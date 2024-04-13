@@ -4,6 +4,9 @@ import { Analytics } from '@vercel/analytics/react';
 import { Metadata, Viewport } from 'next';
 import { Playfair_Display } from 'next/font/google';
 
+import { ThemeSwitch } from '@/components/theme-switch';
+
+import { Header } from './header';
 import { NextThemeProvider } from './theme-provider';
 
 // Metadata for SEO
@@ -89,7 +92,11 @@ export default function RootLayout({
     <html lang='en' className={font.className}>
       <body>
         <NextThemeProvider attribute='class' defaultTheme='system' enableSystem>
+          <Header />
           {children}
+          <div className='fixed right-4 top-4 z-50'>
+            <ThemeSwitch />
+          </div>
         </NextThemeProvider>
         <Analytics />
       </body>
