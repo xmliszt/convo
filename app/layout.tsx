@@ -1,6 +1,7 @@
 import './globals.css';
 
 import { Metadata, Viewport } from 'next';
+import { Playfair_Display } from 'next/font/google';
 
 // Metadata for SEO
 export const metadata: Metadata = {
@@ -71,13 +72,18 @@ export const viewport: Viewport = {
   themeColor: '#000000',
 };
 
+const font = Playfair_Display({
+  weight: ['400', '500', '600', '700', '800', '900'],
+  subsets: ['latin'],
+});
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
+    <html lang='en' className={font.className}>
       <body>{children}</body>
     </html>
   );

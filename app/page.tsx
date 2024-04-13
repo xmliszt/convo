@@ -1,9 +1,10 @@
+import { Chat } from './chat';
+
 export default function Home() {
   return (
-    <main className='w-full h-full'>
-      <h1 className='max-w-lg mx-auto text-center p-4 bg-primary text-primary-foreground'>
-        Convo
-      </h1>
+    <main className='flex h-full w-full flex-col items-center gap-y-4'>
+      <h1 className='mx-auto max-w-lg p-4 text-center'>Convo</h1>
+      <Chat />
     </main>
   );
 }
