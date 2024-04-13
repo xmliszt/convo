@@ -20,8 +20,7 @@ export async function sendMessagesToLlm(
   const chat = geminiModel.startChat({
     history: history,
     generationConfig: {
-      maxOutputTokens: 100,
-      temperature: 0,
+      temperature: 0.5,
     },
     safetySettings: [
       {
@@ -38,10 +37,6 @@ export async function sendMessagesToLlm(
       },
       {
         category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-        threshold: HarmBlockThreshold.BLOCK_NONE,
-      },
-      {
-        category: HarmCategory.HARM_CATEGORY_UNSPECIFIED,
         threshold: HarmBlockThreshold.BLOCK_NONE,
       },
     ],

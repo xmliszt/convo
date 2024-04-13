@@ -28,6 +28,10 @@ export function getInitialLlmPrompt(
   Bad example: "The room rate is $[rate]."
   Good example: "The room rate is $100."
 
+  5. You speak one sentence at a time. Do not combine multiple sentences into one.
+  Bad example: "Good morning! How can I help you today? Would you like to make a reservation? Note: If the guest says no, simply say:)"
+  Good example: "Good morning! How can I help you today?"
+
   ${options.llmRole.starting_prompt}
   `;
 }
