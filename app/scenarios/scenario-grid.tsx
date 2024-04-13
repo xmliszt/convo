@@ -3,6 +3,7 @@
 import { motion, Variants } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { isMobile } from 'react-device-detect';
 
 import { HoverPerspectiveContainer } from '@/components/hover-perspective-container';
 
@@ -77,7 +78,7 @@ function ScenarioCard(props: ScenarioCardProps) {
         className='group flex cursor-pointer flex-col gap-y-2 rounded-lg border border-primary/10 bg-secondary/10 shadow-inner backdrop-blur-[1px]'
         initial='initial'
         animate='animate'
-        whileHover='hover'
+        whileHover={isMobile ? 'initial' : 'hover'}
         variants={variants}
         onPointerOver={() => {
           if (backgroundImageUrl !== props.scenario.image_url) {
