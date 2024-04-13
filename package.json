@@ -18,6 +18,7 @@
     "@radix-ui/react-scroll-area": "^1.0.5",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.42.3",
+    "@vercel/analytics": "^1.2.2",
     "ai": "^3.0.22",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",

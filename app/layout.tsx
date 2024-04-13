@@ -1,5 +1,6 @@
 import './globals.css';
 
+import { Analytics } from '@vercel/analytics/react';
 import { Metadata, Viewport } from 'next';
 import { Playfair_Display } from 'next/font/google';
 
@@ -84,7 +85,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' className={font.className}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
