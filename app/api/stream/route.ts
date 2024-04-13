@@ -1,5 +1,5 @@
 import { GoogleGenerativeAIStream, Message, StreamingTextResponse } from 'ai';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 import { getGeminiModel } from '@/lib/ai/gemini';
 
@@ -21,6 +21,15 @@ const buildGoogleGenAIPrompt = (messages: Message[]) => ({
 });
 
 export async function POST(req: NextRequest) {
+  if (process.env.VERCEL_ENV === 'production') {
+    return NextResponse.json(
+      {
+        error:
+          'Convo is currently work in progress. The stream API is not available for public usage.',
+      },
+      { status: 503 }
+    );
+  }
   // Extract the `prompt` from the body of the request
   const { messages } = await req.json();
 
