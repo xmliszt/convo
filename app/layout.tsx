@@ -4,6 +4,8 @@ import { Analytics } from '@vercel/analytics/react';
 import { Metadata, Viewport } from 'next';
 import { Playfair_Display } from 'next/font/google';
 
+import { NextThemeProvider } from './theme-provider';
+
 // Metadata for SEO
 export const metadata: Metadata = {
   title: 'Convo | English Conversation with AI',
@@ -86,7 +88,9 @@ export default function RootLayout({
   return (
     <html lang='en' className={font.className}>
       <body>
-        {children}
+        <NextThemeProvider attribute='class' defaultTheme='system' enableSystem>
+          {children}
+        </NextThemeProvider>
         <Analytics />
       </body>
     </html>
