@@ -1,5 +1,6 @@
-import { Metadata, Viewport } from 'next';
 import './globals.css';
+
+import { Metadata, Viewport } from 'next';
 
 // Metadata for SEO
 export const metadata: Metadata = {
