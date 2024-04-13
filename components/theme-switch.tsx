@@ -7,11 +7,16 @@ import { useTheme } from 'next-themes';
 export function ThemeSwitch() {
   const { resolvedTheme, setTheme } = useTheme();
 
+  function switchTheme() {
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+  }
+
   return (
     <motion.button
       className='flex size-11 items-center justify-center overflow-hidden rounded-full border bg-[linear-gradient(320deg,#f1f1f1,#ffffff)] shadow-lg dark:bg-[linear-gradient(320deg,#000000,#5a5752)] sm:size-12'
       onClick={() => {
-        setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+        if (!document.startViewTransition) switchTheme();
+        document.startViewTransition(switchTheme);
       }}
       whileHover={{
         scale: 1.1,

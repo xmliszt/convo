@@ -2,6 +2,7 @@
 
 import { Robot, User } from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import Markdown from 'react-markdown';
 
@@ -10,6 +11,9 @@ import { cn } from '@/lib/utils';
 type ChatBubbleProps = {
   message: string;
   isUser: boolean;
+  isError?: boolean;
+  avatarUrl?: string;
+  onRetry?: () => void;
 };
 
 export function ChatBubble(props: ChatBubbleProps) {
@@ -34,7 +38,7 @@ export function ChatBubble(props: ChatBubbleProps) {
       )}
     >
       <motion.div
-        className='table size-4 place-items-center rounded-full border bg-muted p-2 text-muted-foreground'
+        className='flex aspect-square size-10 items-center justify-center rounded-full border bg-muted text-muted-foreground'
         initial={{
           opacity: 0,
           y: 10,
@@ -44,7 +48,20 @@ export function ChatBubble(props: ChatBubbleProps) {
           y: 0,
         }}
       >
-        {props.isUser ? <User /> : <Robot />}
+        {props.isUser ? (
+          <User />
+        ) : props.avatarUrl ? (
+          <Image
+            src={props.avatarUrl}
+            alt='Avatar'
+            width={40}
+            height={40}
+            className='rounded-full border'
+            unoptimized
+          />
+        ) : (
+          <Robot />
+        )}
       </motion.div>
       <motion.div
         initial={{
@@ -72,7 +89,22 @@ export function ChatBubble(props: ChatBubbleProps) {
             : 'dark:bg-[linear-gradient(215deg,#000000,#292828)]'
         )}
       >
-        <Markdown className='prose dark:prose-invert'>{props.message}</Markdown>
+        <Markdown
+          className={cn(
+            'prose dark:prose-invert',
+            props.isError && 'text-red-500'
+          )}
+        >
+          {props.message}
+        </Markdown>
+        {props.isError && (
+          <button
+            className='mt-1 text-xs text-secondary-foreground/70 transition-colors hover:text-secondary-foreground'
+            onClick={props.onRetry}
+          >
+            Refresh to try again
+          </button>
+        )}
       </motion.div>
     </div>
   );
