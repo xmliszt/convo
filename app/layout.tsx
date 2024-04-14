@@ -13,8 +13,9 @@ import { NextThemeProvider } from './theme-provider';
 
 // Metadata for SEO
 export const metadata: Metadata = {
-  title: 'Convo | English Conversation with AI',
-  description: 'Practice English by talking in various real-life scenarios!',
+  title: 'Convo | Conversation with AI',
+  description:
+    'Practice conversation by talking in various real-life scenarios!',
   manifest: '/manifest.json',
   appleWebApp: {
     title: 'Convo',
@@ -49,7 +50,8 @@ export const metadata: Metadata = {
   category: 'education',
   openGraph: {
     title: 'Convo',
-    description: 'Practice English by talking in various real-life scenarios!',
+    description:
+      'Practice conversation by talking in various real-life scenarios!',
     url: 'https://convo.website/',
     siteName: 'Taboo AI',
     images: [
@@ -57,7 +59,7 @@ export const metadata: Metadata = {
         url: 'https://i.imgur.com/IIP6UzK.jpeg',
         width: 800,
         height: 600,
-        alt: 'Convo | English Conversation with AI',
+        alt: 'Convo | Conversation with AI',
       },
     ],
     locale: 'en_US',
@@ -65,8 +67,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Convo | English Conversation with AI',
-    description: 'Practice English by talking in various real-life scenarios!',
+    title: 'Convo | Conversation with AI',
+    description:
+      'Practice conversation by talking in various real-life scenarios!',
     siteId: '1704579643',
     creator: '@xmliszt',
     creatorId: '1704579643',

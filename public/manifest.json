@@ -4,10 +4,10 @@
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
-  "name": "NextJS Template",
-  "short_name": "NextJS Template",
-  "description": "This is an example PWA web app for NextJS template",
-  "categories": ["Example"],
+  "name": "Convo | Conversation with AI",
+  "short_name": "Convo",
+  "description": "Practice conversation by talking in various real-life scenarios!",
+  "categories": ["Education", "AI", "Technology"],
   "icons": [
     {
       "src": "/favicon-16x16.png",
