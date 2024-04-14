@@ -6,6 +6,7 @@ import { Bodoni_Moda } from 'next/font/google';
 
 import { ThemeSwitch } from '@/components/theme-switch';
 import { Toaster } from '@/components/ui/sonner';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 import { Header } from './header';
 import { NextThemeProvider } from './theme-provider';
@@ -97,12 +98,14 @@ export default function RootLayout({
     <html lang='en' className={font.className}>
       <body>
         <NextThemeProvider attribute='class' defaultTheme='system' enableSystem>
-          <Header />
-          {children}
-          <div className='fixed right-4 top-4 z-50'>
-            <ThemeSwitch />
-          </div>
-          <Toaster duration={1000} />
+          <TooltipProvider delayDuration={100}>
+            <Header />
+            {children}
+            <div className='fixed right-4 top-4 z-50'>
+              <ThemeSwitch />
+            </div>
+            <Toaster duration={1000} />
+          </TooltipProvider>
         </NextThemeProvider>
         <Analytics />
       </body>

@@ -3,8 +3,10 @@ import type { Metadata } from 'next';
 import { ScenarioBackground } from '../scenario-background';
 import { ScenarioBackgroundProvider } from '../scenario-background-provider';
 import { Chat } from './chat';
+import { GoalPane } from './goal-pane';
 import { ScenarioGoalLoader } from './scenario-goal-loader';
 import { ScenarioGoalProvider } from './scenario-goal-provider';
+import { ScenarioPane } from './scenario-pane';
 import { fetchGoals } from './services/fetch-goals';
 import { fetchLlmRole } from './services/fetch-llm-role';
 import { fetchScenario } from './services/fetch-scenario';
@@ -70,8 +72,14 @@ export default async function Page(props: PageProps) {
           targetWords={targetWords.words}
         />
         <main className='relative flex h-full w-full flex-col items-center gap-y-4'>
+          <div className='absolute left-[calc(50vw-34rem)] top-[80px] z-20 hidden max-w-[16rem] flex-col items-center gap-y-4 pb-[60px] lg:flex'>
+            <GoalPane />
+            <TargetWordsPane />
+          </div>
           <Chat llmRole={llmRole} initialHistory={initialHistory} />
-          <TargetWordsPane />
+          <div className='absolute left-[calc(50vw+18rem)] top-[80px] z-20 hidden max-w-[14rem] flex-col items-center gap-y-4 pb-[60px] lg:flex'>
+            <ScenarioPane />
+          </div>
           <ScenarioBackground />
         </main>
       </ScenarioGoalProvider>

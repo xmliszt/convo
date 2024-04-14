@@ -1,15 +1,14 @@
 'use client';
 
-import { Circle, UserCircleCheck } from '@phosphor-icons/react';
+import { CheckCircle, Circle, Info } from '@phosphor-icons/react';
 import { motion, Variants } from 'framer-motion';
 
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
 import { useScenarioGoal } from './scenario-goal-provider';
@@ -34,10 +33,12 @@ export function TargetWordsPane() {
   const completionVariants: Variants = {
     initial: {
       scale: 1,
+      opacity: 0.5,
     },
     visible: (i) => ({
       rotate: [0, 3, -3, 5, -5, 3, -3, 0],
       scale: [1, 1.1, 1.1, 1.2, 1.2, 1.1, 1.1, 1],
+      opacity: 1,
       transition: {
         duration: 0.5,
         ease: 'easeInOut',
@@ -48,19 +49,20 @@ export function TargetWordsPane() {
   };
 
   return (
-    <Card
-      className={cn(
-        'absolute left-[calc(50vw-32rem)] top-[80px] max-w-[14rem]',
-        'brightness-80 bg-card/20 backdrop-blur-sm',
-        'hidden lg:block'
-      )}
-    >
+    <Card className='brightness-80 w-full bg-card/20 backdrop-blur-sm'>
       <CardHeader>
-        <CardTitle>Target words</CardTitle>
-        <CardDescription className='text-sm'>
-          These are the words you should try to make the AI say. Bonus points
-          will be awarded for each word you manage to get the AI to say.
-        </CardDescription>
+        <CardTitle className='flex items-center gap-2'>
+          Target words
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Info />
+            </TooltipTrigger>
+            <TooltipContent align='start'>
+              Try to make AI mention these words in the conversation for some
+              bonus points!
+            </TooltipContent>
+          </Tooltip>
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className='flex flex-col gap-4'>
@@ -82,7 +84,7 @@ export function TargetWordsPane() {
                 animate={word.completed ? 'visible' : 'initial'}
                 variants={completionVariants}
               >
-                {word.completed ? <UserCircleCheck /> : <Circle />}
+                {word.completed ? <CheckCircle /> : <Circle />}
               </motion.span>
               <motion.span
                 custom={1}
