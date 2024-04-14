@@ -2,7 +2,7 @@
 
 import { Content } from '@google/generative-ai';
 import { motion } from 'framer-motion';
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { ChatBubble } from '@/components/chat-bubble';
 import { Input } from '@/components/ui/input';
@@ -10,29 +10,23 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 
 import { useScenarioBackground } from '../scenario-background-provider';
+import type { Chat as ChatType } from './scenario-goal-provider';
 import { useScenarioGoal } from './scenario-goal-provider';
-import { checkGoalCompletions } from './services/check-goal-completions';
 import { sendMessagesToLlm } from './services/send-messages-to-llm';
 import { getMatchedWordsInString } from './utils/get-matched-targets';
 
-type Chat = {
-  role: 'user' | 'model' | 'error';
-  message: string;
-};
-
 type ChatProps = {
   llmRole: LlmRole;
-  initialHistory: Chat[];
 };
 
 export function Chat(props: ChatProps) {
   const [inputValue, setInputValue] = useState('');
-  const [messages, setMessages] = useState<Chat[]>(props.initialHistory);
-  const [isPending, startTransition] = useTransition();
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const { setBackgroundImageUrl, setShowBackgroundImage } =
     useScenarioBackground();
-  const { scenario, goals, targetWords, setTargetWords, setGoals } =
+  const { scenario, targetWords, setTargetWords, history, setHistory } =
     useScenarioGoal();
 
   useEffect(() => {
@@ -43,108 +37,80 @@ export function Chat(props: ChatProps) {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (isPending) return;
+    if (isSendingMessage) return;
     if (!inputValue.trim()) return;
     const newUserMessage = inputValue;
     setInputValue('');
-    setMessages((prev) => [
+    setHistory((prev) => [
       ...prev,
       {
         role: 'user',
         message: newUserMessage,
       },
     ]);
-    sendMessage(messages, newUserMessage);
+    sendMessage(history, newUserMessage);
   }
 
   function handleRetry() {
     // Remove the last error message and resend the last user message.
-    setMessages((prev) => prev.slice(0, -1));
-    const historyWithoutLastUserMessage = [...messages].slice(0, -2);
-    const lastUserMessage = messages[messages.length - 2];
+    setHistory((prev) => prev.slice(0, -1));
+    const historyWithoutLastUserMessage = [...history].slice(0, -2);
+    const lastUserMessage = history[history.length - 2];
     sendMessage(historyWithoutLastUserMessage, lastUserMessage.message);
   }
 
-  function sendMessage(history: Chat[], newUserMessage: string) {
-    startTransition(async () => {
-      const convertedMessages: Content[] = history
-        .filter((m) => m.role !== 'error')
-        .map((m) => ({ role: m.role, parts: [{ text: m.message }] }));
-      try {
-        const newModelMessage = await sendMessagesToLlm(
-          convertedMessages,
-          newUserMessage
-        );
-        const newModelMessageText = newModelMessage.parts.at(0)?.text;
-        if (!newModelMessageText) {
-          setMessages((prev) => [
-            ...prev,
-            {
-              role: 'error',
-              message: 'An error occurred while sending the message.',
-            },
-          ]);
-        } else {
-          const newHistory: Chat[] = [
-            ...history,
-            { role: 'user', message: newUserMessage },
-            { role: 'model', message: newModelMessageText },
-          ];
-          setMessages(newHistory);
-          checkGoals(newHistory);
-        }
-      } catch (error) {
-        console.error(error);
-        setMessages((prev) => [
+  async function sendMessage(history: ChatType[], newUserMessage: string) {
+    const convertedMessages: Content[] = history
+      .filter((m) => m.role !== 'error')
+      .map((m) => ({ role: m.role, parts: [{ text: m.message }] }));
+    try {
+      setIsSendingMessage(true);
+      const newModelMessage = await sendMessagesToLlm(
+        convertedMessages,
+        newUserMessage
+      );
+      const newModelMessageText = newModelMessage.parts.at(0)?.text;
+      if (!newModelMessageText) {
+        setHistory((prev) => [
           ...prev,
           {
             role: 'error',
             message: 'An error occurred while sending the message.',
           },
         ]);
+      } else {
+        const newHistory: ChatType[] = [
+          ...history,
+          { role: 'user', message: newUserMessage },
+          { role: 'model', message: newModelMessageText },
+        ];
+        setHistory(newHistory);
       }
-    });
-  }
-
-  async function checkGoals(history: Chat[]) {
-    if (scenario) {
-      try {
-        const completedGoalIds = await checkGoalCompletions({
-          goals: goals,
-          completedGoalIds: goals
-            .filter((goal) => goal.completed)
-            .map((g) => g.id),
-          history: history.map((message) => ({
-            role: message.role,
-            parts: [{ text: message.message }],
-          })),
-          scenario: scenario,
-        });
-        if (completedGoalIds.length > 0) {
-          setGoals((prev) =>
-            prev.map((goal) => ({
-              ...goal,
-              completed: completedGoalIds.includes(goal.id),
-            }))
-          );
-        }
-      } catch (error) {
-        console.log(error);
-      }
+    } catch (error) {
+      console.error(error);
+      setHistory((prev) => [
+        ...prev,
+        {
+          role: 'error',
+          message: 'An error occurred while sending the message.',
+        },
+      ]);
+    } finally {
+      setIsSendingMessage(false);
     }
   }
 
   useEffect(() => {
-    if (!isPending) {
+    if (!isSendingMessage) {
       inputRef.current?.focus();
     }
-  }, [isPending]);
+  }, [isSendingMessage]);
 
   // We remove the first initial LLM prompt.
-  const filteredMessages = [...messages].slice(1);
+  const filteredMessages = [...history].slice(1);
 
   // Match target words in AI-generated messages and update the completion status for target words.
-  const llmMessage = [...messages]
+  const llmMessage = [...history]
     .filter((m) => m.role === 'model')
     .map((m) => m.message)
     .join(' ');
@@ -217,7 +183,7 @@ export function Chat(props: ChatProps) {
           <Input
             ref={inputRef}
             type='text'
-            disabled={isPending}
+            disabled={isSendingMessage}
             value={inputValue}
             placeholder='Type a message...'
             onChange={(event) => setInputValue(event.target.value)}

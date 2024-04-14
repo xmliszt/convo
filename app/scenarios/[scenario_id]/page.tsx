@@ -70,13 +70,14 @@ export default async function Page(props: PageProps) {
           scenario={scenario}
           goals={goals}
           targetWords={targetWords.words}
+          initialHistory={initialHistory}
         />
         <main className='relative flex h-full w-full flex-col items-center gap-y-4'>
           <div className='absolute left-[calc(50vw-34rem)] top-[80px] z-20 hidden max-w-[16rem] flex-col items-center gap-y-4 pb-[60px] lg:flex'>
             <GoalPane />
             <TargetWordsPane />
           </div>
-          <Chat llmRole={llmRole} initialHistory={initialHistory} />
+          <Chat llmRole={llmRole} />
           <div className='absolute left-[calc(50vw+18rem)] top-[80px] z-20 hidden max-w-[14rem] flex-col items-center gap-y-4 pb-[60px] lg:flex'>
             <ScenarioPane />
           </div>

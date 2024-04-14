@@ -1,7 +1,8 @@
 'use client';
 
-import { Info } from '@phosphor-icons/react';
+import { ArrowClockwise, Info } from '@phosphor-icons/react';
 import { motion, Variants } from 'framer-motion';
+import { useCallback, useEffect, useRef, useTransition } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -11,11 +12,60 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
-import { useScenarioGoal } from './scenario-goal-provider';
+import { Chat, useScenarioGoal } from './scenario-goal-provider';
+import { checkGoalCompletions } from './services/check-goal-completions';
 
 export function GoalPane() {
-  const { scenario, goals } = useScenarioGoal();
-  if (!scenario) return null;
+  const { scenario, goals, setGoals, history } = useScenarioGoal();
+  const [isPending, startTransition] = useTransition();
+
+  const checkGoals = useCallback(
+    (history: Chat[]) => {
+      // Start transition so it does not block UI.
+      startTransition(async () => {
+        if (scenario) {
+          try {
+            const completedGoalIds = await checkGoalCompletions({
+              goals: goals,
+              completedGoalIds: goals
+                .filter((goal) => goal.completed)
+                .map((g) => g.id),
+              history: history
+                .filter(
+                  (message) =>
+                    message.role === 'user' || message.role === 'model'
+                )
+                .map((message) => ({
+                  role: message.role,
+                  parts: [{ text: message.message }],
+                })),
+              scenario: scenario,
+            });
+            if (completedGoalIds.length > 0) {
+              setGoals((prev) =>
+                prev.map((goal) => ({
+                  ...goal,
+                  completed: completedGoalIds.includes(goal.id),
+                }))
+              );
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      });
+    },
+    [goals, scenario, setGoals]
+  );
+
+  const previousHistory = useRef<Chat[]>([]);
+
+  useEffect(() => {
+    if (history.length <= 2) return;
+    if (history.length === previousHistory.current.length) return;
+    checkGoals(history);
+    previousHistory.current = history;
+  }, [history, checkGoals]);
 
   const individualTargetWordVariants: Variants = {
     initial: {
@@ -67,7 +117,7 @@ export function GoalPane() {
           </Tooltip>
         </CardTitle>
       </CardHeader>
-      <CardContent className='flex flex-col gap-4'>
+      <CardContent className='relative flex flex-col gap-4'>
         {goals.map((goal, idx) => (
           <Tooltip key={goal.id}>
             <TooltipTrigger asChild>
@@ -105,6 +155,16 @@ export function GoalPane() {
             </TooltipContent>
           </Tooltip>
         ))}
+        <div className='absolute bottom-4 right-4 z-10 size-4'>
+          <ArrowClockwise
+            className={cn(
+              isPending
+                ? 'animate-spin text-primary'
+                : 'animate-none text-primary/20',
+              'transition-[opacity_color]'
+            )}
+          />
+        </div>
       </CardContent>
     </Card>
   );
