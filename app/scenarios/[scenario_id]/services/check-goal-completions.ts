@@ -28,7 +28,6 @@ export async function checkGoalCompletions(
 
   // Remove the first two messages from history as it starts with system prompting.
   const history = options.history.slice(2);
-  console.log('History: ', history);
   const systemPrompt = getSystemPrompt(
     options.scenario,
     history,

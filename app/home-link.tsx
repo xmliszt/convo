@@ -24,16 +24,31 @@ type HomeLinkProps = {
 export function HomeLink(props: HomeLinkProps) {
   const router = useRouter();
   const pathname = usePathname();
+
   const [headingHeight, setHeadingHeight] = useState(0);
   const [isBeforeRouting, setIsBeforeRouting] = useState(false);
+
+  useEffect(() => {
+    // Listen to viewport change
+    function handleViewportChange() {
+      const headingElement = document.getElementById('home-link-heading');
+      if (headingElement) {
+        setHeadingHeight(headingElement.clientHeight);
+      }
+    }
+    window.addEventListener('resize', handleViewportChange);
+    return () => {
+      window.removeEventListener('resize', handleViewportChange);
+    };
+  }, []);
 
   const containerVairants: Variants = {
     initial: {
       y: 0,
     },
-    onHover: {
-      y: -headingHeight,
-    },
+    onHover: (height) => ({
+      y: -height,
+    }),
   };
 
   function handleLinkClick() {
@@ -73,12 +88,13 @@ export function HomeLink(props: HomeLinkProps) {
         >
           {/* Container that holds two rows of text */}
           <motion.div
+            custom={headingHeight}
             initial='initial'
             whileHover='onHover'
             variants={containerVairants}
           >
             <h1
-              ref={(heading) => setHeadingHeight(heading?.clientHeight ?? 0)}
+              id='home-link-heading'
               className='h-fit w-full text-center'
               style={{
                 fontSize: props.fontSize,
