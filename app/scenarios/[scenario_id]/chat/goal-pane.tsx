@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
-import { Chat, useScenarioGoal } from './scenario-goal-provider';
+import { Chat, useScenarioGoal } from '../scenario-goal-provider';
 import { checkGoalCompletions } from './services/check-goal-completions';
 
 export function GoalPane() {

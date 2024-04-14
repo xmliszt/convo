@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { Chat, useScenarioGoal } from './scenario-goal-provider';
 
 type ScenarioGoalLoaderProps = {
+  llmRole: LlmRole;
   scenario: Scenario;
   goals: Goal[];
   targetWords: string[];
@@ -12,10 +13,11 @@ type ScenarioGoalLoaderProps = {
 };
 
 export function ScenarioGoalLoader(props: ScenarioGoalLoaderProps) {
-  const { setScenario, setGoals, setTargetWords, setHistory } =
+  const { setLlmRole, setScenario, setGoals, setTargetWords, setHistory } =
     useScenarioGoal();
 
   useEffect(() => {
+    setLlmRole(props.llmRole);
     setScenario(props.scenario);
     setGoals(props.goals.map((goal) => ({ ...goal, completed: false })));
     setTargetWords(
@@ -24,13 +26,15 @@ export function ScenarioGoalLoader(props: ScenarioGoalLoaderProps) {
     setHistory(props.initialHistory);
   }, [
     props.goals,
+    props.llmRole,
     props.scenario,
     props.targetWords,
     props.initialHistory,
     setGoals,
+    setLlmRole,
+    setHistory,
     setScenario,
     setTargetWords,
-    setHistory,
   ]);
 
   return null;

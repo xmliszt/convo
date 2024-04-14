@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
-import { useScenarioGoal } from './scenario-goal-provider';
+import { useScenarioGoal } from '../scenario-goal-provider';
 import { getMatchedWordsInString } from './utils/get-matched-targets';
 
 export function TargetWordsPane() {

@@ -3,37 +3,50 @@
 import { Content } from '@google/generative-ai';
 import { PaperPlane } from '@phosphor-icons/react';
 import { motion, Variants } from 'framer-motion';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 
 import { ChatBubble } from '@/components/chat-bubble';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 
-import { useScenarioBackground } from '../scenario-background-provider';
-import type { Chat as ChatType } from './scenario-goal-provider';
-import { useScenarioGoal } from './scenario-goal-provider';
+import { useScenarioBackground } from '../../scenario-background-provider';
+import type { Chat as ChatType } from '../scenario-goal-provider';
+import { useScenarioGoal } from '../scenario-goal-provider';
 import { sendMessagesToLlm } from './services/send-messages-to-llm';
 
-type ChatProps = {
-  llmRole: LlmRole;
-};
-
-export function Chat(props: ChatProps) {
+export function Chat() {
+  const router = useRouter();
+  const pathname = usePathname();
   const [inputValue, setInputValue] = useState('');
   const [isSendingMessage, setIsSendingMessage] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const gameOverButtonRef = useRef<HTMLButtonElement>(null);
+
   const { setBackgroundImageUrl, setShowBackgroundImage } =
     useScenarioBackground();
-  const { scenario, history, setHistory, isGameOver } = useScenarioGoal();
+  const { scenario, history, setHistory, isGameOver, llmRole } =
+    useScenarioGoal();
 
   useEffect(() => {
     if (!scenario) return;
     setBackgroundImageUrl(scenario.image_url);
     setShowBackgroundImage(true);
   }, [scenario, setBackgroundImageUrl, setShowBackgroundImage]);
+
+  useEffect(() => {
+    if (isGameOver) {
+      gameOverButtonRef.current?.focus();
+      gameOverButtonRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
+  }, [isGameOver]);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -126,7 +139,7 @@ export function Chat(props: ChatProps) {
     <>
       <ScrollArea className='absolute left-0 top-0 h-full w-full px-4'>
         <div
-          className='mx-auto w-full max-w-lg space-y-4 py-20'
+          className='mx-auto w-full max-w-lg space-y-4 pb-24 pt-20'
           style={{
             marginTop: isMobile ? '80px' : '0',
           }}
@@ -138,11 +151,28 @@ export function Chat(props: ChatProps) {
               isError={message.role === 'error'}
               isUser={message.role === 'user'}
               avatarUrl={
-                message.role === 'user' ? undefined : props.llmRole.avatar_url
+                message.role === 'user' ? undefined : llmRole?.avatar_url
               }
               onRetry={handleRetry}
             />
           ))}
+          {isGameOver && (
+            <div className='grid w-full  place-items-center'>
+              <Button
+                ref={gameOverButtonRef}
+                className='border-border font-bold hover:border hover:bg-accent/60 hover:shadow-2xl'
+                onClick={() => {
+                  const evaluationPathname = pathname.replace(
+                    'chat',
+                    'evaluation'
+                  );
+                  router.push(evaluationPathname);
+                }}
+              >
+                End the conversation
+              </Button>
+            </div>
+          )}
         </div>
       </ScrollArea>
       <motion.div
