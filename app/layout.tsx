@@ -104,6 +104,14 @@ export default function RootLayout({
             <div className='fixed right-4 top-4 z-50'>
               <ThemeSwitch />
             </div>
+            {/* trademark */}
+            <div className='fixed bottom-1 right-2 z-50 text-[0.6rem] font-semibold text-secondary-foreground/70'>
+              <span>Convo © 2024. All rights reserved.</span>
+            </div>
+            {/* beta tag */}
+            <div className='fixed bottom-1 left-2 z-50 text-[0.6rem] font-semibold text-secondary-foreground/70'>
+              <span>Beta</span>
+            </div>
             <Toaster duration={1000} />
           </TooltipProvider>
         </NextThemeProvider>

@@ -133,7 +133,7 @@ export function Chat(props: ChatProps) {
       </ScrollArea>
       <motion.div
         className={cn(
-          'fixed bottom-0 z-50 w-full py-4',
+          'fixed bottom-0 z-50 w-full py-8',
           // gradient glass effect
           'shadow-inner backdrop-blur-[10px] [mask:linear-gradient(to_top,black_0%,black_75%,transparent_100%)]'
         )}
