@@ -5,6 +5,7 @@ import { Metadata, Viewport } from 'next';
 import { Bodoni_Moda } from 'next/font/google';
 
 import { ThemeSwitch } from '@/components/theme-switch';
+import { Toaster } from '@/components/ui/sonner';
 
 import { Header } from './header';
 import { NextThemeProvider } from './theme-provider';
@@ -101,6 +102,7 @@ export default function RootLayout({
           <div className='fixed right-4 top-4 z-50'>
             <ThemeSwitch />
           </div>
+          <Toaster duration={1000} />
         </NextThemeProvider>
         <Analytics />
       </body>

@@ -1,11 +1,16 @@
 import type { Metadata } from 'next';
 
+import { ScenarioBackground } from '../scenario-background';
+import { ScenarioBackgroundProvider } from '../scenario-background-provider';
 import { Chat } from './chat';
+import { ScenarioGoalLoader } from './scenario-goal-loader';
+import { ScenarioGoalProvider } from './scenario-goal-provider';
 import { fetchGoals } from './services/fetch-goals';
 import { fetchLlmRole } from './services/fetch-llm-role';
 import { fetchScenario } from './services/fetch-scenario';
 import { fetchTargetWords } from './services/fetch-target-words';
 import { getInitialHistory } from './services/get-initial-llm-message';
+import { TargetWordsPane } from './target-words-pane';
 
 export async function generateMetadata({
   params,
@@ -56,14 +61,20 @@ export default async function Page(props: PageProps) {
     });
 
   return (
-    <main className='relative flex h-full w-full flex-col items-center gap-y-4'>
-      <Chat
-        scenario={scenario}
-        llmRole={llmRole}
-        goals={goals}
-        targetWords={targetWords.words}
-        initialHistory={initialHistory}
-      />
-    </main>
+    <ScenarioBackgroundProvider>
+      <ScenarioGoalProvider>
+        {/* Load scenario, goal, targetWords into the provider context */}
+        <ScenarioGoalLoader
+          scenario={scenario}
+          goals={goals}
+          targetWords={targetWords.words}
+        />
+        <main className='relative flex h-full w-full flex-col items-center gap-y-4'>
+          <Chat llmRole={llmRole} initialHistory={initialHistory} />
+          <TargetWordsPane />
+          <ScenarioBackground />
+        </main>
+      </ScenarioGoalProvider>
+    </ScenarioBackgroundProvider>
   );
 }

@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 
+import { useScenarioBackground } from '../scenario-background-provider';
+import { useScenarioGoal } from './scenario-goal-provider';
 import { sendMessagesToLlm } from './services/send-messages-to-llm';
 import { getMatchedWordsInString } from './utils/get-matched-targets';
 
@@ -18,10 +20,7 @@ type Chat = {
 };
 
 type ChatProps = {
-  scenario: Scenario;
   llmRole: LlmRole;
-  goals: Goal[];
-  targetWords: string[];
   initialHistory: Chat[];
 };
 
@@ -30,6 +29,15 @@ export function Chat(props: ChatProps) {
   const [messages, setMessages] = useState<Chat[]>(props.initialHistory);
   const [isPending, startTransition] = useTransition();
   const inputRef = useRef<HTMLInputElement>(null);
+  const { setBackgroundImageUrl, setShowBackgroundImage } =
+    useScenarioBackground();
+  const { scenario, targetWords, setTargetWords } = useScenarioGoal();
+
+  useEffect(() => {
+    if (!scenario) return;
+    setBackgroundImageUrl(scenario.image_url);
+    setShowBackgroundImage(true);
+  }, [scenario, setBackgroundImageUrl, setShowBackgroundImage]);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -102,12 +110,30 @@ export function Chat(props: ChatProps) {
   // We remove the first initial LLM prompt.
   const filteredMessages = [...messages].slice(1);
 
-  // Match target words in AI-generated messages.
+  // Match target words in AI-generated messages and update the completion status for target words.
   const llmMessage = [...messages]
     .filter((m) => m.role === 'model')
     .map((m) => m.message)
     .join(' ');
-  const matchedWords = getMatchedWordsInString(llmMessage, props.targetWords);
+  const matchedWords = getMatchedWordsInString(
+    llmMessage,
+    targetWords.map((word) => word.word)
+  );
+  const currentlyMatchedTargetWordrs = targetWords
+    .filter((word) => word.completed)
+    .map((word) => word.word);
+  const newMatchedWords = matchedWords.filter(
+    (word) => !currentlyMatchedTargetWordrs.includes(word)
+  );
+  if (newMatchedWords.length > 0) {
+    setTargetWords((prev) =>
+      prev.map((word) =>
+        newMatchedWords.includes(word.word)
+          ? { ...word, completed: true }
+          : word
+      )
+    );
+  }
 
   return (
     <>
@@ -131,7 +157,7 @@ export function Chat(props: ChatProps) {
       </ScrollArea>
       <motion.div
         className={cn(
-          'fixed bottom-0 z-50 w-full bg-background/60 py-4',
+          'fixed bottom-0 z-50 w-full py-4',
           // gradient glass effect
           'shadow-inner backdrop-blur-[10px] [mask:linear-gradient(to_top,black_0%,black_75%,transparent_100%)]'
         )}
@@ -162,15 +188,11 @@ export function Chat(props: ChatProps) {
             value={inputValue}
             placeholder='Type a message...'
             onChange={(event) => setInputValue(event.target.value)}
-            className='max-w-lg transition-[box-shadow] duration-300 ease-out focus:shadow-xl'
+            className='max-w-lg bg-background/40 transition-[box-shadow] duration-300 ease-out focus:shadow-xl'
             autoFocus
           />
         </form>
       </motion.div>
-      <div className='fixed bottom-16 right-4 border p-4'>
-        <div>{`Targets: ${props.targetWords}`}</div>
-        {`Matched target words: ${matchedWords.join(', ')}`}
-      </div>
     </>
   );
 }
