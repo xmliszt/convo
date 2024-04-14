@@ -3,6 +3,7 @@
 import { Content } from '@google/generative-ai';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
+import { isMobile } from 'react-device-detect';
 
 import { ChatBubble } from '@/components/chat-bubble';
 import { Input } from '@/components/ui/input';
@@ -109,8 +110,13 @@ export function Chat(props: ChatProps) {
 
   return (
     <>
-      <ScrollArea className='h-full w-full px-4'>
-        <div className='mx-auto flex h-full w-full max-w-lg flex-col gap-4 py-24'>
+      <ScrollArea className='absolute left-0 top-0 h-full w-full px-4'>
+        <div
+          className='mx-auto w-full max-w-lg space-y-4 py-20'
+          style={{
+            marginTop: isMobile ? '80px' : '0',
+          }}
+        >
           {filteredMessages.map((message, idx) => (
             <ChatBubble
               key={idx}

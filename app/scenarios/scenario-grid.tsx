@@ -77,7 +77,12 @@ function ScenarioCard(props: ScenarioCardProps) {
   return (
     <HoverPerspectiveContainer className='border-none shadow-none'>
       <motion.div
-        className='group flex h-[450px] max-w-[16rem] cursor-pointer flex-col gap-y-2 rounded-lg border border-primary/10 bg-secondary/10 shadow-inner backdrop-blur-[1px]'
+        className='group flex h-[450px] max-w-[16rem] cursor-pointer flex-col gap-y-2 rounded-lg border border-primary/10 bg-secondary/10 shadow-inner backdrop-blur-[4px]'
+        style={{
+          WebkitBackdropFilter: 'blur(4px)',
+          WebkitBoxShadow:
+            'var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);',
+        }}
         initial='initial'
         animate='animate'
         whileHover={isMobile ? 'initial' : 'hover'}
