@@ -1,7 +1,8 @@
 'use client';
 
 import { Content } from '@google/generative-ai';
-import { motion } from 'framer-motion';
+import { PaperPlane } from '@phosphor-icons/react';
+import { motion, Variants } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 
@@ -26,7 +27,7 @@ export function Chat(props: ChatProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { setBackgroundImageUrl, setShowBackgroundImage } =
     useScenarioBackground();
-  const { scenario, history, setHistory } = useScenarioGoal();
+  const { scenario, history, setHistory, isGameOver } = useScenarioGoal();
 
   useEffect(() => {
     if (!scenario) return;
@@ -108,6 +109,19 @@ export function Chat(props: ChatProps) {
   // We remove the first initial LLM prompt.
   const filteredMessages = [...history].slice(1);
 
+  const sendButtonVariants: Variants = {
+    initial: {
+      y: 0,
+    },
+    hover: {
+      y: [0, -2, 2, 0],
+      transition: {
+        duration: 0.5,
+        repeat: Infinity,
+      },
+    },
+  };
+
   return (
     <>
       <ScrollArea className='absolute left-0 top-0 h-full w-full px-4'>
@@ -162,16 +176,43 @@ export function Chat(props: ChatProps) {
           onSubmit={handleSubmit}
           className='grid w-full place-items-center px-4'
         >
-          <Input
-            ref={inputRef}
-            type='text'
-            disabled={isSendingMessage}
-            value={inputValue}
-            placeholder='Type a message...'
-            onChange={(event) => setInputValue(event.target.value)}
-            className='max-w-lg bg-background/40 transition-[box-shadow] duration-300 ease-out focus:shadow-xl'
-            autoFocus
-          />
+          <div className='relative w-full max-w-lg'>
+            <Input
+              ref={inputRef}
+              type='text'
+              disabled={isSendingMessage}
+              value={inputValue}
+              placeholder='Type a message...'
+              onChange={(event) => setInputValue(event.target.value)}
+              className='h-10 w-full bg-background/40 pr-10 transition-[box-shadow] duration-300 ease-out focus:shadow-xl'
+              autoFocus
+            />
+            {inputValue.length > 0 && (
+              <motion.button
+                type='submit'
+                className='absolute bottom-1 right-1 top-1 grid size-8 place-items-center rounded-sm bg-card/40 p-2'
+                initial='initial'
+                whileHover='hover'
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                variants={{
+                  initial: {
+                    opacity: 0,
+                    y: 10,
+                  },
+                  hover: {
+                    opacity: 1,
+                  },
+                }}
+              >
+                <motion.span variants={sendButtonVariants}>
+                  <PaperPlane />
+                </motion.span>
+              </motion.button>
+            )}
+          </div>
         </form>
       </motion.div>
     </>
