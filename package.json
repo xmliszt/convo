@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "vercel-build": "next build",
     "vercel:dev": "vercel dev",
     "vercel:pull": "vercel pull",
-    "build": "next build",
+    "vercel:build": "vercel build",
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
