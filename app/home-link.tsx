@@ -95,6 +95,11 @@ export function HomeLink(props: HomeLinkProps) {
           >
             <h1
               id='home-link-heading'
+              ref={(el) => {
+                if (el) {
+                  setHeadingHeight(el.clientHeight);
+                }
+              }}
               className='h-fit w-full text-center'
               style={{
                 fontSize: props.fontSize,
