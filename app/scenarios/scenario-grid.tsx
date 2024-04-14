@@ -83,12 +83,14 @@ function ScenarioCard(props: ScenarioCardProps) {
         whileHover={isMobile ? 'initial' : 'hover'}
         variants={variants}
         onPointerOver={() => {
+          if (isMobile) return;
           if (backgroundImageUrl !== props.scenario.image_url) {
             setBackgroundImageUrl(props.scenario.image_url);
           }
           setShowBackgroundImage(true);
         }}
         onPointerLeave={() => {
+          if (isMobile) return;
           setShowBackgroundImage(false);
         }}
         onClick={() => {

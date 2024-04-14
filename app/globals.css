@@ -63,7 +63,25 @@
   body {
     @apply bg-background text-foreground transition-colors duration-500 ease-out;
 
+    display: grid;
     background-image: var(--background-pattern);
+  }
+
+  body,
+  html {
+    @apply antialiased;
+
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    max-height: -webkit-fill-available;
+  }
+
+  main {
+    height: inherit;
+    width: inherit;
   }
 
   h1 {

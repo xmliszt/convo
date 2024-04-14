@@ -13,7 +13,6 @@ import { useScenarioBackground } from '../scenario-background-provider';
 import type { Chat as ChatType } from './scenario-goal-provider';
 import { useScenarioGoal } from './scenario-goal-provider';
 import { sendMessagesToLlm } from './services/send-messages-to-llm';
-import { getMatchedWordsInString } from './utils/get-matched-targets';
 
 type ChatProps = {
   llmRole: LlmRole;
@@ -26,8 +25,7 @@ export function Chat(props: ChatProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { setBackgroundImageUrl, setShowBackgroundImage } =
     useScenarioBackground();
-  const { scenario, targetWords, setTargetWords, history, setHistory } =
-    useScenarioGoal();
+  const { scenario, history, setHistory } = useScenarioGoal();
 
   useEffect(() => {
     if (!scenario) return;
@@ -109,49 +107,22 @@ export function Chat(props: ChatProps) {
   // We remove the first initial LLM prompt.
   const filteredMessages = [...history].slice(1);
 
-  // Match target words in AI-generated messages and update the completion status for target words.
-  const llmMessage = [...history]
-    .filter((m) => m.role === 'model')
-    .map((m) => m.message)
-    .join(' ');
-  const matchedWords = getMatchedWordsInString(
-    llmMessage,
-    targetWords.map((word) => word.word)
-  );
-  const currentlyMatchedTargetWordrs = targetWords
-    .filter((word) => word.completed)
-    .map((word) => word.word);
-  const newMatchedWords = matchedWords.filter(
-    (word) => !currentlyMatchedTargetWordrs.includes(word)
-  );
-  if (newMatchedWords.length > 0) {
-    setTargetWords((prev) =>
-      prev.map((word) =>
-        newMatchedWords.includes(word.word)
-          ? { ...word, completed: true }
-          : word
-      )
-    );
-  }
-
   return (
     <>
-      <ScrollArea className='flex h-screen w-full px-4'>
-        <div className='grid h-full w-full place-items-center py-10'>
-          <div className='flex w-full max-w-lg flex-col gap-4 py-10'>
-            {filteredMessages.map((message, idx) => (
-              <ChatBubble
-                key={idx}
-                message={message.message}
-                isError={message.role === 'error'}
-                isUser={message.role === 'user'}
-                avatarUrl={
-                  message.role === 'user' ? undefined : props.llmRole.avatar_url
-                }
-                onRetry={handleRetry}
-              />
-            ))}
-          </div>
+      <ScrollArea className='h-full w-full px-4'>
+        <div className='mx-auto flex h-full w-full max-w-lg flex-col gap-4 py-24'>
+          {filteredMessages.map((message, idx) => (
+            <ChatBubble
+              key={idx}
+              message={message.message}
+              isError={message.role === 'error'}
+              isUser={message.role === 'user'}
+              avatarUrl={
+                message.role === 'user' ? undefined : props.llmRole.avatar_url
+              }
+              onRetry={handleRetry}
+            />
+          ))}
         </div>
       </ScrollArea>
       <motion.div
@@ -160,6 +131,11 @@ export function Chat(props: ChatProps) {
           // gradient glass effect
           'shadow-inner backdrop-blur-[10px] [mask:linear-gradient(to_top,black_0%,black_75%,transparent_100%)]'
         )}
+        style={{
+          WebkitBackdropFilter: 'blur(10px)',
+          WebkitMask:
+            'linear-gradient(to top,black 0%,black 75%,transparent 100%)',
+        }}
         initial={{
           y: 20,
           opacity: 0,

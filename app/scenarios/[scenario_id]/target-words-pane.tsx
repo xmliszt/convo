@@ -2,6 +2,7 @@
 
 import { CheckCircle, Circle, Info } from '@phosphor-icons/react';
 import { motion, Variants } from 'framer-motion';
+import { useEffect } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -12,9 +13,38 @@ import {
 import { cn } from '@/lib/utils';
 
 import { useScenarioGoal } from './scenario-goal-provider';
+import { getMatchedWordsInString } from './utils/get-matched-targets';
 
 export function TargetWordsPane() {
-  const { targetWords } = useScenarioGoal();
+  const { targetWords, history, setTargetWords } = useScenarioGoal();
+
+  useEffect(() => {
+    if (targetWords.every((word) => word.completed)) return;
+    // Match target words in AI-generated messages and update the completion status for target words.
+    const llmMessage = [...history]
+      .filter((m) => m.role === 'model')
+      .map((m) => m.message)
+      .join(' ');
+    const matchedWords = getMatchedWordsInString(
+      llmMessage,
+      targetWords.map((word) => word.word)
+    );
+    const currentlyMatchedTargetWordrs = targetWords
+      .filter((word) => word.completed)
+      .map((word) => word.word);
+    const newMatchedWords = matchedWords.filter(
+      (word) => !currentlyMatchedTargetWordrs.includes(word)
+    );
+    if (newMatchedWords.length > 0) {
+      setTargetWords((prev) =>
+        prev.map((word) =>
+          newMatchedWords.includes(word.word)
+            ? { ...word, completed: true }
+            : word
+        )
+      );
+    }
+  }, [history, targetWords, setTargetWords]);
 
   const individualTargetWordVariants: Variants = {
     initial: {

@@ -72,7 +72,7 @@ export default async function Page(props: PageProps) {
           targetWords={targetWords.words}
           initialHistory={initialHistory}
         />
-        <main className='relative flex h-full w-full flex-col items-center gap-y-4'>
+        <main className='relative flex flex-col items-center gap-y-4'>
           <div className='absolute left-[calc(50vw-34rem)] top-[80px] z-20 hidden max-w-[16rem] flex-col items-center gap-y-4 pb-[60px] lg:flex'>
             <GoalPane />
             <TargetWordsPane />

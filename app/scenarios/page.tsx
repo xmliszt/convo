@@ -11,9 +11,9 @@ export default async function Page() {
 
   return (
     <ScenarioBackgroundProvider>
-      <main className='h-screen w-screen'>
-        <ScrollArea className='h-full w-full'>
-          <div className='flex h-full w-full justify-center px-4 py-32'>
+      <main>
+        <ScrollArea className='h-full'>
+          <div className='flex justify-center px-4 py-32'>
             <ScenarioGrid scenarios={scenarios} />
           </div>
         </ScrollArea>

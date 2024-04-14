@@ -10,6 +10,11 @@ export function Header() {
         // gradient glass effect
         'shadow-inner backdrop-blur-[5px] [mask:linear-gradient(to_bottom,black_0%,black_50%,transparent_100%)]'
       )}
+      style={{
+        WebkitBackdropFilter: 'blur(5px)',
+        WebkitMask:
+          'linear-gradient(to bottom,black 0%,black 50%,transparent 100%)',
+      }}
     >
       <div className='px-4 py-2'>
         <HomeLink href='/' fontSize='24px' />

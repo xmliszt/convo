@@ -63,9 +63,10 @@ export function GoalPane() {
   useEffect(() => {
     if (history.length <= 2) return;
     if (history.length === previousHistory.current.length) return;
+    if (goals.every((goal) => goal.completed)) return;
     checkGoals(history);
     previousHistory.current = history;
-  }, [history, checkGoals]);
+  }, [goals, history, checkGoals]);
 
   const individualTargetWordVariants: Variants = {
     initial: {
