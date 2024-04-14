@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 
 import { useScenarioBackground } from '../scenario-background-provider';
 import { useScenarioGoal } from './scenario-goal-provider';
+import { checkGoalCompletions } from './services/check-goal-completions';
 import { sendMessagesToLlm } from './services/send-messages-to-llm';
 import { getMatchedWordsInString } from './utils/get-matched-targets';
 
@@ -31,7 +32,8 @@ export function Chat(props: ChatProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { setBackgroundImageUrl, setShowBackgroundImage } =
     useScenarioBackground();
-  const { scenario, targetWords, setTargetWords } = useScenarioGoal();
+  const { scenario, goals, targetWords, setTargetWords, setGoals } =
+    useScenarioGoal();
 
   useEffect(() => {
     if (!scenario) return;
@@ -83,10 +85,13 @@ export function Chat(props: ChatProps) {
             },
           ]);
         } else {
-          setMessages((prev) => [
-            ...prev,
+          const newHistory: Chat[] = [
+            ...history,
+            { role: 'user', message: newUserMessage },
             { role: 'model', message: newModelMessageText },
-          ]);
+          ];
+          setMessages(newHistory);
+          checkGoals(newHistory);
         }
       } catch (error) {
         console.error(error);
@@ -99,6 +104,34 @@ export function Chat(props: ChatProps) {
         ]);
       }
     });
+  }
+
+  async function checkGoals(history: Chat[]) {
+    if (scenario) {
+      try {
+        const completedGoalIds = await checkGoalCompletions({
+          goals: goals,
+          completedGoalIds: goals
+            .filter((goal) => goal.completed)
+            .map((g) => g.id),
+          history: history.map((message) => ({
+            role: message.role,
+            parts: [{ text: message.message }],
+          })),
+          scenario: scenario,
+        });
+        if (completedGoalIds.length > 0) {
+          setGoals((prev) =>
+            prev.map((goal) => ({
+              ...goal,
+              completed: completedGoalIds.includes(goal.id),
+            }))
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
 
   useEffect(() => {

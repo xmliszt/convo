@@ -34,11 +34,13 @@ export function TargetWordsPane() {
     initial: {
       scale: 1,
       opacity: 0.5,
+      textDecoration: 'none',
     },
     visible: (i) => ({
       rotate: [0, 3, -3, 5, -5, 3, -3, 0],
       scale: [1, 1.1, 1.1, 1.2, 1.2, 1.1, 1.1, 1],
       opacity: 1,
+      textDecoration: 'line-through',
       transition: {
         duration: 0.5,
         ease: 'easeInOut',
