@@ -207,6 +207,7 @@ export function Chat() {
         >
           <div className='relative w-full max-w-lg'>
             <Input
+              tabIndex={0}
               ref={inputRef}
               type='text'
               disabled={isSendingMessage}

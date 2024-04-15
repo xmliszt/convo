@@ -13,18 +13,21 @@ export type Database = {
         Row: {
           id: string
           long_description: string | null
+          points: number
           scenario_id: string
           short_description: string
         }
         Insert: {
           id?: string
           long_description?: string | null
+          points?: number
           scenario_id: string
           short_description: string
         }
         Update: {
           id?: string
           long_description?: string | null
+          points?: number
           scenario_id?: string
           short_description?: string
         }
