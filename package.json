@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "dev": "next dev",
     "vercel-build": "next build",
     "vercel:dev": "vercel dev",
     "vercel:pull": "vercel pull",
