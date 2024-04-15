@@ -2,10 +2,10 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-import { useScenarioGoal } from '../scenario-goal-provider';
+import { useScenario } from '../scenario-goal-provider';
 
 export function ScenarioPane() {
-  const { scenario } = useScenarioGoal();
+  const { scenario } = useScenario();
   if (!scenario) return null;
 
   return (

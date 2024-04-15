@@ -2,9 +2,9 @@
 
 import { useEffect } from 'react';
 
-import { Chat, useScenarioGoal } from './scenario-goal-provider';
+import { Chat, useScenario } from './scenario-goal-provider';
 
-type ScenarioGoalLoaderProps = {
+type ScenarioLoaderProps = {
   llmRole: LlmRole;
   scenario: Scenario;
   goals: Goal[];
@@ -12,9 +12,9 @@ type ScenarioGoalLoaderProps = {
   initialHistory: Chat[];
 };
 
-export function ScenarioGoalLoader(props: ScenarioGoalLoaderProps) {
+export function ScenarioLoader(props: ScenarioLoaderProps) {
   const { setLlmRole, setScenario, setGoals, setTargetWords, setHistory } =
-    useScenarioGoal();
+    useScenario();
 
   useEffect(() => {
     setLlmRole(props.llmRole);

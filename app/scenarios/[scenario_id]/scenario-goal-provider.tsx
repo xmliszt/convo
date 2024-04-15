@@ -25,7 +25,7 @@ export type TargetWordsWithCompletion = {
   completed: boolean;
 };
 
-type ScenarioGoalProviderContextValue = {
+type ScenarioProviderContextValue = {
   llmRole: LlmRole | undefined;
   scenario: Scenario | undefined;
   goals: GoalWthCompletion[];
@@ -40,27 +40,22 @@ type ScenarioGoalProviderContextValue = {
   setIsGameOver: Dispatch<SetStateAction<boolean>>;
 };
 
-const ScenarioGoalProviderContext =
-  createContext<ScenarioGoalProviderContextValue>({
-    llmRole: undefined,
-    scenario: undefined,
-    goals: [],
-    history: [],
-    targetWords: [],
-    isGameOver: false,
-    setLlmRole: () => {},
-    setScenario: () => {},
-    setGoals: () => {},
-    setTargetWords: () => {},
-    setHistory: () => {},
-    setIsGameOver: () => {},
-  });
+const ScenarioProviderContext = createContext<ScenarioProviderContextValue>({
+  llmRole: undefined,
+  scenario: undefined,
+  goals: [],
+  history: [],
+  targetWords: [],
+  isGameOver: false,
+  setLlmRole: () => {},
+  setScenario: () => {},
+  setGoals: () => {},
+  setTargetWords: () => {},
+  setHistory: () => {},
+  setIsGameOver: () => {},
+});
 
-export function ScenarioGoalProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function ScenarioProvider({ children }: { children: React.ReactNode }) {
   const [isGameOver, setIsGameOver] = useState(false);
   const [llmRole, setLlmRole] = useState<LlmRole | undefined>(undefined);
   const [scenario, setScenario] = useState<Scenario | undefined>(undefined);
@@ -82,7 +77,7 @@ export function ScenarioGoalProvider({
   }, [goals, scenario, targetWords]);
 
   return (
-    <ScenarioGoalProviderContext.Provider
+    <ScenarioProviderContext.Provider
       value={{
         llmRole,
         scenario,
@@ -99,10 +94,10 @@ export function ScenarioGoalProvider({
       }}
     >
       {children}
-    </ScenarioGoalProviderContext.Provider>
+    </ScenarioProviderContext.Provider>
   );
 }
 
-export function useScenarioGoal() {
-  return useContext(ScenarioGoalProviderContext);
+export function useScenario() {
+  return useContext(ScenarioProviderContext);
 }

@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils';
 
 import { useScenarioBackground } from '../../scenario-background-provider';
 import type { Chat as ChatType } from '../scenario-goal-provider';
-import { useScenarioGoal } from '../scenario-goal-provider';
+import { useScenario } from '../scenario-goal-provider';
 import { sendMessagesToLlm } from './services/send-messages-to-llm';
 
 export function Chat() {
@@ -29,8 +29,7 @@ export function Chat() {
 
   const { setBackgroundImageUrl, setShowBackgroundImage } =
     useScenarioBackground();
-  const { scenario, history, setHistory, isGameOver, llmRole } =
-    useScenarioGoal();
+  const { scenario, history, setHistory, isGameOver, llmRole } = useScenario();
 
   useEffect(() => {
     if (!scenario) return;

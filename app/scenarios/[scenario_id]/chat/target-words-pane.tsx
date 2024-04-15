@@ -12,11 +12,11 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
-import { useScenarioGoal } from '../scenario-goal-provider';
+import { useScenario } from '../scenario-goal-provider';
 import { getMatchedWordsInString } from './utils/get-matched-targets';
 
 export function TargetWordsPane() {
-  const { targetWords, history, setTargetWords } = useScenarioGoal();
+  const { targetWords, history, setTargetWords } = useScenario();
 
   useEffect(() => {
     if (targetWords.every((word) => word.completed)) return;
