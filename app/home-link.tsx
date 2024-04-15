@@ -6,11 +6,27 @@ import { useEffect, useState } from 'react';
 
 import { AnimatedText } from '@/components/animated-text';
 
-type HomeLinkProps = {
+export type HomeLink = {
   /**
    * The path to navigate to when the user clicks on this component.
    */
   href: string;
+  /**
+   * The label to show on the home link.
+   */
+  label: string;
+};
+
+export const DEFAULT_HOMELINK: HomeLink = {
+  href: '/',
+  label: 'Home',
+};
+
+type HomeLinkProps = {
+  /**
+   * The {@link HomeLink} object that contains the path and label for the home link.
+   */
+  homeLink: HomeLink;
   /**
    * The font size of the heading text as string.
    */
@@ -54,7 +70,7 @@ export function HomeLink(props: HomeLinkProps) {
   function handleLinkClick() {
     setIsBeforeRouting(true);
     setTimeout(() => {
-      router.push(props.href);
+      router.push(props.homeLink.href);
     }, 200);
   }
 
@@ -113,9 +129,7 @@ export function HomeLink(props: HomeLinkProps) {
                 fontSize: props.fontSize,
               }}
             >
-              <AnimatedText yOffset={20}>
-                {props.href === '/' ? 'Home' : 'Start'}
-              </AnimatedText>
+              <AnimatedText yOffset={20}>{props.homeLink.label}</AnimatedText>
             </div>
           </motion.div>
         </motion.div>
