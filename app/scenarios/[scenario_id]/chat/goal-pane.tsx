@@ -124,8 +124,8 @@ export function GoalPane() {
             <TooltipTrigger asChild>
               <motion.div
                 className={cn(
-                  'flex items-start gap-3',
-                  goal.completed && 'text-green-600 line-through'
+                  'relative flex items-start gap-3',
+                  goal.completed && 'text-green-600 [&>span]:line-through'
                 )}
                 custom={idx}
                 initial='initial'
@@ -142,13 +142,23 @@ export function GoalPane() {
                   <Info />
                 </motion.span>
                 <motion.span
-                  custom={0}
+                  custom={1}
                   initial='initial'
                   animate={goal.completed ? 'visible' : 'initial'}
                   variants={completionVariants}
                 >
                   {goal.short_description}
                 </motion.span>
+                <div
+                  className={cn(
+                    'pointer-events-none select-none rounded-[6px] border px-2 text-sm font-bold transition-colors ease-out',
+                    goal.completed
+                      ? 'border-green-600 bg-green-600/10 text-green-700'
+                      : 'border-border bg-background/30 text-primary/50'
+                  )}
+                >
+                  +{goal.points}
+                </div>
               </motion.div>
             </TooltipTrigger>
             <TooltipContent align='start' side='left'>

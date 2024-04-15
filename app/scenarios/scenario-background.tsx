@@ -9,13 +9,13 @@ export function ScenarioBackground() {
 
   return (
     <motion.div
-      className='fixed inset-0 left-0 top-0 -z-10 h-[120%] w-[120%] opacity-35 brightness-50 [mask:linear-gradient(to_bottom,transparent_0%,black_100%)]'
+      className='fixed inset-0 left-0 top-0 -z-10 h-[120%] w-[120%] opacity-35 [mask:linear-gradient(to_bottom,transparent_0%,black_100%)]'
       style={{
         backgroundImage: `url(${backgroundImageUrl})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        filter: 'blur(30px)',
+        filter: 'blur(20px) brightness(0.8)',
       }}
       initial={{
         opacity: 0,

@@ -102,8 +102,8 @@ export function TargetWordsPane() {
             <motion.div
               key={word.word}
               className={cn(
-                'flex items-center gap-3 leading-none [&>svg]:mt-1',
-                word.completed && 'text-green-600'
+                'flex items-start gap-3 leading-none [&>svg]:mt-1',
+                word.completed && 'text-green-600 [&>span]:line-through'
               )}
               custom={idx}
               initial='initial'
@@ -123,9 +123,20 @@ export function TargetWordsPane() {
                 initial='initial'
                 animate={word.completed ? 'visible' : 'initial'}
                 variants={completionVariants}
+                className='relative grow leading-tight'
               >
                 {word.word}
               </motion.span>
+              <div
+                className={cn(
+                  'pointer-events-none select-none rounded-[6px] border px-2 text-sm font-bold transition-colors ease-out',
+                  word.completed
+                    ? 'border-green-600 bg-green-600/10 text-green-700'
+                    : 'border-border bg-background/30 text-primary/50'
+                )}
+              >
+                +1
+              </div>
             </motion.div>
           ))}
         </div>
