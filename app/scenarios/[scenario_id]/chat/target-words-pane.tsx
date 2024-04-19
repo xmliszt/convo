@@ -129,7 +129,7 @@ export function TargetWordsPane() {
               </motion.span>
               <div
                 className={cn(
-                  'pointer-events-none select-none rounded-[6px] border px-2 text-sm font-bold transition-colors ease-out',
+                  'pointer-events-none w-10 select-none rounded-[6px] border px-2 text-center text-sm font-bold transition-colors ease-out',
                   word.completed
                     ? 'border-green-600 bg-green-600/10 text-green-700'
                     : 'border-border bg-background/30 text-primary/50'

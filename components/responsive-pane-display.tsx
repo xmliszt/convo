@@ -1,32 +1,24 @@
 'use client';
 import { ArrowFatUp } from '@phosphor-icons/react';
-import * as React from "react";
+import * as React from 'react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
+} from '@/components/ui/drawer';
 
-type ResponsivePaneDrawerProps = {
-  title?: string;
-  descriptionclassNam?: string;
-  content: React.ReactNode;
-  className?: string
+type PaneGroupDrawerProps = {
+  title: string;
+  children: React.ReactNode;
 };
 
-export function ResponsivePaneDrawer({ 
-  title, 
-  description, 
-  content, 
-  className
-}: ResponsivePaneDrawerProps) {
+export function PaneGroupDrawer(props: PaneGroupDrawerProps) {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = () => {
@@ -35,22 +27,22 @@ export function ResponsivePaneDrawer({
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild className={className}>
-        <Button variant="outline" onClick={toggleDrawer}>
-          <ArrowFatUp className='size-6'/>
+      <DrawerTrigger
+        asChild
+        className='block h-10 bg-background/40 transition-[box-shadow] duration-300 ease-out focus:shadow-xl lg:hidden'
+      >
+        <Button variant='outline' onClick={toggleDrawer}>
+          <ArrowFatUp className='size-6' />
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        {title && (
-          <DrawerHeader>
-            <DrawerTitle>{title}</DrawerTitle>
-            {description && <DrawerDescription>{description}</DrawerDescription>}
-          </DrawerHeader>
-        )}
-        {content}
+        <DrawerHeader>
+          <DrawerTitle>{props.title}</DrawerTitle>
+        </DrawerHeader>
+        {props.children}
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant="outline" onClick={toggleDrawer}>
+            <Button variant='outline' onClick={toggleDrawer}>
               Close
             </Button>
           </DrawerClose>

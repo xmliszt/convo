@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 
 import { ChatBubble } from '@/components/chat-bubble';
-import { ResponsivePaneDrawer } from '@/components/responsive-pane-display';
+import { PaneGroupDrawer } from '@/components/responsive-pane-display';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -138,6 +138,8 @@ export function Chat() {
     },
   };
 
+  if (!scenario) return null;
+
   return (
     <>
       <ScrollArea className='absolute left-0 top-0 h-full w-full px-4'>
@@ -209,16 +211,12 @@ export function Chat() {
           onSubmit={handleSubmit}
           className='grid w-full place-items-center px-4'
         >
-          <div className='relative w-full max-w-lg gap-x-2 inline-flex'>
-          <ResponsivePaneDrawer className='h-10 bg-background/40 transition-[box-shadow] duration-300 ease-out focus:shadow-xl block lg:hidden'
-              content={
-                <div>
-                  <ScenarioPane />
-                  <GoalPane />
-                  <TargetWordsPane />
-                </div>
-              }
-            />
+          <div className='relative inline-flex w-full max-w-lg gap-x-2'>
+            <PaneGroupDrawer title={scenario?.name}>
+              <ScenarioPane />
+              <GoalPane />
+              <TargetWordsPane />
+            </PaneGroupDrawer>
             <Input
               tabIndex={0}
               ref={inputRef}
