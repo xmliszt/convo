@@ -7,7 +7,6 @@ import { fetchLlmRole } from './chat/services/fetch-llm-role';
 import { fetchScenario } from './chat/services/fetch-scenario';
 import { fetchTargetWords } from './chat/services/fetch-target-words';
 import { getInitialHistory } from './chat/services/get-initial-llm-message';
-import { ScenarioLoader } from './scenario-goal-loader';
 import { ScenarioProvider } from './scenario-goal-provider';
 
 export async function generateMetadata({
@@ -61,15 +60,16 @@ export default async function Layout(props: LayoutProps) {
 
   return (
     <ScenarioBackgroundProvider>
-      <ScenarioProvider>
-        {/* Load scenario, goal, targetWords into the provider context */}
-        <ScenarioLoader
-          goals={goals}
-          llmRole={llmRole}
-          scenario={scenario}
-          targetWords={targetWords.words}
-          initialHistory={initialHistory}
-        />
+      <ScenarioProvider
+        goals={goals.map((goal) => ({ ...goal, completed: false }))}
+        llmRole={llmRole}
+        scenario={scenario}
+        targetWords={targetWords.words.map((word) => ({
+          word,
+          completed: false,
+        }))}
+        history={initialHistory}
+      >
         <main className='relative'>
           {props.children}
           <ScenarioBackground />

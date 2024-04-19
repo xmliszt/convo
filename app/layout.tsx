@@ -2,7 +2,7 @@ import './globals.css';
 
 import { Analytics } from '@vercel/analytics/react';
 import { Metadata, Viewport } from 'next';
-import { Bodoni_Moda } from 'next/font/google';
+import { Playfair_Display } from 'next/font/google';
 
 import { ThemeSwitch } from '@/components/theme-switch';
 import { Toaster } from '@/components/ui/sonner';
@@ -87,7 +87,7 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-const font = Bodoni_Moda({
+const font = Playfair_Display({
   weight: ['400', '500', '600', '700', '800', '900'],
   subsets: ['latin'],
 });

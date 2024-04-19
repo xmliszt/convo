@@ -13,7 +13,7 @@ export function ScenarioPane() {
       <CardHeader>
         <CardTitle>{scenario.name}</CardTitle>
       </CardHeader>
-      <CardContent className='text-sm text-foreground opacity-50'>
+      <CardContent className='text-sm font-light text-foreground opacity-90'>
         {scenario.description}
       </CardContent>
     </Card>
