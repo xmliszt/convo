@@ -1,8 +1,8 @@
 'use client';
-import * as React from "react";
-import { Button } from "@/components/ui/button";
 import { ArrowFatUp } from '@phosphor-icons/react';
+import * as React from "react";
 
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -13,7 +13,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { cn } from "@/lib/utils";
 
 type ResponsivePaneDrawerProps = {
   title?: string;

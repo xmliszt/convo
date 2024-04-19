@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 
 import { ChatBubble } from '@/components/chat-bubble';
+import { ResponsivePaneDrawer } from '@/components/responsive-pane-display';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -16,12 +17,10 @@ import { cn } from '@/lib/utils';
 import { useScenarioBackground } from '../../scenario-background-provider';
 import type { Chat as ChatType } from '../scenario-goal-provider';
 import { useScenario } from '../scenario-goal-provider';
-import { sendMessagesToLlm } from './services/send-messages-to-llm';
-
 import { GoalPane } from './goal-pane';
 import { ScenarioPane } from './scenario-pane';
+import { sendMessagesToLlm } from './services/send-messages-to-llm';
 import { TargetWordsPane } from './target-words-pane';
-import { ResponsivePaneDrawer } from '@/components/responsive-pane-display';
 
 export function Chat() {
   const router = useRouter();
