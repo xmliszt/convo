@@ -18,6 +18,11 @@ import type { Chat as ChatType } from '../scenario-goal-provider';
 import { useScenario } from '../scenario-goal-provider';
 import { sendMessagesToLlm } from './services/send-messages-to-llm';
 
+import { GoalPane } from './goal-pane';
+import { ScenarioPane } from './scenario-pane';
+import { TargetWordsPane } from './target-words-pane';
+import { ResponsivePaneDrawer } from '@/components/responsive-pane-display';
+
 export function Chat() {
   const router = useRouter();
   const pathname = usePathname();
@@ -205,7 +210,16 @@ export function Chat() {
           onSubmit={handleSubmit}
           className='grid w-full place-items-center px-4'
         >
-          <div className='relative w-full max-w-lg'>
+          <div className='relative w-full max-w-lg gap-x-2 inline-flex'>
+          <ResponsivePaneDrawer className='h-10 bg-background/40 transition-[box-shadow] duration-300 ease-out focus:shadow-xl block lg:hidden'
+              content={
+                <div>
+                  <ScenarioPane />
+                  <GoalPane />
+                  <TargetWordsPane />
+                </div>
+              }
+            />
             <Input
               tabIndex={0}
               ref={inputRef}

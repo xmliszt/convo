@@ -13,7 +13,7 @@ export default function Page() {
       <Chat />
       <div className='absolute left-[calc(50vw+18rem)] top-[80px] z-20 hidden max-w-[14rem] flex-col items-center gap-y-4 pb-[60px] lg:flex'>
         <ScenarioPane />
-      </div>
+      </div>      
     </>
   );
 }
