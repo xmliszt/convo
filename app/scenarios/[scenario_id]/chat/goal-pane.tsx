@@ -20,7 +20,7 @@ import { useMediaQuery } from '@/lib/use-media-query';
 import { cn } from '@/lib/utils';
 
 import { Chat, useScenario } from '../scenario-goal-provider';
-import { checkGoalCompletions } from './services/gemini/check-goal-completions';
+import { checkGoalCompletions } from './services/openai/check-goal-completions';
 
 export function GoalPane() {
   const { scenario, goals, setGoals, history } = useScenario();

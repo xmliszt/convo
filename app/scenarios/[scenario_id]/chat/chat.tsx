@@ -17,7 +17,7 @@ import { useScenarioBackground } from '../../scenario-background-provider';
 import type { Chat as ChatType } from '../scenario-goal-provider';
 import { useScenario } from '../scenario-goal-provider';
 import { GoalPane } from './goal-pane';
-import { sendMessagesToLlm } from './services/gemini/send-messages-to-llm';
+import { sendMessagesToLlm } from './services/openai/send-messages-to-llm';
 import { TargetWordsPane } from './target-words-pane';
 
 export function Chat() {

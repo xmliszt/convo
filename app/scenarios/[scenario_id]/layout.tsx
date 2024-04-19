@@ -6,7 +6,7 @@ import { fetchGoals } from './chat/services/fetch-goals';
 import { fetchLlmRole } from './chat/services/fetch-llm-role';
 import { fetchScenario } from './chat/services/fetch-scenario';
 import { fetchTargetWords } from './chat/services/fetch-target-words';
-import { getInitialHistory } from './chat/services/gemini/get-initial-llm-message';
+import { getInitialHistory } from './chat/services/openai/get-initial-history';
 import { ScenarioProvider } from './scenario-goal-provider';
 
 export async function generateMetadata({
