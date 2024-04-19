@@ -6,7 +6,7 @@ import { fetchGoals } from './chat/services/fetch-goals';
 import { fetchLlmRole } from './chat/services/fetch-llm-role';
 import { fetchScenario } from './chat/services/fetch-scenario';
 import { fetchTargetWords } from './chat/services/fetch-target-words';
-import { getInitialHistory } from './chat/services/get-initial-llm-message';
+import { getInitialHistory } from './chat/services/gemini/get-initial-llm-message';
 import { ScenarioProvider } from './scenario-goal-provider';
 
 export async function generateMetadata({
@@ -46,17 +46,12 @@ export default async function Layout(props: LayoutProps) {
       llmRole,
       scenario,
     })
-  )
-    .map((content) => ({
-      role: content.role,
-      message: content.parts[0].text,
-    }))
-    .filter<{
-      role: 'user' | 'model';
-      message: string;
-    }>((content): content is { role: 'user' | 'model'; message: string } => {
-      return content.role === 'user' || content.role === 'model';
-    });
+  ).filter<{
+    role: 'user' | 'model';
+    message: string;
+  }>((content): content is { role: 'user' | 'model'; message: string } => {
+    return content.role === 'user' || content.role === 'model';
+  });
 
   return (
     <ScenarioBackgroundProvider>

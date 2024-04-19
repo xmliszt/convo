@@ -1,6 +1,5 @@
 'use client';
 
-import { Content } from '@google/generative-ai';
 import { PaperPlane } from '@phosphor-icons/react';
 import { motion, Variants } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
@@ -18,7 +17,7 @@ import { useScenarioBackground } from '../../scenario-background-provider';
 import type { Chat as ChatType } from '../scenario-goal-provider';
 import { useScenario } from '../scenario-goal-provider';
 import { GoalPane } from './goal-pane';
-import { sendMessagesToLlm } from './services/send-messages-to-llm';
+import { sendMessagesToLlm } from './services/gemini/send-messages-to-llm';
 import { TargetWordsPane } from './target-words-pane';
 
 export function Chat() {
@@ -75,16 +74,16 @@ export function Chat() {
   }
 
   async function sendMessage(history: ChatType[], newUserMessage: string) {
-    const convertedMessages: Content[] = history
-      .filter((m) => m.role !== 'error')
-      .map((m) => ({ role: m.role, parts: [{ text: m.message }] }));
+    const convertedMessages: ChatType[] = history.filter(
+      (m) => m.role !== 'error'
+    );
     try {
       setIsSendingMessage(true);
       const newModelMessage = await sendMessagesToLlm(
         convertedMessages,
         newUserMessage
       );
-      const newModelMessageText = newModelMessage.parts.at(0)?.text;
+      const newModelMessageText = newModelMessage.message;
       if (!newModelMessageText) {
         setHistory((prev) => [
           ...prev,

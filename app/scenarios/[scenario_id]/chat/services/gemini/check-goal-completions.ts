@@ -8,10 +8,12 @@ import {
 
 import { getGeminiModel } from '@/lib/ai/gemini';
 
+import { Chat } from '../../../scenario-goal-provider';
+
 type CheckGoalCompletionsOptions = {
   goals: Goal[];
   completedGoalIds: string[];
-  history: Content[];
+  history: Chat[];
   scenario: Scenario;
 };
 
@@ -78,7 +80,7 @@ export async function checkGoalCompletions(
 
 function getSystemPrompt(
   scenario: Scenario,
-  history: Content[],
+  history: Chat[],
   goals: Goal[]
 ): Content[] {
   return [
@@ -182,7 +184,14 @@ function getSystemPrompt(
         },
       ],
     },
-    ...history,
+    ...history.map((message) => ({
+      role: message.role,
+      parts: [
+        {
+          text: message.message,
+        },
+      ],
+    })),
     // Last user message to indicate the end of the conversation history and prompt the model to evaluate the goals.
     {
       role: 'user',
