@@ -20,7 +20,7 @@ const config = {
     screens: {
       sm: '640px',
       md: '768px',
-      lg: '1024px',
+      lg: '1140px',
       xl: '1280px',
       '2xl': '1536px',
     },
@@ -81,7 +81,11 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('@tailwindcss/typography'),
+    require('tailwind-scrollbar-hide'),
+  ],
   future: {
     hoverOnlyWhenSupported: true,
   },

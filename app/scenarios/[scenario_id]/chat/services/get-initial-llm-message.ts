@@ -1,6 +1,10 @@
 import 'server-only';
 
-import { Content } from '@google/generative-ai';
+import {
+  Content,
+  HarmBlockThreshold,
+  HarmCategory,
+} from '@google/generative-ai';
 
 import { getGeminiModel } from '@/lib/ai/gemini';
 
@@ -30,6 +34,27 @@ export async function getInitialHistory(
         ],
       },
     ],
+    safetySettings: [
+      {
+        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+        threshold: HarmBlockThreshold.BLOCK_NONE,
+      },
+      {
+        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+        threshold: HarmBlockThreshold.BLOCK_NONE,
+      },
+      {
+        category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        threshold: HarmBlockThreshold.BLOCK_NONE,
+      },
+      {
+        category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+        threshold: HarmBlockThreshold.BLOCK_NONE,
+      },
+    ],
+    generationConfig: {
+      temperature: 0,
+    },
   });
   const message = result.response.text();
   return [

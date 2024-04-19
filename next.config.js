@@ -16,6 +16,11 @@ const withPWA = require('next-pwa')({
 
 const nextConfig = {
   reactStrictMode: true,
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   async headers() {
     return [
       {

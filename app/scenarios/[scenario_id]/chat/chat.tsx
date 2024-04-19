@@ -143,7 +143,7 @@ export function Chat() {
     <>
       <ScrollArea className='absolute left-0 top-0 h-full w-full px-4'>
         <div
-          className='mx-auto w-full max-w-lg space-y-4 pb-24 pt-20'
+          className='mx-auto w-full max-w-lg space-y-4 pb-32 pt-20'
           style={{
             marginTop: isMobile ? '80px' : '0',
           }}
@@ -181,7 +181,7 @@ export function Chat() {
       </ScrollArea>
       <motion.div
         className={cn(
-          'fixed bottom-0 z-50 w-full py-8',
+          'fixed bottom-0 z-50 flex w-full justify-center py-8',
           // gradient glass effect
           'shadow-inner backdrop-blur-[10px] [mask:linear-gradient(to_top,black_0%,black_75%,transparent_100%)]'
         )}
@@ -205,56 +205,56 @@ export function Chat() {
           },
         }}
       >
-        {' '}
-        <form
-          onSubmit={handleSubmit}
-          className='grid w-full place-items-center px-4'
-        >
-          <div className='relative inline-flex w-full max-w-lg gap-x-2'>
-            {/* For viewport < lg */}
+        <div className='flex max-w-lg grow flex-col justify-start gap-2 px-4'>
+          {/* For viewport < lg */}
+          <div className='visible lg:invisible'>
             <PaneGroupDrawer>
               <GoalPane />
               <TargetWordsPane />
             </PaneGroupDrawer>
-
-            <Input
-              tabIndex={0}
-              ref={inputRef}
-              type='text'
-              disabled={isSendingMessage}
-              value={inputValue}
-              placeholder='Type a message...'
-              onChange={(event) => setInputValue(event.target.value)}
-              className='h-10 w-full bg-background/40 pr-10 transition-[box-shadow] duration-300 ease-out focus:shadow-xl'
-              autoFocus
-            />
-            {inputValue.length > 0 && (
-              <motion.button
-                type='submit'
-                className='absolute bottom-1 right-1 top-1 grid size-8 place-items-center rounded-sm bg-card/40 p-2'
-                initial='initial'
-                whileHover='hover'
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                variants={{
-                  initial: {
-                    opacity: 0,
-                    y: 10,
-                  },
-                  hover: {
-                    opacity: 1,
-                  },
-                }}
-              >
-                <motion.span variants={sendButtonVariants}>
-                  <PaperPlane />
-                </motion.span>
-              </motion.button>
-            )}
           </div>
-        </form>
+          <form onSubmit={handleSubmit} className='grid place-items-center'>
+            <div className='relative inline-flex w-full gap-x-2'>
+              <Input
+                tabIndex={0}
+                ref={inputRef}
+                type='text'
+                disabled={isSendingMessage}
+                value={inputValue}
+                placeholder='Type a message...'
+                onChange={(event) => setInputValue(event.target.value)}
+                className='h-10 w-full bg-background/40 pr-10 transition-[box-shadow] duration-300 ease-out focus:shadow-xl'
+                autoFocus
+              />
+              {inputValue.length > 0 && (
+                <motion.button
+                  type='submit'
+                  className='absolute bottom-1 right-1 top-1 grid size-8 place-items-center rounded-sm bg-card/40 p-2'
+                  initial='initial'
+                  whileHover='hover'
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  variants={{
+                    initial: {
+                      opacity: 0,
+                      y: 10,
+                    },
+                    hover: {
+                      opacity: 1,
+                    },
+                  }}
+                >
+                  <motion.span variants={sendButtonVariants}>
+                    <PaperPlane />
+                  </motion.span>
+                </motion.button>
+              )}
+            </div>
+          </form>
+        </div>
+        <div />
       </motion.div>
     </>
   );

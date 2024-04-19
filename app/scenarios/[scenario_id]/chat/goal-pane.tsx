@@ -4,12 +4,19 @@ import { ArrowClockwise, Info } from '@phosphor-icons/react';
 import { motion, Variants } from 'framer-motion';
 import { useCallback, useEffect, useRef, useTransition } from 'react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { useMediaQuery } from '@/lib/use-media-query';
 import { cn } from '@/lib/utils';
 
 import { Chat, useScenario } from '../scenario-goal-provider';
@@ -102,26 +109,47 @@ export function GoalPane() {
     }),
   };
 
+  const isSmallerDevice = useMediaQuery('(max-width: 1140px)');
+
   return (
     <Card className='brightness-80 w-full bg-card/20 backdrop-blur-sm'>
       <CardHeader>
         <CardTitle className='flex items-center gap-2'>
           Goals
-          <Tooltip>
-            <TooltipTrigger asChild>
+          <Popover>
+            <PopoverTrigger
+              asChild
+              hidden={isSmallerDevice}
+              className='cursor-pointer'
+              disabled={isSmallerDevice}
+            >
               <Info />
-            </TooltipTrigger>
-            <TooltipContent align='start'>
+            </PopoverTrigger>
+            <PopoverContent align='start'>
               Main goals of this scenario. Try to achieve them by mentioning in
               your conversation.
-            </TooltipContent>
-          </Tooltip>
+            </PopoverContent>
+          </Popover>
         </CardTitle>
+        {isSmallerDevice && (
+          <CardDescription>
+            Main goals of this scenario. Try to achieve them by mentioning in
+            your conversation.
+          </CardDescription>
+        )}
       </CardHeader>
-      <CardContent className='relative flex flex-col gap-4 pb-10'>
+      <CardContent className='relative flex flex-col gap-y-4 pb-10'>
         {goals.map((goal, idx) => (
-          <Tooltip key={goal.id}>
-            <TooltipTrigger asChild>
+          <Popover key={goal.id}>
+            <PopoverTrigger
+              asChild
+              className={cn(
+                'cursor-pointer',
+                isSmallerDevice && 'pointer-events-none'
+              )}
+              hidden={isSmallerDevice}
+              disabled={isSmallerDevice}
+            >
               <motion.div
                 className={cn(
                   'relative flex items-start justify-between gap-3',
@@ -139,21 +167,25 @@ export function GoalPane() {
                     initial='initial'
                     animate={goal.completed ? 'visible' : 'initial'}
                     variants={completionVariants}
+                    hidden={isSmallerDevice}
                   >
                     <Info />
                   </motion.span>
-                  <motion.span
+                  <motion.div
                     custom={1}
                     initial='initial'
                     animate={goal.completed ? 'visible' : 'initial'}
                     variants={completionVariants}
                   >
-                    {goal.short_description}
-                  </motion.span>
+                    <div className='font-bold'>{goal.short_description}</div>
+                    {isSmallerDevice && (
+                      <div className='text-sm'>{goal.long_description}</div>
+                    )}
+                  </motion.div>
                 </div>
                 <div
                   className={cn(
-                    'pointer-events-none w-10 select-none rounded-[6px] border px-2 text-center text-sm font-bold transition-colors ease-out',
+                    'pointer-events-none w-10 min-w-10 max-w-10 select-none rounded-[6px] border px-2 text-center text-sm font-bold transition-colors ease-out',
                     goal.completed
                       ? 'border-green-600 bg-green-600/10 text-green-700'
                       : 'border-border bg-background/30 text-primary/50'
@@ -162,11 +194,9 @@ export function GoalPane() {
                   +{goal.points}
                 </div>
               </motion.div>
-            </TooltipTrigger>
-            <TooltipContent align='start' side='left'>
-              {goal.long_description}
-            </TooltipContent>
-          </Tooltip>
+            </PopoverTrigger>
+            <PopoverContent>{goal.long_description}</PopoverContent>
+          </Popover>
         ))}
         <div className='absolute bottom-4 right-4 z-10 size-4'>
           <ArrowClockwise

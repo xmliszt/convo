@@ -4,12 +4,19 @@ import { CheckCircle, Circle, Info } from '@phosphor-icons/react';
 import { motion, Variants } from 'framer-motion';
 import { useEffect } from 'react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { useMediaQuery } from '@/lib/use-media-query';
 import { cn } from '@/lib/utils';
 
 import { useScenario } from '../scenario-goal-provider';
@@ -80,21 +87,34 @@ export function TargetWordsPane() {
     }),
   };
 
+  const isSmallerDevice = useMediaQuery('(max-width: 1140px)');
+
   return (
     <Card className='brightness-80 w-full bg-card/20 backdrop-blur-sm'>
       <CardHeader>
         <CardTitle className='flex items-center gap-2'>
           Target words
-          <Tooltip>
-            <TooltipTrigger asChild>
+          <Popover>
+            <PopoverTrigger
+              asChild
+              hidden={isSmallerDevice}
+              className='cursor-pointer'
+              disabled={isSmallerDevice}
+            >
               <Info />
-            </TooltipTrigger>
-            <TooltipContent align='start'>
+            </PopoverTrigger>
+            <PopoverContent align='start'>
               Try to make AI mention these words in the conversation for some
               bonus points!
-            </TooltipContent>
-          </Tooltip>
+            </PopoverContent>
+          </Popover>
         </CardTitle>
+        {isSmallerDevice && (
+          <CardDescription>
+            Try to make AI mention these words in the conversation for some
+            bonus points!goalpan
+          </CardDescription>
+        )}
       </CardHeader>
       <CardContent>
         <div className='flex flex-col gap-4'>

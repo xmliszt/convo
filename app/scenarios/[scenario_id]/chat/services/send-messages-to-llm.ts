@@ -20,7 +20,7 @@ export async function sendMessagesToLlm(
   const chat = geminiModel.startChat({
     history: history,
     generationConfig: {
-      temperature: 0.5,
+      temperature: 0.2,
     },
     safetySettings: [
       {

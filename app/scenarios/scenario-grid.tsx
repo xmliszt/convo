@@ -81,7 +81,7 @@ function ScenarioCard(props: ScenarioCardProps) {
         style={{
           WebkitBackdropFilter: 'blur(4px)',
           WebkitBoxShadow:
-            'var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);',
+            'var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)',
         }}
         initial='initial'
         animate='animate'
@@ -99,7 +99,7 @@ function ScenarioCard(props: ScenarioCardProps) {
           setShowBackgroundImage(false);
         }}
         onClick={() => {
-          router.push(`/scenarios/${props.scenario.id}`);
+          router.push(`/scenarios/${props.scenario.id}/chat`);
         }}
       >
         <div className='flex h-full w-full flex-col gap-2'>
