@@ -118,13 +118,13 @@ export function GoalPane() {
           </Tooltip>
         </CardTitle>
       </CardHeader>
-      <CardContent className='relative flex flex-col gap-4'>
+      <CardContent className='relative flex flex-col gap-4 pb-10'>
         {goals.map((goal, idx) => (
           <Tooltip key={goal.id}>
             <TooltipTrigger asChild>
               <motion.div
                 className={cn(
-                  'relative flex items-start gap-3',
+                  'relative flex items-start justify-between gap-3',
                   goal.completed && 'text-green-600 [&>span]:line-through'
                 )}
                 custom={idx}
@@ -132,23 +132,25 @@ export function GoalPane() {
                 animate='visible'
                 variants={individualTargetWordVariants}
               >
-                <motion.span
-                  className='mt-1'
-                  custom={0}
-                  initial='initial'
-                  animate={goal.completed ? 'visible' : 'initial'}
-                  variants={completionVariants}
-                >
-                  <Info />
-                </motion.span>
-                <motion.span
-                  custom={1}
-                  initial='initial'
-                  animate={goal.completed ? 'visible' : 'initial'}
-                  variants={completionVariants}
-                >
-                  {goal.short_description}
-                </motion.span>
+                <div className='relative flex items-start gap-3'>
+                  <motion.span
+                    className='mt-1'
+                    custom={0}
+                    initial='initial'
+                    animate={goal.completed ? 'visible' : 'initial'}
+                    variants={completionVariants}
+                  >
+                    <Info />
+                  </motion.span>
+                  <motion.span
+                    custom={1}
+                    initial='initial'
+                    animate={goal.completed ? 'visible' : 'initial'}
+                    variants={completionVariants}
+                  >
+                    {goal.short_description}
+                  </motion.span>
+                </div>
                 <div
                   className={cn(
                     'pointer-events-none w-10 select-none rounded-[6px] border px-2 text-center text-sm font-bold transition-colors ease-out',

@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 
 import { ChatBubble } from '@/components/chat-bubble';
-import { PaneGroupDrawer } from '@/components/responsive-pane-display';
+import { PaneGroupDrawer } from '@/components/pane-group-drawer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -18,7 +18,6 @@ import { useScenarioBackground } from '../../scenario-background-provider';
 import type { Chat as ChatType } from '../scenario-goal-provider';
 import { useScenario } from '../scenario-goal-provider';
 import { GoalPane } from './goal-pane';
-import { ScenarioPane } from './scenario-pane';
 import { sendMessagesToLlm } from './services/send-messages-to-llm';
 import { TargetWordsPane } from './target-words-pane';
 
@@ -212,11 +211,12 @@ export function Chat() {
           className='grid w-full place-items-center px-4'
         >
           <div className='relative inline-flex w-full max-w-lg gap-x-2'>
-            <PaneGroupDrawer title={scenario?.name}>
-              <ScenarioPane />
+            {/* For viewport < lg */}
+            <PaneGroupDrawer>
               <GoalPane />
               <TargetWordsPane />
             </PaneGroupDrawer>
+
             <Input
               tabIndex={0}
               ref={inputRef}
