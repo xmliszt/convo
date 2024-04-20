@@ -11,6 +11,7 @@ type CategoryPaneProps = {
 export function CategoryPane(props: CategoryPaneProps) {
   return (
     <div className='flex w-full flex-col items-start gap-4 p-4'>
+      <h2 className='text-lg font-bold'>Filter by categories</h2>
       <div className='flex flex-wrap gap-2'>
         {props.categories.map((category) => (
           <Link
