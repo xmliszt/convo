@@ -13,6 +13,7 @@ import { NextThemeProvider } from './theme-provider';
 
 // Metadata for SEO
 export const metadata: Metadata = {
+  metadataBase: new URL('https://convo.website'),
   title: 'Convo | Boundless Conversation Practice with AI',
   description:
     'Convo is an innovative edtech web app designed to enhance language learning through immersive, situational conversations. Choose from a variety of scenarios covering diverse topics and interact with an AI role-playing partner. Practice speaking freely, set conversation goals, and target specific vocabulary, all while receiving personalized feedback on your linguistic performance. Start your journey to fluent communication today with Convo.',
@@ -53,14 +54,14 @@ export const metadata: Metadata = {
   authors: [{ name: 'Li Yuxuan', url: 'https://liyuxuan.dev/' }],
   creator: 'Li Yuxuan',
   alternates: {
-    canonical: 'https://convo.website/',
+    canonical: '/',
   },
   category: 'education',
   openGraph: {
     title: 'Convo | Boundless Conversation Practice with AI',
     description:
       'Convo is an innovative edtech web app designed to enhance language learning through immersive, situational conversations. Choose from a variety of scenarios covering diverse topics and interact with an AI role-playing partner. Practice speaking freely, set conversation goals, and target specific vocabulary, all while receiving personalized feedback on your linguistic performance. Start your journey to fluent communication today with Convo.',
-    url: 'https://convo.website/',
+    url: '/',
     siteName: 'Convo | Boundless Conversation Practice with AI',
     images: [
       {
