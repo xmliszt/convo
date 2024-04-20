@@ -14,7 +14,7 @@ export async function fetchEvaluation(evaluationId: string) {
     .single();
   if (response.error)
     throw new ConvoError(
-      'Failed to fetch evaluation',
+      'Failed to fetch evaluation with ID: ' + evaluationId,
       JSON.stringify({
         code: response.error.code,
         details: response.error.details,

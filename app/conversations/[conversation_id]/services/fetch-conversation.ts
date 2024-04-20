@@ -16,11 +16,17 @@ export async function fetchConversation({
     )
     .eq('id', conversationId)
     .single();
-  if (response.error)
+  if (response.error) {
     throw new ConvoError(
-      'Unable to fetch conversation',
-      JSON.stringify(response.error)
+      'Unable to fetch conversation with ID: ' + conversationId,
+      JSON.stringify({
+        code: response.error.code,
+        details: response.error.details,
+        hint: response.error.hint,
+        message: response.error.message,
+      })
     );
+  }
 
   return { conversation: response.data };
 }

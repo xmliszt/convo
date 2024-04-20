@@ -31,7 +31,7 @@ export function ScenarioGrid(props: ScenarioGridProps) {
 
   return (
     <motion.div
-      className='relative grid h-full w-full max-w-xl grid-cols-1 place-items-center gap-8 sm:grid-cols-2'
+      className='relative flex h-full w-full max-w-xl flex-col items-center gap-8 sm:grid sm:grid-cols-2'
       initial='initial'
       animate='animate'
       variants={variants}
@@ -74,10 +74,13 @@ function ScenarioCard(props: ScenarioCardProps) {
   };
 
   return (
-    <Link href={`/scenarios/${props.scenario.id}`}>
-      <HoverPerspectiveContainer className='border-none shadow-none'>
+    <Link
+      href={`/scenarios/${props.scenario.id}`}
+      className='w-fit sm:place-self-stretch'
+    >
+      <HoverPerspectiveContainer className='h-full w-fit border-none shadow-none'>
         <motion.div
-          className='group flex h-[450px] max-w-[20rem] cursor-pointer flex-col gap-y-2 rounded-lg border border-primary/10 bg-secondary/10 shadow-inner backdrop-blur-[4px]'
+          className='group flex h-full max-w-[20rem] cursor-pointer flex-col gap-y-2 rounded-lg border border-primary/10 bg-secondary/10 shadow-inner backdrop-blur-[4px]'
           style={{
             WebkitBackdropFilter: 'blur(4px)',
             WebkitBoxShadow:

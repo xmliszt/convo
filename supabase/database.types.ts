@@ -163,6 +163,7 @@ export type Database = {
       }
       scenarios: {
         Row: {
+          categories: string[]
           description: string
           id: string
           image_url: string
@@ -171,6 +172,7 @@ export type Database = {
           player_role: string
         }
         Insert: {
+          categories?: string[]
           description: string
           id?: string
           image_url: string
@@ -179,6 +181,7 @@ export type Database = {
           player_role: string
         }
         Update: {
+          categories?: string[]
           description?: string
           id?: string
           image_url?: string
