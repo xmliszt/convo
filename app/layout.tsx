@@ -65,13 +65,13 @@ export const metadata: Metadata = {
     siteName: 'Convo | Boundless Conversation Practice with AI',
     images: [
       {
-        url: '/og/title-light.jpg',
+        url: 'https://www.convo.website/og/title-light.jpg',
         width: 800,
         height: 600,
         alt: 'Convo | Boundless Conversation Practice with AI',
       },
       {
-        url: '/og/title-dark.jpg',
+        url: 'https://www.convo.website/og/title-dark.jpg',
         width: 800,
         height: 600,
         alt: 'Convo | Boundless Conversation Practice with AI',
@@ -90,18 +90,29 @@ export const metadata: Metadata = {
     creatorId: '1704579643',
     images: [
       {
-        url: '/og/title-light.jpg',
+        url: 'https://www.convo.website/og/title-light.jpg',
         width: 800,
         height: 600,
         alt: 'Convo | Boundless Conversation Practice with AI',
       },
       {
-        url: '/og/title-dark.jpg',
+        url: 'https://www.convo.website/og/title-dark.jpg',
         width: 800,
         height: 600,
         alt: 'Convo | Boundless Conversation Practice with AI',
       },
     ],
+  },
+  robots: {
+    follow: true,
+    nocache: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 
