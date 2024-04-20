@@ -104,7 +104,7 @@ export default function RootLayout({
           <TooltipProvider delayDuration={100}>
             <Header />
             {children}
-            <div className='fixed right-4 top-4 z-50'>
+            <div className='fixed right-4 top-4 z-40'>
               <ThemeSwitch />
             </div>
             {/* trademark */}

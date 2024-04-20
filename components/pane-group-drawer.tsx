@@ -42,7 +42,7 @@ export function PaneGroupDrawer(props: PaneGroupDrawerProps) {
       </DrawerTrigger>
       <DrawerContent
         className={cn(
-          'max-h-[95vh] overflow-hidden rounded-t-2xl bg-[linear-gradient(320deg,#ababab,#ffffff)] px-0 dark:bg-[linear-gradient(320deg,#000000,#292828)]',
+          'max-h-[90vh] overflow-hidden rounded-t-2xl bg-[linear-gradient(320deg,#ababab,#ffffff)] px-0 dark:bg-[linear-gradient(320deg,#000000,#292828)]',
           '[&>div:first-child]:absolute [&>div:first-child]:left-1/2 [&>div:first-child]:top-3 [&>div:first-child]:z-50 [&>div:first-child]:mx-auto [&>div:first-child]:h-2 [&>div:first-child]:w-[100px] [&>div:first-child]:translate-x-[-50px] [&>div:first-child]:bg-foreground/60'
         )}
       >
@@ -54,7 +54,7 @@ export function PaneGroupDrawer(props: PaneGroupDrawerProps) {
               WebkitMask: 'linear-gradient(black,black,transparent)',
             }}
           />
-          <div className='h-[95vh] w-full overflow-y-auto px-4 scrollbar-hide'>
+          <div className='h-[90vh] w-full overflow-y-auto px-4 scrollbar-hide'>
             <div className='mx-auto w-full max-w-lg pb-20 pt-[65px]'>
               <DrawerHeader>
                 <DrawerTitle>{scenario?.name}</DrawerTitle>
