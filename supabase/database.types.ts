@@ -11,19 +11,19 @@ export type Database = {
     Tables: {
       conversation_dialogs: {
         Row: {
-          conversation_id: string
+          conversation_id: string | null
           message: string | null
           role: Database["public"]["Enums"]["role"]
           timestamp: string
         }
         Insert: {
-          conversation_id: string
+          conversation_id?: string | null
           message?: string | null
           role: Database["public"]["Enums"]["role"]
           timestamp?: string
         }
         Update: {
-          conversation_id?: string
+          conversation_id?: string | null
           message?: string | null
           role?: Database["public"]["Enums"]["role"]
           timestamp?: string
