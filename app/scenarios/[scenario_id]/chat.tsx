@@ -201,7 +201,7 @@ export function Chat() {
         <div
           className='mx-auto w-full max-w-lg space-y-4 pb-32 pt-20'
           style={{
-            marginTop: isMobile ? '80px' : '0',
+            marginTop: isMobile ? '60px' : '0',
           }}
         >
           {filteredMessages.map((message, idx) => (

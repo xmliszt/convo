@@ -66,9 +66,9 @@ export default async function Page(props: PageProps) {
       }
     >
       <div className='h-full w-full'>
-        <ScrollArea className='h-screen w-full'>
-          <div className='mx-auto w-full max-w-lg px-4 py-20'>
-            <article>
+        <ScrollArea className='h-screen w-full px-4'>
+          <div className='mx-auto w-full max-w-lg py-20'>
+            <article className='w-full'>
               <h1 className='relative my-4 text-center text-6xl font-bold'>
                 {scenario.name}
                 <div className='absolute right-0 top-0 flex size-12 -translate-y-4 translate-x-1 items-center justify-center'>
@@ -78,7 +78,7 @@ export default async function Page(props: PageProps) {
               <p className='my-2 text-justify text-base font-normal [text-align-last:center]'>
                 {scenario.description}
               </p>
-              <div className='mx-auto my-4 flex w-[300px] flex-col gap-y-4'>
+              <div className='mx-auto my-4 flex w-full max-w-[300px] flex-col gap-y-4'>
                 <LabelWithPaddedDigits
                   label='Turns used:'
                   value={turnsUsed}

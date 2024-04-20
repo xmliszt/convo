@@ -3,6 +3,7 @@
 import { motion, Variants } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { isMobile } from 'react-device-detect';
 
 import { HoverPerspectiveContainer } from '@/components/hover-perspective-container';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
@@ -87,12 +88,14 @@ function ScenarioCard(props: ScenarioCardProps) {
           whileHover='hover'
           variants={variants}
           onPointerOver={() => {
+            if (isMobile) return;
             if (backgroundImageUrl !== props.scenario.image_url) {
               setBackgroundImageUrl(props.scenario.image_url);
             }
             setShowBackgroundImage(true);
           }}
           onPointerLeave={() => {
+            if (isMobile) return;
             setShowBackgroundImage(false);
           }}
         >

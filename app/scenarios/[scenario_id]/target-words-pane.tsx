@@ -104,15 +104,15 @@ export function TargetWordsPane() {
               <Info />
             </PopoverTrigger>
             <PopoverContent align='start'>
-              Try to make AI mention these words in the conversation for some
-              bonus points!
+              Try to make AI mention these words in the conversation to earn
+              bonus points.
             </PopoverContent>
           </Popover>
         </CardTitle>
         {isSmallerDevice && (
           <CardDescription>
-            Try to make AI mention these words in the conversation for some
-            bonus points!goalpan
+            Try to make AI mention these words in the conversation to earn bonus
+            points.
           </CardDescription>
         )}
       </CardHeader>

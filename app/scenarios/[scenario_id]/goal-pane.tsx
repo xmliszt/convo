@@ -120,15 +120,15 @@ export function GoalPane() {
               <Info />
             </PopoverTrigger>
             <PopoverContent align='start'>
-              Main goals of this scenario. Try to achieve them by mentioning in
-              your conversation.
+              Try to achieve these goals by mentioning them in your conversation
+              to earn bonus points.
             </PopoverContent>
           </Popover>
         </CardTitle>
         {isSmallerDevice && (
           <CardDescription>
-            Main goals of this scenario. Try to achieve them by mentioning in
-            your conversation.
+            Try to achieve these goals by mentioning them in your conversation
+            to earn bonus points.
           </CardDescription>
         )}
       </CardHeader>
