@@ -77,7 +77,7 @@ function ScenarioCard(props: ScenarioCardProps) {
   return (
     <HoverPerspectiveContainer className='border-none shadow-none'>
       <motion.div
-        className='group flex h-[450px] max-w-[16rem] cursor-pointer flex-col gap-y-2 rounded-lg border border-primary/10 bg-secondary/10 shadow-inner backdrop-blur-[4px]'
+        className='group flex h-[450px] max-w-[20rem] cursor-pointer flex-col gap-y-2 rounded-lg border border-primary/10 bg-secondary/10 shadow-inner backdrop-blur-[4px]'
         style={{
           WebkitBackdropFilter: 'blur(4px)',
           WebkitBoxShadow:
