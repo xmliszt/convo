@@ -20,14 +20,16 @@ type PageProps = {
 
 export default async function Page(props: PageProps) {
   const { scenarios } = await fetchScenarios();
-  const categories = scenarios.reduce<string[]>((acc, scenario) => {
-    scenario.categories.forEach((category) => {
-      if (!acc.includes(category)) {
-        acc.push(category);
-      }
-    });
-    return acc;
-  }, []);
+  const categories = [...scenarios]
+    .reduce<string[]>((acc, scenario) => {
+      scenario.categories.forEach((category) => {
+        if (!acc.includes(category)) {
+          acc.push(category);
+        }
+      });
+      return acc;
+    }, [])
+    .sort((a, b) => a.localeCompare(b));
 
   const filterCategory = props.searchParams?.category;
   let filteredScenarios: typeof scenarios = scenarios;

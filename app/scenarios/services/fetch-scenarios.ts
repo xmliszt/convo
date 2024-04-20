@@ -1,5 +1,7 @@
 import 'server-only';
 
+import { cookies } from 'next/headers';
+
 import { ConvoError } from '@/lib/convo-error';
 import { createServerServiceRoleClient } from '@/lib/supabase/server';
 
@@ -7,6 +9,7 @@ import { createServerServiceRoleClient } from '@/lib/supabase/server';
  * Fetches all scenarios from the database.
  */
 export async function fetchScenarios() {
+  cookies();
   const supabase = createServerServiceRoleClient();
   const response = await supabase.from('scenarios').select('*');
   if (response.error) {
