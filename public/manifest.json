@@ -4,9 +4,9 @@
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
-  "name": "Convo | Conversation with AI",
+  "name": "Convo | Boundless Conversation Practice with AI",
   "short_name": "Convo",
-  "description": "Practice conversation by talking in various real-life scenarios!",
+  "description": "Convo is an innovative edtech web app designed to enhance language learning through immersive, situational conversations. Choose from a variety of scenarios covering diverse topics and interact with an AI role-playing partner. Practice speaking freely, set conversation goals, and target specific vocabulary, all while receiving personalized feedback on your linguistic performance. Start your journey to fluent communication today with Convo.",
   "categories": ["Education", "AI", "Technology"],
   "icons": [
     {
