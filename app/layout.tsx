@@ -13,12 +13,12 @@ import { NextThemeProvider } from './theme-provider';
 
 // Metadata for SEO
 export const metadata: Metadata = {
-  title: 'Convo | Conversation with AI',
+  title: 'Convo | Boundless Conversation Practice with AI',
   description:
-    'Practice conversation by talking in various real-life scenarios!',
+    'Convo is an innovative edtech web app designed to enhance language learning through immersive, situational conversations. Choose from a variety of scenarios covering diverse topics and interact with an AI role-playing partner. Practice speaking freely, set conversation goals, and target specific vocabulary, all while receiving personalized feedback on your linguistic performance. Start your journey to fluent communication today with Convo.',
   manifest: '/manifest.json',
   appleWebApp: {
-    title: 'Convo',
+    title: 'Convo | Boundless Conversation Practice with AI',
     statusBarStyle: 'black-translucent',
   },
   icons: {
@@ -40,8 +40,16 @@ export const metadata: Metadata = {
       url: '/apple-touch-icon.png',
     },
   },
-  applicationName: 'Convo',
-  keywords: ['convo', 'english', 'conversation', 'ai', 'practice', 'learn'],
+  applicationName: 'Convo | Boundless Conversation Practice with AI',
+  keywords: [
+    'convo',
+    'english',
+    'conversation',
+    'ai',
+    'practice',
+    'learn',
+    'situational',
+  ],
   authors: [{ name: 'Li Yuxuan', url: 'https://liyuxuan.dev/' }],
   creator: 'Li Yuxuan',
   alternates: {
@@ -49,17 +57,23 @@ export const metadata: Metadata = {
   },
   category: 'education',
   openGraph: {
-    title: 'Convo',
+    title: 'Convo | Boundless Conversation Practice with AI',
     description:
-      'Practice conversation by talking in various real-life scenarios!',
+      'Convo is an innovative edtech web app designed to enhance language learning through immersive, situational conversations. Choose from a variety of scenarios covering diverse topics and interact with an AI role-playing partner. Practice speaking freely, set conversation goals, and target specific vocabulary, all while receiving personalized feedback on your linguistic performance. Start your journey to fluent communication today with Convo.',
     url: 'https://convo.website/',
-    siteName: 'Taboo AI',
+    siteName: 'Convo | Boundless Conversation Practice with AI',
     images: [
       {
-        url: 'https://i.imgur.com/IIP6UzK.jpeg',
+        url: '/og/title-light.jpg',
         width: 800,
         height: 600,
-        alt: 'Convo | Conversation with AI',
+        alt: 'Convo | Boundless Conversation Practice with AI',
+      },
+      {
+        url: '/og/title-dark.jpg',
+        width: 800,
+        height: 600,
+        alt: 'Convo | Boundless Conversation Practice with AI',
       },
     ],
     locale: 'en_US',
@@ -67,13 +81,26 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Convo | Conversation with AI',
+    title: 'Convo | Boundless Conversation Practice with AI',
     description:
-      'Practice conversation by talking in various real-life scenarios!',
+      'Convo is an innovative edtech web app designed to enhance language learning through immersive, situational conversations. Choose from a variety of scenarios covering diverse topics and interact with an AI role-playing partner. Practice speaking freely, set conversation goals, and target specific vocabulary, all while receiving personalized feedback on your linguistic performance. Start your journey to fluent communication today with Convo.',
     siteId: '1704579643',
     creator: '@xmliszt',
     creatorId: '1704579643',
-    images: ['https://i.imgur.com/IIP6UzK.jpeg'],
+    images: [
+      {
+        url: '/og/title-light.jpg',
+        width: 800,
+        height: 600,
+        alt: 'Convo | Boundless Conversation Practice with AI',
+      },
+      {
+        url: '/og/title-dark.jpg',
+        width: 800,
+        height: 600,
+        alt: 'Convo | Boundless Conversation Practice with AI',
+      },
+    ],
   },
 };
 
