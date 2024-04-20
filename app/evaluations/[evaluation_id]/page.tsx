@@ -16,23 +16,24 @@ export default async function Page(props: PageProps) {
   const { evaluation: scenarioEvaluation } = await getEvaluation(
     props.params.evaluation_id
   );
-
+  const scenario = scenarioEvaluation.conversation.scenario;
+  const conversation = scenarioEvaluation.conversation;
   return (
     <ScenarioProvider
-      goals={scenarioEvaluation.scenario.goals.map((goal) => ({
+      goals={scenario.goals.map((goal) => ({
         ...goal,
         completed: false,
       }))}
-      llmRole={scenarioEvaluation.scenario.llm_role}
-      scenario={scenarioEvaluation.scenario}
+      llmRole={scenario.llm_role}
+      scenario={scenario}
       targetWords={
-        scenarioEvaluation.scenario.target_words?.words.map((word) => ({
+        scenario.target_words?.words.map((word) => ({
           word,
           completed: false,
         })) ?? []
       }
       history={
-        scenarioEvaluation.scenario.conversations?.conversation_dialogs
+        conversation.conversation_dialogs
           ?.filter<{
             conversation_id: string;
             role: 'user' | 'model';
@@ -60,10 +61,10 @@ export default async function Page(props: PageProps) {
           <div className='mx-auto w-full max-w-lg px-4 py-20'>
             <article>
               <h1 className='my-4 text-center text-2xl font-bold'>
-                {scenarioEvaluation.scenario.name}
+                {scenario.name}
               </h1>
               <p className='my-2 text-justify text-base font-normal [text-align-last:center]'>
-                {scenarioEvaluation.scenario.description}
+                {scenario.description}
               </p>
               <div></div>
               <Markdown className='prose prose-neutral dark:prose-invert'>
@@ -73,7 +74,7 @@ export default async function Page(props: PageProps) {
           </div>
         </ScrollArea>
       </div>
-      <ScenarioBackgroundLoader scenario={scenarioEvaluation.scenario} />
+      <ScenarioBackgroundLoader scenario={scenario} />
     </ScenarioProvider>
   );
 }

@@ -87,7 +87,7 @@ export function Chat() {
     if (!scenario || !targetWords || !goals || !history) return;
     startEvaluation(async () => {
       try {
-        await saveConversation({
+        const { conversation } = await saveConversation({
           scenarioId: scenario.id,
           conversation: history,
         });
@@ -98,7 +98,7 @@ export function Chat() {
           history,
         });
         const savedEvaluation = await saveEvaluation({
-          scenarioId: scenario.id,
+          conversationId: conversation.id,
           evaluation: aiEvaluation,
         });
         router.push(`/evaluations/${savedEvaluation.evaluation.id}`);

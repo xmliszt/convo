@@ -8,7 +8,7 @@ export async function getEvaluation(evaluationId: string) {
   const response = await supabase
     .from('evaluations')
     .select(
-      '*,scenario:scenarios!inner(*,llm_role:llm_roles!inner(*),target_words!inner(*),goals(*),conversations!inner(*,conversation_dialogs(*)))'
+      '*,conversation:conversations!inner(*,conversation_dialogs(*),scenario:scenarios!inner(*,llm_role:llm_roles!inner(*),target_words!inner(*),goals(*)))'
     )
     .eq('id', evaluationId)
     .single();

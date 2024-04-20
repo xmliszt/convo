@@ -3,7 +3,7 @@
 import { createServerServiceRoleClient } from '@/lib/supabase/server';
 
 type SaveEvaluationOptions = {
-  scenarioId: string;
+  conversationId: string;
   evaluation: string;
 };
 
@@ -12,7 +12,7 @@ export async function saveEvaluation(options: SaveEvaluationOptions) {
   const response = await supabase
     .from('evaluations')
     .insert({
-      scenario_id: options.scenarioId,
+      conversation_id: options.conversationId,
       ai_evaluation: options.evaluation,
     })
     .select()

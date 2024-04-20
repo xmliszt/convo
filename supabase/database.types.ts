@@ -58,7 +58,7 @@ export type Database = {
           {
             foreignKeyName: "conversations_scenario_id_fkey"
             columns: ["scenario_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "scenarios"
             referencedColumns: ["id"]
           },
@@ -67,28 +67,28 @@ export type Database = {
       evaluations: {
         Row: {
           ai_evaluation: string
+          conversation_id: string
           created_at: string
           id: string
-          scenario_id: string
         }
         Insert: {
           ai_evaluation: string
+          conversation_id: string
           created_at?: string
           id?: string
-          scenario_id: string
         }
         Update: {
           ai_evaluation?: string
+          conversation_id?: string
           created_at?: string
           id?: string
-          scenario_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "evaluations_scenario_id_fkey"
-            columns: ["scenario_id"]
+            foreignKeyName: "evaluations_conversation_id_fkey"
+            columns: ["conversation_id"]
             isOneToOne: false
-            referencedRelation: "scenarios"
+            referencedRelation: "conversations"
             referencedColumns: ["id"]
           },
         ]

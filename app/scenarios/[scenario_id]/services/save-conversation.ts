@@ -33,6 +33,6 @@ export async function saveConversation(options: SaveConversationOptions) {
     );
   if (insertDialogsResponse.error) throw insertDialogsResponse.error;
   return {
-    conversation: options.conversation,
+    conversation: insertNewConversationResponse.data,
   };
 }
