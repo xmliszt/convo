@@ -1,6 +1,7 @@
 import Markdown from 'react-markdown';
 
 import { ScenarioProvider } from '@/app/scenarios/[scenario_id]/scenario-provider';
+import { LabelWithPaddedDigits } from '@/components/label-with-padded-digits';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 import { ScenarioBackgroundLoader } from './scenario-background-loader';
@@ -18,6 +19,12 @@ export default async function Page(props: PageProps) {
   );
   const scenario = scenarioEvaluation.conversation.scenario;
   const conversation = scenarioEvaluation.conversation;
+  const bonusScore = conversation.bonus_score;
+  const evaluationScore = scenarioEvaluation.ai_score;
+  const turnsUsed = conversation.conversation_dialogs
+    .slice(1)
+    .filter((dialog) => dialog.role === 'user').length;
+
   return (
     <ScenarioProvider
       goals={scenario.goals.map((goal) => ({
@@ -60,14 +67,36 @@ export default async function Page(props: PageProps) {
         <ScrollArea className='h-screen w-full'>
           <div className='mx-auto w-full max-w-lg px-4 py-20'>
             <article>
-              <h1 className='my-4 text-center text-2xl font-bold'>
+              <h1 className='my-4 text-center text-6xl font-bold'>
                 {scenario.name}
               </h1>
               <p className='my-2 text-justify text-base font-normal [text-align-last:center]'>
                 {scenario.description}
               </p>
-              <div></div>
-              <Markdown className='prose prose-neutral dark:prose-invert'>
+              <div className='mx-auto my-4 flex w-[300px] flex-col gap-y-4'>
+                <LabelWithPaddedDigits
+                  label='Turns used:'
+                  value={turnsUsed}
+                  padding={3}
+                />
+                <LabelWithPaddedDigits
+                  label='Bonus earned:'
+                  value={bonusScore}
+                  padding={3}
+                />
+                <LabelWithPaddedDigits
+                  label='AI Evaluation score:'
+                  value={evaluationScore}
+                  padding={3}
+                />
+                <LabelWithPaddedDigits
+                  label='Total score:'
+                  value={evaluationScore + bonusScore}
+                  padding={3}
+                  highlight
+                />
+              </div>
+              <Markdown className='prose prose-neutral mt-10 rounded-md border border-card bg-card/60 p-8 pb-12 shadow-2xl dark:prose-invert'>
                 {scenarioEvaluation.ai_evaluation}
               </Markdown>
             </article>

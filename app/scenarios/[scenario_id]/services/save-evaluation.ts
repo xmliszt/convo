@@ -5,6 +5,7 @@ import { createServerServiceRoleClient } from '@/lib/supabase/server';
 type SaveEvaluationOptions = {
   conversationId: string;
   evaluation: string;
+  score: number;
 };
 
 export async function saveEvaluation(options: SaveEvaluationOptions) {
@@ -14,6 +15,7 @@ export async function saveEvaluation(options: SaveEvaluationOptions) {
     .insert({
       conversation_id: options.conversationId,
       ai_evaluation: options.evaluation,
+      ai_score: options.score,
     })
     .select()
     .single();

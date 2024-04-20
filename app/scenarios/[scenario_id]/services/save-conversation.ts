@@ -7,6 +7,7 @@ import { Chat } from '../scenario-provider';
 type SaveConversationOptions = {
   scenarioId: string;
   conversation: Chat[];
+  bonusScore: number;
 };
 
 export async function saveConversation(options: SaveConversationOptions) {
@@ -15,6 +16,7 @@ export async function saveConversation(options: SaveConversationOptions) {
     .from('conversations')
     .insert({
       scenario_id: options.scenarioId,
+      bonus_score: options.bonusScore,
     })
     .select()
     .single();

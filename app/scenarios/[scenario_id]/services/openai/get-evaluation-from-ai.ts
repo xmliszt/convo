@@ -15,8 +15,13 @@ type GetEvaluationsOptions = {
   history: Chat[];
 };
 
-export async function getEvaluations(options: GetEvaluationsOptions) {
-  return await createCompletion({
+export async function getEvaluationFromAI(
+  options: GetEvaluationsOptions
+): Promise<{
+  evaluation: string;
+  score: number;
+}> {
+  const content = await createCompletion({
     messages: [
       {
         role: 'system',
@@ -33,7 +38,9 @@ export async function getEvaluations(options: GetEvaluationsOptions) {
       },
     ],
     temperature: 0,
+    returnAsJson: true,
   });
+  return JSON.parse(content);
 }
 
 function getSystemPrompt(): string {
@@ -50,8 +57,25 @@ function getSystemPrompt(): string {
   - Point out any mistakes made by the student and suggest improvements.
   - Evaluate the student's overall performance in the role-play scenario context and provide constructive feedback.
 
-  Your evaluation should be detailed and helpful, at the same time, easy to read and clear to understand. You should provide feedback that is encouraging and motivating for the student to improve their English skills. Remember, your evaluation will help the student to learn and grow, so be kind and supportive in your feedback.
+  Your evaluation should be detailed and helpful, at the same time, easy to read and clear to understand. Highlight keywords or phrases that are important to the student. You should provide feedback that is encouraging and motivating for the student to improve their English skills. Remember, your evaluation will help the student to learn and grow, so be kind and supportive in your feedback.
 
-  Your evaluation is to be written in Markdown format.
+  Your only response format is designed to be JSON. You only reply in parsable JSON.
+
+  JSON format as follows:
+  {
+    "evaluation": <<string>>,
+    "score": <<number>>
+  }
+
+  "evaluation" is the string that contains the markdown content of your evaluation.
+  "score" is the number from 0 to 100, that represents the score you give to the student's performance in the role-play scenario.
+
+  Example:
+  {
+    "evaluation": "Your evaluation markdown content here.",
+    "score": 90
+  }
+
+  Your response:
   `;
 }

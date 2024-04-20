@@ -15,14 +15,16 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 
 import { useScenarioBackground } from '../scenario-background-provider';
+import { BonusScorePane } from './bonus-score-pane';
 import { GoalPane } from './goal-pane';
 import type { Chat as ChatType } from './scenario-provider';
 import { useScenario } from './scenario-provider';
-import { getEvaluations } from './services/openai/get-evaluations';
+import { getEvaluationFromAI } from './services/openai/get-evaluation-from-ai';
 import { sendMessagesToLlm } from './services/openai/send-messages-to-llm';
 import { saveConversation } from './services/save-conversation';
 import { saveEvaluation } from './services/save-evaluation';
 import { TargetWordsPane } from './target-words-pane';
+import { MAX_TURNS, TurnsLeftPane } from './turns-left-pane';
 
 export function Chat() {
   const router = useRouter();
@@ -85,13 +87,21 @@ export function Chat() {
 
   const handleEvaluation = useCallback(() => {
     if (!scenario || !targetWords || !goals || !history) return;
+    const bonusScore =
+      goals
+        .filter((goal) => goal.completed)
+        .reduce((acc, goal) => acc + goal.points, 0) +
+      targetWords
+        .filter((targetWord) => targetWord.completed)
+        .reduce((acc) => acc + 1, 0);
     startEvaluation(async () => {
       try {
         const { conversation } = await saveConversation({
           scenarioId: scenario.id,
           conversation: history,
+          bonusScore,
         });
-        const aiEvaluation = await getEvaluations({
+        const aiEvaluation = await getEvaluationFromAI({
           scenario,
           targetWords,
           goals,
@@ -99,7 +109,8 @@ export function Chat() {
         });
         const savedEvaluation = await saveEvaluation({
           conversationId: conversation.id,
-          evaluation: aiEvaluation,
+          evaluation: aiEvaluation.evaluation,
+          score: aiEvaluation.score,
         });
         router.push(`/evaluations/${savedEvaluation.evaluation.id}`);
       } catch (error) {
@@ -181,6 +192,9 @@ export function Chat() {
 
   if (!scenario) return null;
 
+  const hasRunOutofTurn =
+    history.slice(1).filter((chat) => chat.role === 'user').length >= MAX_TURNS;
+
   return (
     <>
       <ScrollArea className='absolute left-0 top-0 h-full w-full px-4'>
@@ -203,7 +217,7 @@ export function Chat() {
             />
           ))}
           <AnimatePresence>
-            {isGameOver && (
+            {(isGameOver || hasRunOutofTurn) && (
               <motion.div
                 key='game-over-button'
                 className='grid w-full place-items-center'
@@ -283,6 +297,8 @@ export function Chat() {
           {/* For viewport < lg */}
           <div className='visible lg:invisible'>
             <PaneGroupDrawer>
+              <BonusScorePane />
+              <TurnsLeftPane />
               <GoalPane />
               <TargetWordsPane />
             </PaneGroupDrawer>
@@ -290,12 +306,17 @@ export function Chat() {
           <form onSubmit={handleSubmit} className='grid place-items-center'>
             <div className='relative inline-flex w-full gap-x-2'>
               <Input
+                maxLength={200}
                 tabIndex={0}
                 ref={inputRef}
                 type='text'
-                disabled={isSendingMessage}
+                disabled={isSendingMessage || hasRunOutofTurn || isEvaluating}
                 value={inputValue}
-                placeholder='Type a message...'
+                placeholder={
+                  hasRunOutofTurn
+                    ? 'You have run out of turns'
+                    : 'Type a message...'
+                }
                 onChange={(event) => setInputValue(event.target.value)}
                 className='h-10 w-full bg-background/40 pr-10 transition-[box-shadow_background] duration-300 ease-out focus:bg-background/60 focus:shadow-xl'
                 autoFocus
@@ -307,6 +328,9 @@ export function Chat() {
                     className='absolute bottom-1 right-1 top-1 grid size-8 place-items-center rounded-sm bg-card/80 p-2'
                     initial='initial'
                     whileHover='hover'
+                    disabled={
+                      isSendingMessage || hasRunOutofTurn || isEvaluating
+                    }
                     animate={{
                       opacity: 1,
                       y: 0,

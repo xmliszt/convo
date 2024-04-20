@@ -40,16 +40,19 @@ export type Database = {
       }
       conversations: {
         Row: {
+          bonus_score: number
           created_at: string
           id: string
           scenario_id: string
         }
         Insert: {
+          bonus_score?: number
           created_at?: string
           id?: string
           scenario_id: string
         }
         Update: {
+          bonus_score?: number
           created_at?: string
           id?: string
           scenario_id?: string
@@ -67,18 +70,21 @@ export type Database = {
       evaluations: {
         Row: {
           ai_evaluation: string
+          ai_score: number
           conversation_id: string
           created_at: string
           id: string
         }
         Insert: {
           ai_evaluation: string
+          ai_score?: number
           conversation_id: string
           created_at?: string
           id?: string
         }
         Update: {
           ai_evaluation?: string
+          ai_score?: number
           conversation_id?: string
           created_at?: string
           id?: string
