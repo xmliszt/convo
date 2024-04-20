@@ -9,6 +9,9 @@ import { ScenarioBackgroundProvider } from './scenario-background-provider';
 import { ScenarioGrid } from './scenario-grid';
 import { fetchScenarios } from './services/fetch-scenarios';
 
+// This route is opt out of caching.
+export const dynamic = 'force-dynamic';
+
 type PageProps = {
   searchParams?: {
     category: string;
