@@ -1,6 +1,9 @@
 'use client';
 
-import { useSelectedLayoutSegments } from 'next/navigation';
+import {
+  useSelectedLayoutSegment,
+  useSelectedLayoutSegments,
+} from 'next/navigation';
 
 import { cn } from '@/lib/utils';
 
@@ -15,19 +18,31 @@ const LAYOUT_SEGMENT_TO_LINK: Record<string, HomeLink> = {
     href: '/',
     label: 'Home',
   },
-  chat: {
+  'scenarios/*': {
     href: '/scenarios',
     label: 'Scenarios',
   },
-  evaluation: {
+  'evaluations/*': {
     href: '/scenarios',
     label: 'Scenarios',
   },
 };
 
 export function Header() {
+  const layoutSegment = useSelectedLayoutSegment();
   const segments = useSelectedLayoutSegments();
-  const lastSegment = segments.at(-1);
+  const isRootLayout =
+    layoutSegment === null ||
+    segments.length === 1 ||
+    (segments.length > 1 &&
+      segments.indexOf(layoutSegment) === segments.length - 1);
+
+  const segmentKey =
+    layoutSegment === null
+      ? '/'
+      : isRootLayout
+        ? layoutSegment
+        : `${layoutSegment}/*`;
 
   return (
     <div
@@ -44,9 +59,7 @@ export function Header() {
     >
       <div className='px-4 py-2'>
         <HomeLink
-          homeLink={
-            LAYOUT_SEGMENT_TO_LINK[lastSegment ?? '/'] ?? DEFAULT_HOMELINK
-          }
+          homeLink={LAYOUT_SEGMENT_TO_LINK[segmentKey] ?? DEFAULT_HOMELINK}
           fontSize='24px'
         />
       </div>

@@ -2,7 +2,7 @@ import 'server-only';
 
 import { createCompletion, OpenAIMessage } from '@/lib/ai/openai';
 
-import { Chat } from '../../../scenario-goal-provider';
+import { Chat } from '../../scenario-provider';
 import { getInitialLlmPrompt } from '../../utils/get-initial-llm-prompt';
 
 type GetInitialHistoryOptions = {
@@ -30,10 +30,12 @@ export async function getInitialHistory(
     {
       role: 'user',
       message: systemPromptString,
+      createdAt: new Date().toISOString(),
     },
     {
       role: 'model',
       message: content,
+      createdAt: new Date().toISOString(),
     },
   ];
 }

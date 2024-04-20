@@ -9,6 +9,90 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      conversation_dialogs: {
+        Row: {
+          conversation_id: string
+          message: string | null
+          role: Database["public"]["Enums"]["role"]
+          timestamp: string
+        }
+        Insert: {
+          conversation_id: string
+          message?: string | null
+          role: Database["public"]["Enums"]["role"]
+          timestamp?: string
+        }
+        Update: {
+          conversation_id?: string
+          message?: string | null
+          role?: Database["public"]["Enums"]["role"]
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_dialogs_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          created_at: string
+          id: string
+          scenario_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          scenario_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          scenario_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_scenario_id_fkey"
+            columns: ["scenario_id"]
+            isOneToOne: true
+            referencedRelation: "scenarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      evaluations: {
+        Row: {
+          ai_evaluation: string
+          created_at: string
+          id: string
+          scenario_id: string
+        }
+        Insert: {
+          ai_evaluation: string
+          created_at?: string
+          id?: string
+          scenario_id: string
+        }
+        Update: {
+          ai_evaluation?: string
+          created_at?: string
+          id?: string
+          scenario_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "evaluations_scenario_id_fkey"
+            columns: ["scenario_id"]
+            isOneToOne: false
+            referencedRelation: "scenarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       goals: {
         Row: {
           id: string
@@ -123,7 +207,7 @@ export type Database = {
           {
             foreignKeyName: "target_words_scenario_id_fkey"
             columns: ["scenario_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "scenarios"
             referencedColumns: ["id"]
           },
@@ -138,6 +222,7 @@ export type Database = {
     }
     Enums: {
       gender: "male" | "female"
+      role: "user" | "model" | "error"
     }
     CompositeTypes: {
       [_ in never]: never

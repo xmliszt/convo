@@ -19,7 +19,7 @@ import {
 import { useMediaQuery } from '@/lib/use-media-query';
 import { cn } from '@/lib/utils';
 
-import { Chat, useScenario } from '../scenario-goal-provider';
+import { Chat, useScenario } from './scenario-provider';
 import { checkGoalCompletions } from './services/openai/check-goal-completions';
 
 export function GoalPane() {

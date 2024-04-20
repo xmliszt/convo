@@ -19,7 +19,7 @@ import {
 import { useMediaQuery } from '@/lib/use-media-query';
 import { cn } from '@/lib/utils';
 
-import { useScenario } from '../scenario-goal-provider';
+import { useScenario } from './scenario-provider';
 import { getMatchedWordsInString } from './utils/get-matched-targets';
 
 export function TargetWordsPane() {

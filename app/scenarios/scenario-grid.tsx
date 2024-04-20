@@ -99,7 +99,7 @@ function ScenarioCard(props: ScenarioCardProps) {
           setShowBackgroundImage(false);
         }}
         onClick={() => {
-          router.push(`/scenarios/${props.scenario.id}/chat`);
+          router.push(`/scenarios/${props.scenario.id}`);
         }}
       >
         <div className='flex h-full w-full flex-col gap-2'>

@@ -4,7 +4,7 @@ import { HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
 
 import { getGeminiModel } from '@/lib/ai/gemini';
 
-import { Chat } from '../../../scenario-goal-provider';
+import { Chat } from '../../scenario-provider';
 
 /**
  * Send messages to the LLM, messages include history. This returns the new history.
@@ -51,5 +51,6 @@ export async function sendMessagesToLlm(
   return {
     role: 'model',
     message: text,
+    createdAt: new Date().toISOString(),
   };
 }

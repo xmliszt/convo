@@ -4,7 +4,7 @@ import { HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
 
 import { getGeminiModel } from '@/lib/ai/gemini';
 
-import { Chat } from '../../../scenario-goal-provider';
+import { Chat } from '../../scenario-provider';
 import { getInitialLlmPrompt } from '../../utils/get-initial-llm-prompt';
 
 type GetInitialHistoryOptions = {
@@ -58,10 +58,12 @@ export async function getInitialHistory(
     {
       role: 'user',
       message: systemPromptString,
+      createdAt: new Date().toISOString(),
     },
     {
       role: 'model',
       message,
+      createdAt: new Date().toISOString(),
     },
   ];
 }

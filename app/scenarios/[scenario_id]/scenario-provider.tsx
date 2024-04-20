@@ -9,11 +9,15 @@ import {
   useState,
 } from 'react';
 
-import { Chat } from './chat/chat';
+import { Chat } from './chat';
 
 export type Chat = {
   role: 'user' | 'model' | 'error';
   message: string;
+  /**
+   * ISO 8601 string
+   */
+  createdAt: string;
 };
 
 export type GoalWthCompletion = Goal & {

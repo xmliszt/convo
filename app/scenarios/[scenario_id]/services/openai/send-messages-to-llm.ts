@@ -2,7 +2,7 @@
 
 import { createCompletion, OpenAIMessage } from '@/lib/ai/openai';
 
-import { Chat } from '../../../scenario-goal-provider';
+import { Chat } from '../../scenario-provider';
 
 /**
  * Send messages to the LLM, messages include history. This returns the new history.
@@ -27,5 +27,6 @@ export async function sendMessagesToLlm(
   return {
     role: 'model',
     message: content,
+    createdAt: new Date().toISOString(),
   };
 }

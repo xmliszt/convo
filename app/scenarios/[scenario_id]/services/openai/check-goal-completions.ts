@@ -2,7 +2,7 @@
 
 import { createCompletion, OpenAIMessage } from '@/lib/ai/openai';
 
-import { Chat } from '../../../scenario-goal-provider';
+import { Chat } from '../../scenario-provider';
 
 type CheckGoalCompletionsOptions = {
   goals: Goal[];
@@ -35,7 +35,6 @@ export async function checkGoalCompletions(
   });
 
   const responseText = cleanupJSONString(content);
-  console.log('Goals checking response: ', responseText);
   const completedGoals = JSON.parse(responseText).response;
   if (!Array.isArray(completedGoals)) {
     throw new Error('Invalid response from the AI model');
@@ -87,8 +86,8 @@ function getInitialPrompts(
       For the conversation history, the data structure is as follows:
       [
         {
-          "role": "user" | "assistant",
-          "message": "The message sent by the user or assistant"
+          "role": "user" | "model",
+          "message": "The message sent by the user or model"
         }
       ]
 

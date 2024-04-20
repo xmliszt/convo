@@ -8,7 +8,7 @@ import {
 
 import { getGeminiModel } from '@/lib/ai/gemini';
 
-import { Chat } from '../../../scenario-goal-provider';
+import { Chat } from '../../scenario-provider';
 
 type CheckGoalCompletionsOptions = {
   goals: Goal[];
@@ -61,7 +61,6 @@ export async function checkGoalCompletions(
   });
 
   const responseText = cleanupJSONString(result.response.text());
-  console.log('Goals checking response: ', responseText);
   const completedGoals = JSON.parse(responseText).response;
   if (!Array.isArray(completedGoals)) {
     throw new Error('Invalid response from the AI model');
