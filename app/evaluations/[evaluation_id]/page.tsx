@@ -7,7 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { CopyLink } from './copy-link';
 import { CopyLinkIcon } from './copy-link-icon';
 import { ScenarioBackgroundLoader } from './scenario-background-loader';
-import { getEvaluation } from './services/get-evaluation';
+import { fetchEvaluation } from './services/fetch-evaluation';
 
 type PageProps = {
   params: {
@@ -16,7 +16,7 @@ type PageProps = {
 };
 
 export default async function Page(props: PageProps) {
-  const { evaluation: scenarioEvaluation } = await getEvaluation(
+  const { evaluation: scenarioEvaluation } = await fetchEvaluation(
     props.params.evaluation_id
   );
   const scenario = scenarioEvaluation.conversation.scenario;
@@ -71,7 +71,7 @@ export default async function Page(props: PageProps) {
             <article className='w-full'>
               <h1 className='relative my-4 text-center text-6xl font-bold'>
                 {scenario.name}
-                <div className='absolute right-0 top-0 flex size-12 -translate-y-4 translate-x-1 items-center justify-center'>
+                <div className='absolute right-0 top-0 flex size-12 -translate-y-12 translate-x-1 items-center justify-center lg:-translate-y-6'>
                   <CopyLinkIcon />
                 </div>
               </h1>
@@ -104,6 +104,24 @@ export default async function Page(props: PageProps) {
               <Markdown className='prose prose-neutral mt-10 rounded-md border border-card bg-card/60 p-8 pb-12 shadow-2xl dark:prose-invert'>
                 {scenarioEvaluation.ai_evaluation}
               </Markdown>
+              {scenarioEvaluation.suggestions.length > 0 && (
+                <div>
+                  <h2 className='mt-8 text-2xl font-bold'>Suggestions</h2>
+                  <div className='mt-4 flex flex-col gap-y-4'>
+                    {scenarioEvaluation.suggestions.map((suggestion, index) => (
+                      <div
+                        key={index}
+                        className='rounded-md border-card bg-card/60 p-4 text-card-foreground shadow-md'
+                      >
+                        <span className='mr-2 inline-flex size-6 items-center justify-center rounded-full bg-card/80 p-1 font-sans text-sm shadow-inner'>
+                          {index + 1}
+                        </span>
+                        {suggestion}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </article>
             <div className='my-12 grid place-items-center'>
               <CopyLink />

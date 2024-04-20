@@ -6,6 +6,7 @@ type SaveEvaluationOptions = {
   conversationId: string;
   evaluation: string;
   score: number;
+  suggestions: string[];
 };
 
 export async function saveEvaluation(options: SaveEvaluationOptions) {
@@ -16,6 +17,7 @@ export async function saveEvaluation(options: SaveEvaluationOptions) {
       conversation_id: options.conversationId,
       ai_evaluation: options.evaluation,
       ai_score: options.score,
+      suggestions: options.suggestions,
     })
     .select()
     .single();

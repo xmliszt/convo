@@ -3,7 +3,7 @@ import 'server-only';
 import { ConvoError } from '@/lib/convo-error';
 import { createServerServiceRoleClient } from '@/lib/supabase/server';
 
-export async function getEvaluation(evaluationId: string) {
+export async function fetchEvaluation(evaluationId: string) {
   const supabase = createServerServiceRoleClient();
   const response = await supabase
     .from('evaluations')

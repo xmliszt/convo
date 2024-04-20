@@ -49,6 +49,9 @@ export function TurnsLeftPane() {
                   key='currentScore'
                   className={cn(
                     'absolute left-0 top-0 z-0 h-full w-full transition-colors',
+                    currentTurnCountLeft > 0 &&
+                      currentTurnCountLeft <= 5 &&
+                      'text-orange-400',
                     currentTurnCountLeft === 0 && 'text-red-600'
                   )}
                   initial={{ y: 30 }}
@@ -62,6 +65,9 @@ export function TurnsLeftPane() {
                   key='previousScore'
                   className={cn(
                     'absolute left-0 top-0 z-0 h-full w-full transition-colors',
+                    currentTurnCountLeft > 0 &&
+                      currentTurnCountLeft <= 5 &&
+                      'text-orange-400',
                     currentTurnCountLeft === 0 && 'text-red-600'
                   )}
                   initial={{ y: 30 }}

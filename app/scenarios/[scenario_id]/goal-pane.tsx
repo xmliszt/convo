@@ -147,7 +147,9 @@ export function GoalPane() {
               <motion.div
                 className={cn(
                   'relative flex items-start justify-between gap-3',
-                  goal.completed && 'text-green-600 [&>span]:line-through'
+                  goal.completed
+                    ? 'text-green-600 [&>span]:line-through'
+                    : '[&>span]:[text-decoration:none]'
                 )}
                 custom={idx}
                 initial='initial'

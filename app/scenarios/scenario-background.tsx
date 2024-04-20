@@ -19,12 +19,12 @@ export function ScenarioBackground() {
         backgroundRepeat: 'no-repeat',
         filter:
           resolvedTheme === 'light'
-            ? 'blur(30px) contrast(50%)'
-            : 'blur(30px) contrast(100%)',
+            ? 'blur(25px) contrast(80%)'
+            : 'blur(25px) contrast(100%)',
         WebkitFilter:
           resolvedTheme === 'light'
-            ? 'blur(30px) contrast(50%)'
-            : 'blur(30px) contrast(100%)',
+            ? 'blur(25px) contrast(80%)'
+            : 'blur(25px) contrast(100%)',
         WebkitMask: 'linear-gradient(to bottom, transparent 0%, black 100%)',
       }}
       initial={{

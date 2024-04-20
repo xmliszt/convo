@@ -19,13 +19,14 @@ import { cn } from '@/lib/utils';
 
 type PaneGroupDrawerProps = {
   children: React.ReactNode;
+  onDrawerClose?: () => void;
 };
 
 export function PaneGroupDrawer(props: PaneGroupDrawerProps) {
   const { scenario } = useScenario();
 
   return (
-    <Drawer>
+    <Drawer onClose={props.onDrawerClose}>
       <DrawerTrigger
         asChild
         className='transition-[box-shadow] duration-300 ease-out focus:shadow-xl'

@@ -105,12 +105,13 @@ export function Chat() {
           scenario,
           targetWords,
           goals,
-          history,
+          history: history.slice(1), //  Remove first system message
         });
         const savedEvaluation = await saveEvaluation({
           conversationId: conversation.id,
           evaluation: aiEvaluation.evaluation,
           score: aiEvaluation.score,
+          suggestions: aiEvaluation.suggestions,
         });
         router.push(`/evaluations/${savedEvaluation.evaluation.id}`);
       } catch (error) {
@@ -197,7 +198,7 @@ export function Chat() {
 
   return (
     <>
-      <ScrollArea className='absolute left-0 top-0 h-full w-full px-4'>
+      <ScrollArea className='absolute left-0 top-0 z-0 h-full w-full px-4'>
         <div
           className='mx-auto w-full max-w-lg space-y-4 pb-32 pt-20'
           style={{
@@ -207,6 +208,7 @@ export function Chat() {
           {filteredMessages.map((message, idx) => (
             <ChatBubble
               key={idx}
+              id={`chat-bubble-${idx}`}
               message={message.message}
               isError={message.role === 'error'}
               isUser={message.role === 'user'}
@@ -269,7 +271,7 @@ export function Chat() {
       </ScrollArea>
       <motion.div
         className={cn(
-          'fixed bottom-0 z-50 flex w-full justify-center py-8',
+          'fixed bottom-0 left-0 z-20 flex w-full justify-center py-8',
           // gradient glass effect
           'shadow-inner backdrop-blur-[10px] [mask:linear-gradient(to_top,black_0%,black_75%,transparent_100%)]'
         )}
@@ -296,7 +298,20 @@ export function Chat() {
         <div className='flex max-w-lg grow flex-col justify-start gap-2 px-4'>
           {/* For viewport < lg */}
           <div className='visible lg:invisible'>
-            <PaneGroupDrawer>
+            <PaneGroupDrawer
+              onDrawerClose={() => {
+                const lastChatBubbleIndex = filteredMessages.length - 1;
+                const lastChatBubble = document.getElementById(
+                  `chat-bubble-${lastChatBubbleIndex}`
+                );
+                setTimeout(() => {
+                  lastChatBubble?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                  });
+                }, 500);
+              }}
+            >
               <BonusScorePane />
               <TurnsLeftPane />
               <GoalPane />

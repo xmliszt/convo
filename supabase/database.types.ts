@@ -74,6 +74,7 @@ export type Database = {
           conversation_id: string
           created_at: string
           id: string
+          suggestions: string[]
         }
         Insert: {
           ai_evaluation: string
@@ -81,6 +82,7 @@ export type Database = {
           conversation_id: string
           created_at?: string
           id?: string
+          suggestions?: string[]
         }
         Update: {
           ai_evaluation?: string
@@ -88,6 +90,7 @@ export type Database = {
           conversation_id?: string
           created_at?: string
           id?: string
+          suggestions?: string[]
         }
         Relationships: [
           {

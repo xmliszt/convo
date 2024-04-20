@@ -9,6 +9,7 @@ import Markdown from 'react-markdown';
 import { cn } from '@/lib/utils';
 
 type ChatBubbleProps = {
+  id: string;
   message: string;
   isUser: boolean;
   isError?: boolean;
@@ -31,6 +32,7 @@ export function ChatBubble(props: ChatBubbleProps) {
 
   return (
     <div
+      id={props.id}
       ref={chatBubbleRef}
       className={cn(
         'flex items-start justify-start gap-x-2',
