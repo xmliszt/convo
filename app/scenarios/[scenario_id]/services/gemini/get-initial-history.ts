@@ -1,14 +1,11 @@
 import 'server-only';
 
-import {
-  Content,
-  HarmBlockThreshold,
-  HarmCategory,
-} from '@google/generative-ai';
+import { HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
 
 import { getGeminiModel } from '@/lib/ai/gemini';
 
-import { getInitialLlmPrompt } from '../utils/get-initial-llm-prompt';
+import { Chat } from '../../scenario-provider';
+import { getInitialLlmPrompt } from '../../utils/get-initial-llm-prompt';
 
 type GetInitialHistoryOptions = {
   llmRole: LlmRole;
@@ -17,8 +14,8 @@ type GetInitialHistoryOptions = {
 
 export async function getInitialHistory(
   options: GetInitialHistoryOptions
-): Promise<Content[]> {
-  const userPrompt = getInitialLlmPrompt({
+): Promise<Chat[]> {
+  const systemPromptString = getInitialLlmPrompt({
     llmRole: options.llmRole,
     scenario: options.scenario,
   });
@@ -29,7 +26,7 @@ export async function getInitialHistory(
         role: 'user',
         parts: [
           {
-            text: userPrompt,
+            text: systemPromptString,
           },
         ],
       },
@@ -60,11 +57,13 @@ export async function getInitialHistory(
   return [
     {
       role: 'user',
-      parts: [{ text: userPrompt }],
+      message: systemPromptString,
+      createdAt: new Date().toISOString(),
     },
     {
       role: 'model',
-      parts: [{ text: message }],
+      message,
+      createdAt: new Date().toISOString(),
     },
   ];
 }

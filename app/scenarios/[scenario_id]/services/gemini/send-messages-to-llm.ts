@@ -1,24 +1,25 @@
 'use server';
 
-import {
-  Content,
-  HarmBlockThreshold,
-  HarmCategory,
-} from '@google/generative-ai';
+import { HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
 
 import { getGeminiModel } from '@/lib/ai/gemini';
+
+import { Chat } from '../../scenario-provider';
 
 /**
  * Send messages to the LLM, messages include history. This returns the new history.
  */
 export async function sendMessagesToLlm(
-  history: Content[],
+  history: Chat[],
   newUserMessage: string
-): Promise<Content> {
+): Promise<Chat> {
   const geminiModel = getGeminiModel({ modelName: 'gemini-pro' });
 
   const chat = geminiModel.startChat({
-    history: history,
+    history: history.map((message) => ({
+      role: message.role,
+      parts: [{ text: message.message }],
+    })),
     generationConfig: {
       temperature: 0.2,
     },
@@ -49,6 +50,7 @@ export async function sendMessagesToLlm(
   // Return the new history
   return {
     role: 'model',
-    parts: [{ text }],
+    message: text,
+    createdAt: new Date().toISOString(),
   };
 }

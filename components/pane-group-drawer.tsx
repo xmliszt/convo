@@ -3,7 +3,7 @@
 import { CursorClick, Fingerprint } from '@phosphor-icons/react';
 import { isMobile } from 'react-device-detect';
 
-import { useScenario } from '@/app/scenarios/[scenario_id]/scenario-goal-provider';
+import { useScenario } from '@/app/scenarios/[scenario_id]/scenario-provider';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -54,7 +54,7 @@ export function PaneGroupDrawer(props: PaneGroupDrawerProps) {
               WebkitMask: 'linear-gradient(black,black,transparent)',
             }}
           />
-          <div className='scrollbar-hide h-[95vh] w-full overflow-y-auto px-4'>
+          <div className='h-[95vh] w-full overflow-y-auto px-4 scrollbar-hide'>
             <div className='mx-auto w-full max-w-lg pb-20 pt-[65px]'>
               <DrawerHeader>
                 <DrawerTitle>{scenario?.name}</DrawerTitle>

@@ -2,12 +2,12 @@ import type { Metadata } from 'next';
 
 import { ScenarioBackground } from '../scenario-background';
 import { ScenarioBackgroundProvider } from '../scenario-background-provider';
-import { fetchGoals } from './chat/services/fetch-goals';
-import { fetchLlmRole } from './chat/services/fetch-llm-role';
-import { fetchScenario } from './chat/services/fetch-scenario';
-import { fetchTargetWords } from './chat/services/fetch-target-words';
-import { getInitialHistory } from './chat/services/get-initial-llm-message';
-import { ScenarioProvider } from './scenario-goal-provider';
+import { ScenarioProvider } from './scenario-provider';
+import { fetchGoals } from './services/fetch-goals';
+import { fetchLlmRole } from './services/fetch-llm-role';
+import { fetchScenario } from './services/fetch-scenario';
+import { fetchTargetWords } from './services/fetch-target-words';
+import { getInitialHistory } from './services/openai/get-initial-history';
 
 export async function generateMetadata({
   params,
@@ -41,22 +41,10 @@ export default async function Layout(props: LayoutProps) {
     fetchTargetWords({ scenarioId: scenario.id }),
   ]);
 
-  const initialHistory = (
-    await getInitialHistory({
-      llmRole,
-      scenario,
-    })
-  )
-    .map((content) => ({
-      role: content.role,
-      message: content.parts[0].text,
-    }))
-    .filter<{
-      role: 'user' | 'model';
-      message: string;
-    }>((content): content is { role: 'user' | 'model'; message: string } => {
-      return content.role === 'user' || content.role === 'model';
-    });
+  const initialHistory = await getInitialHistory({
+    llmRole,
+    scenario,
+  });
 
   return (
     <ScenarioBackgroundProvider>

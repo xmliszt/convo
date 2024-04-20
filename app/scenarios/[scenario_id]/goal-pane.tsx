@@ -19,8 +19,8 @@ import {
 import { useMediaQuery } from '@/lib/use-media-query';
 import { cn } from '@/lib/utils';
 
-import { Chat, useScenario } from '../scenario-goal-provider';
-import { checkGoalCompletions } from './services/check-goal-completions';
+import { Chat, useScenario } from './scenario-provider';
+import { checkGoalCompletions } from './services/openai/check-goal-completions';
 
 export function GoalPane() {
   const { scenario, goals, setGoals, history } = useScenario();
@@ -37,15 +37,9 @@ export function GoalPane() {
               completedGoalIds: goals
                 .filter((goal) => goal.completed)
                 .map((g) => g.id),
-              history: history
-                .filter(
-                  (message) =>
-                    message.role === 'user' || message.role === 'model'
-                )
-                .map((message) => ({
-                  role: message.role,
-                  parts: [{ text: message.message }],
-                })),
+              history: history.filter(
+                (message) => message.role === 'user' || message.role === 'model'
+              ),
               scenario: scenario,
             });
             if (completedGoalIds.length > 0) {

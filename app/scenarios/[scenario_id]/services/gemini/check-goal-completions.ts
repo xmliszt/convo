@@ -8,10 +8,12 @@ import {
 
 import { getGeminiModel } from '@/lib/ai/gemini';
 
+import { Chat } from '../../scenario-provider';
+
 type CheckGoalCompletionsOptions = {
   goals: Goal[];
   completedGoalIds: string[];
-  history: Content[];
+  history: Chat[];
   scenario: Scenario;
 };
 
@@ -59,7 +61,6 @@ export async function checkGoalCompletions(
   });
 
   const responseText = cleanupJSONString(result.response.text());
-  console.log('Goals checking response: ', responseText);
   const completedGoals = JSON.parse(responseText).response;
   if (!Array.isArray(completedGoals)) {
     throw new Error('Invalid response from the AI model');
@@ -78,7 +79,7 @@ export async function checkGoalCompletions(
 
 function getSystemPrompt(
   scenario: Scenario,
-  history: Content[],
+  history: Chat[],
   goals: Goal[]
 ): Content[] {
   return [
@@ -182,7 +183,14 @@ function getSystemPrompt(
         },
       ],
     },
-    ...history,
+    ...history.map((message) => ({
+      role: message.role,
+      parts: [
+        {
+          text: message.message,
+        },
+      ],
+    })),
     // Last user message to indicate the end of the conversation history and prompt the model to evaluate the goals.
     {
       role: 'user',

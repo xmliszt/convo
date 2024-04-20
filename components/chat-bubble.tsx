@@ -91,7 +91,7 @@ export function ChatBubble(props: ChatBubbleProps) {
       >
         <Markdown
           className={cn(
-            'prose dark:prose-invert',
+            'prose prose-neutral dark:prose-invert',
             props.isError && 'text-red-500'
           )}
         >
