@@ -4,6 +4,8 @@ import { ScenarioProvider } from '@/app/scenarios/[scenario_id]/scenario-provide
 import { LabelWithPaddedDigits } from '@/components/label-with-padded-digits';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
+import { CopyLink } from './copy-link';
+import { CopyLinkIcon } from './copy-link-icon';
 import { ScenarioBackgroundLoader } from './scenario-background-loader';
 import { getEvaluation } from './services/get-evaluation';
 
@@ -67,8 +69,11 @@ export default async function Page(props: PageProps) {
         <ScrollArea className='h-screen w-full'>
           <div className='mx-auto w-full max-w-lg px-4 py-20'>
             <article>
-              <h1 className='my-4 text-center text-6xl font-bold'>
+              <h1 className='relative my-4 text-center text-6xl font-bold'>
                 {scenario.name}
+                <div className='absolute right-0 top-0 flex size-12 -translate-y-4 translate-x-1 items-center justify-center'>
+                  <CopyLinkIcon />
+                </div>
               </h1>
               <p className='my-2 text-justify text-base font-normal [text-align-last:center]'>
                 {scenario.description}
@@ -100,6 +105,9 @@ export default async function Page(props: PageProps) {
                 {scenarioEvaluation.ai_evaluation}
               </Markdown>
             </article>
+            <div className='my-12 grid place-items-center'>
+              <CopyLink />
+            </div>
           </div>
         </ScrollArea>
       </div>
