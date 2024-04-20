@@ -4,7 +4,7 @@ export default function Loading() {
   return (
     <main className='relative h-full w-full'>
       <div
-        className='absolute left-0 top-0 z-[998] flex h-full w-full items-center justify-center backdrop-blur-[10px]'
+        className='absolute left-0 top-0 z-30 flex h-full w-full items-center justify-center backdrop-blur-[10px]'
         style={{
           WebkitBackdropFilter: 'blur(10px)',
         }}
