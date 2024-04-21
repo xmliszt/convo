@@ -22,12 +22,14 @@ import { useScenario } from './scenario-provider';
 import { getEvaluationFromAI } from './services/openai/get-evaluation-from-ai';
 import { sendMessagesToLlm } from './services/openai/send-messages-to-llm';
 import { saveConversation } from './services/save-conversation';
+import { saveConversationDialog } from './services/save-conversation-dialog';
 import { saveEvaluation } from './services/save-evaluation';
 import { TargetWordsPane } from './target-words-pane';
 import { MAX_TURNS, TurnsLeftPane } from './turns-left-pane';
 
 type ChatProps = {
-  evaluation?: Evaluation;
+  conversationId: string;
+  evaluation: Evaluation | null;
 };
 
 export function Chat(props: ChatProps) {
@@ -86,6 +88,10 @@ export function Chat(props: ChatProps) {
     setInputValue('');
     setHistory((prev) => [...prev, newUserMessage]);
     sendMessage(history, newUserMessage);
+    saveConversationDialog({
+      conversationId: props.conversationId,
+      chat: newUserMessage,
+    });
   }
 
   function handleRetry() {
@@ -172,6 +178,10 @@ export function Chat(props: ChatProps) {
           newModelMessage,
         ];
         setHistory(newHistory);
+        saveConversationDialog({
+          conversationId: props.conversationId,
+          chat: newModelMessage,
+        });
       }
     } catch (error) {
       console.error(error);
