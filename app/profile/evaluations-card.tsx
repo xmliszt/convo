@@ -67,7 +67,7 @@ export function EvaluationsCard(props: EvaluationsCardProps) {
                     </p>
                   </div>
                   <div className='col-span-2 flex flex-col gap-y-2'>
-                    {props.groupedEvaluations[scenarioId].length > 0 &&
+                    {props.groupedEvaluations[scenarioId]?.length > 0 ? (
                       props.groupedEvaluations[scenarioId].map(
                         (evaluation, idx) => (
                           <EvaluationLink
@@ -78,7 +78,12 @@ export function EvaluationsCard(props: EvaluationsCardProps) {
                             scenarioImageUrl={scenario.image_url}
                           />
                         )
-                      )}
+                      )
+                    ) : (
+                      <p className='text-sm text-gray-400'>
+                        No evaluation results available yet.
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

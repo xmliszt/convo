@@ -105,6 +105,7 @@ export default async function Page(props: PageProps) {
           <Chat
             conversationId={props.params.conversation_id}
             evaluation={conversation.evaluation}
+            user={}
           />
           <div className='invisible absolute left-[calc(50vw+16rem)] top-0 z-20 max-w-[20rem] lg:visible'>
             <div className='h-screen w-full overflow-y-auto px-10 scrollbar-hide'>
