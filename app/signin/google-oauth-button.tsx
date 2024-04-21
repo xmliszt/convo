@@ -13,7 +13,7 @@ export function GoogleOAuthButton() {
   const handleGoogleOAuth = useCallback(() => {
     startTransition(async () => {
       try {
-        await signInGoogle({ redirectOrigin: window.location.origin });
+        await signInGoogle();
       } catch (error) {
         toast.error('Failed to sign in with Google');
       }

@@ -1,15 +1,11 @@
 import { createBrowserAnonClient } from '@/lib/supabase/client';
 
-export async function signInGoogle({
-  redirectOrigin,
-}: {
-  redirectOrigin: string;
-}) {
+export async function signInGoogle() {
   const supabase = createBrowserAnonClient();
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${redirectOrigin}/api/auth/callback`,
+      redirectTo: `${window.location.origin}/api/auth/callback`,
     },
   });
   if (error) {
