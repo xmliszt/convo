@@ -455,8 +455,8 @@ export function Chat(props: ChatProps) {
                 className={cn(
                   'h-10 w-full pr-10 transition-[box-shadow_background_color] duration-300 ease-out focus:bg-background/60 focus:shadow-xl',
                   isRecording
-                    ? 'bg-destructive/50 text-black'
-                    : 'bg-background/40 text-primary'
+                    ? 'bg-destructive/50 font-bold text-white'
+                    : 'bg-background/40 font-normal text-primary'
                 )}
                 autoFocus
               />

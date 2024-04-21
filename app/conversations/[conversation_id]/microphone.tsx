@@ -43,10 +43,7 @@ export function Microphone(props: MicrophoneProps) {
       )}
       initial='initial'
       whileHover='hover'
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
+      animate={props.isRecording ? 'recording' : 'visible'}
       exit={{
         opacity: 0,
         y: 10,
@@ -56,8 +53,23 @@ export function Microphone(props: MicrophoneProps) {
           opacity: 0,
           y: 10,
         },
+        visible: {
+          opacity: 1,
+          scale: 1,
+          rotate: 0,
+          y: 0,
+        },
         hover: {
           opacity: 1,
+        },
+        recording: {
+          y: 0,
+          opacity: [1, 0.5, 1],
+          scale: [1, 0.7, 1],
+          transition: {
+            duration: 1,
+            repeat: Infinity,
+          },
         },
       }}
     >
