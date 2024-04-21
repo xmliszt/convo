@@ -2,7 +2,7 @@ import { ConvoLoader } from '@/lib/convo-loader';
 
 export default function Loading() {
   return (
-    <main className='relative h-full w-full'>
+    <main className='relative h-screen w-full'>
       <div
         className='absolute left-0 top-0 z-30 flex h-full w-full items-center justify-center backdrop-blur-[10px]'
         style={{

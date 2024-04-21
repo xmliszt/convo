@@ -9,9 +9,6 @@ import { ScenarioBackgroundProvider } from './scenario-background-provider';
 import { ScenarioGrid } from './scenario-grid';
 import { fetchScenarios } from './services/fetch-scenarios';
 
-// This route is opt out of caching.
-export const dynamic = 'force-dynamic';
-
 type PageProps = {
   searchParams?: {
     category: string;
@@ -32,7 +29,10 @@ export default async function Page(props: PageProps) {
     .sort((a, b) => a.localeCompare(b));
 
   const filterCategory = props.searchParams?.category;
-  let filteredScenarios: typeof scenarios = scenarios;
+  let filteredScenarios: typeof scenarios = [...scenarios].sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
   if (filterCategory) {
     filteredScenarios = scenarios.filter((scenario) =>
       scenario.categories.includes(lowerCase(filterCategory))
@@ -44,13 +44,13 @@ export default async function Page(props: PageProps) {
       <main>
         <ScrollArea className='h-full'>
           <div className='relative flex justify-center px-4 py-32'>
-            <ScenarioGrid scenarios={filteredScenarios} />
-            <div className='invisible fixed left-[calc(50vw+20rem)] top-32 lg:visible'>
+            <div className='invisible fixed bottom-0 left-0 top-28 flex h-auto w-[28%] items-start justify-center overflow-y-scroll px-8 scrollbar-hide lg:visible'>
               <CategoryPane
                 categories={categories}
                 selectedCategory={filterCategory}
               />
             </div>
+            <ScenarioGrid scenarios={filteredScenarios} />
           </div>
         </ScrollArea>
         {/* Mobile category drawer */}

@@ -1,12 +1,19 @@
-import { BonusScorePane } from '@/app/scenarios/[scenario_id]/bonus-score-pane';
-import { Chat } from '@/app/scenarios/[scenario_id]/chat';
-import { GoalPane } from '@/app/scenarios/[scenario_id]/goal-pane';
-import { ScenarioPane } from '@/app/scenarios/[scenario_id]/scenario-pane';
-import { ScenarioProvider } from '@/app/scenarios/[scenario_id]/scenario-provider';
-import { TargetWordsPane } from '@/app/scenarios/[scenario_id]/target-words-pane';
-import { TurnsLeftPane } from '@/app/scenarios/[scenario_id]/turns-left-pane';
+import { redirect } from 'next/navigation';
 
+import { ScenarioBackground } from '@/app/scenarios/scenario-background';
+import { ScenarioBackgroundProvider } from '@/app/scenarios/scenario-background-provider';
+
+import { BonusScorePane } from './bonus-score-pane';
+import { Chat } from './chat';
+import { GoalPane } from './goal-pane';
+import { ScenarioPane } from './scenario-pane';
+import { Chat as ChatType, ScenarioProvider } from './scenario-provider';
 import { fetchConversation } from './services/fetch-conversation';
+import { getInitialHistory } from './services/openai/get-initial-history';
+import { saveConversationDialog } from './services/save-conversation-dialog';
+import { TargetWordsPane } from './target-words-pane';
+import { TurnsLeftPane } from './turns-left-pane';
+import { getInitialLlmPrompt } from './utils/get-initial-llm-prompt';
 
 type PageProps = {
   params: {
@@ -18,64 +25,100 @@ export default async function Page(props: PageProps) {
   const { conversation } = await fetchConversation({
     conversationId: props.params.conversation_id,
   });
-
+  if (!conversation) {
+    return redirect('/scenarios');
+  }
   const scenario = conversation.scenario;
+  const llmRole = scenario.llm_role;
+  const targetWords = scenario.target_words;
+  const goals = scenario.goals;
+
+  const hasConversationDialogHistory =
+    conversation.conversation_dialogs.length > 0;
+
+  const history: ChatType[] = [];
+  if (!hasConversationDialogHistory) {
+    const initialHistory = await getInitialHistory({
+      llmRole,
+      scenario,
+    });
+
+    const firstModelMessage = initialHistory.at(-1);
+    if (firstModelMessage) {
+      saveConversationDialog({
+        conversationId: conversation.id,
+        chat: firstModelMessage,
+      });
+    }
+
+    history.push(...initialHistory);
+  } else {
+    const initialLlmPrompt = getInitialLlmPrompt({
+      llmRole,
+      scenario,
+    });
+    history.push({
+      role: 'user',
+      message: initialLlmPrompt,
+      createdAt: new Date().toISOString(),
+    });
+    conversation.conversation_dialogs.forEach((dialog) => {
+      if (dialog.message) {
+        history.push({
+          role: dialog.role,
+          message: dialog.message,
+          createdAt: dialog.timestamp,
+        });
+      } else {
+        history.push({
+          role: 'error',
+          message: 'Sorry, we could not find the message.',
+          createdAt: dialog.timestamp,
+        });
+      }
+    });
+  }
 
   return (
-    <ScenarioProvider
-      llmRole={scenario.llm_role}
-      scenario={scenario}
-      goals={scenario.goals.map((goal) => ({ ...goal, completed: false }))}
-      targetWords={
-        scenario.target_words?.words.map((word) => ({
-          word,
-          completed: false,
-        })) ?? []
-      }
-      history={
-        conversation.conversation_dialogs
-          ?.filter<{
-            conversation_id: string;
-            role: 'user' | 'model';
-            message: string;
-            timestamp: string;
-          }>(
-            (
-              dialog
-            ): dialog is {
-              conversation_id: string;
-              role: 'user' | 'model';
-              message: string;
-              timestamp: string;
-            } => dialog.role !== 'error' && dialog.message !== null
-          )
-          .map((dialog) => ({
-            role: dialog.role,
-            message: dialog.message,
-            createdAt: new Date(dialog.timestamp).toISOString(),
+    <ScenarioBackgroundProvider>
+      <ScenarioProvider
+        goals={goals.map((goal) => ({ ...goal, completed: false }))}
+        llmRole={llmRole}
+        scenario={scenario}
+        targetWords={
+          targetWords?.words.map((word) => ({
+            word,
+            completed: false,
           })) ?? []
-      }
-    >
-      <main className='relative'>
-        <div className='invisible absolute left-[calc(50vw-36rem)] top-0 z-20 max-w-[20rem] lg:visible'>
-          <div className='h-screen w-full overflow-y-auto px-10 scrollbar-hide'>
-            <div className='flex flex-col gap-y-4 pb-32 pt-20'>
-              <GoalPane />
-              <TargetWordsPane />
+        }
+        history={history}
+      >
+        <main className='relative'>
+          <div className='invisible absolute left-[calc(50vw-36rem)] top-0 z-20 max-w-[20rem] lg:visible'>
+            <div className='h-screen w-full overflow-y-auto px-10 scrollbar-hide'>
+              <div className='flex flex-col gap-y-4 pb-32 pt-20'>
+                <GoalPane />
+                <TargetWordsPane />
+              </div>
             </div>
           </div>
-        </div>
-        <Chat />
-        <div className='invisible absolute left-[calc(50vw+16rem)] top-0 z-20 max-w-[20rem] lg:visible'>
-          <div className='h-screen w-full overflow-y-auto px-10 scrollbar-hide'>
-            <div className='flex flex-col gap-y-4 pb-32 pt-20'>
-              <ScenarioPane />
-              <BonusScorePane />
-              <TurnsLeftPane />
+          <Chat
+            conversationId={props.params.conversation_id}
+            evaluation={conversation.evaluation}
+          />
+          <div className='invisible absolute left-[calc(50vw+16rem)] top-0 z-20 max-w-[20rem] lg:visible'>
+            <div className='h-screen w-full overflow-y-auto px-10 scrollbar-hide'>
+              <div className='flex flex-col gap-y-4 pb-32 pt-20'>
+                <ScenarioPane />
+                <BonusScorePane />
+                <TurnsLeftPane />
+              </div>
             </div>
           </div>
-        </div>
-      </main>
-    </ScenarioProvider>
+        </main>
+
+        <ScenarioBackground />
+      </ScenarioProvider>
+    </ScenarioBackgroundProvider>
   );
 }

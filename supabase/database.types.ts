@@ -12,18 +12,21 @@ export type Database = {
       conversation_dialogs: {
         Row: {
           conversation_id: string | null
+          created_by: string | null
           message: string | null
           role: Database["public"]["Enums"]["role"]
           timestamp: string
         }
         Insert: {
           conversation_id?: string | null
+          created_by?: string | null
           message?: string | null
           role: Database["public"]["Enums"]["role"]
           timestamp?: string
         }
         Update: {
           conversation_id?: string | null
+          created_by?: string | null
           message?: string | null
           role?: Database["public"]["Enums"]["role"]
           timestamp?: string
@@ -36,28 +39,45 @@ export type Database = {
             referencedRelation: "conversations"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "conversation_dialogs_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
         ]
       }
       conversations: {
         Row: {
           bonus_score: number
           created_at: string
+          created_by: string | null
           id: string
           scenario_id: string
         }
         Insert: {
           bonus_score?: number
           created_at?: string
+          created_by?: string | null
           id?: string
           scenario_id: string
         }
         Update: {
           bonus_score?: number
           created_at?: string
+          created_by?: string | null
           id?: string
           scenario_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "conversations_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "conversations_scenario_id_fkey"
             columns: ["scenario_id"]
@@ -96,7 +116,7 @@ export type Database = {
           {
             foreignKeyName: "evaluations_conversation_id_fkey"
             columns: ["conversation_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "conversations"
             referencedColumns: ["id"]
           },
@@ -164,6 +184,7 @@ export type Database = {
       scenarios: {
         Row: {
           categories: string[]
+          created_at: string
           description: string
           id: string
           image_url: string
@@ -173,6 +194,7 @@ export type Database = {
         }
         Insert: {
           categories?: string[]
+          created_at?: string
           description: string
           id?: string
           image_url: string
@@ -182,6 +204,7 @@ export type Database = {
         }
         Update: {
           categories?: string[]
+          created_at?: string
           description?: string
           id?: string
           image_url?: string
@@ -224,6 +247,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      users: {
+        Row: {
+          email: string | null
+          first_login_at: string | null
+          id: string
+          is_anonymous: boolean
+          last_login_at: string | null
+          login_times: number
+          name: string | null
+          password: string | null
+          photo_url: string | null
+        }
+        Insert: {
+          email?: string | null
+          first_login_at?: string | null
+          id: string
+          is_anonymous?: boolean
+          last_login_at?: string | null
+          login_times?: number
+          name?: string | null
+          password?: string | null
+          photo_url?: string | null
+        }
+        Update: {
+          email?: string | null
+          first_login_at?: string | null
+          id?: string
+          is_anonymous?: boolean
+          last_login_at?: string | null
+          login_times?: number
+          name?: string | null
+          password?: string | null
+          photo_url?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {

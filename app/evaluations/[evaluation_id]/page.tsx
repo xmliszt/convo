@@ -1,6 +1,6 @@
 import Markdown from 'react-markdown';
 
-import { ScenarioProvider } from '@/app/scenarios/[scenario_id]/scenario-provider';
+import { ScenarioProvider } from '@/app/conversations/[conversation_id]/scenario-provider';
 import { LabelWithPaddedDigits } from '@/components/label-with-padded-digits';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -48,6 +48,7 @@ export default async function Page(props: PageProps) {
             role: 'user' | 'model';
             message: string;
             timestamp: string;
+            created_by: string;
           }>(
             (
               dialog
@@ -56,6 +57,7 @@ export default async function Page(props: PageProps) {
               role: 'user' | 'model';
               message: string;
               timestamp: string;
+              created_by: string;
             } => dialog.role !== 'error' && dialog.message !== null
           )
           .map((dialog) => ({

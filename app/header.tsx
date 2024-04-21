@@ -18,11 +18,19 @@ const LAYOUT_SEGMENT_TO_LINK: Record<string, HomeLink> = {
     href: '/',
     label: 'Home',
   },
-  'scenarios/*': {
+  'conversations/*': {
     href: '/scenarios',
     label: 'Scenarios',
   },
   'evaluations/*': {
+    href: '/scenarios',
+    label: 'Scenarios',
+  },
+  profile: {
+    href: '/scenarios',
+    label: 'Scenarios',
+  },
+  signin: {
     href: '/scenarios',
     label: 'Scenarios',
   },
