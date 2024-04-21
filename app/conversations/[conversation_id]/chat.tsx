@@ -11,7 +11,7 @@ import SpeechRecognition, {
 } from 'react-speech-recognition';
 import { toast } from 'sonner';
 
-import { ChatBubble } from '@/components/chat-bubble';
+import { ChatBubble } from '@/components/chat-bubble/chat-bubble';
 import { MicrophoneButton } from '@/components/microphone-button';
 import { PaneGroupDrawer } from '@/components/pane-group-drawer';
 import { Button } from '@/components/ui/button';
@@ -321,6 +321,7 @@ export function Chat(props: ChatProps) {
               avatarUrl={
                 message.role === 'user' ? undefined : llmRole?.avatar_url
               }
+              gender= {llmRole?.gender}
               onRetry={handleRetry}
             />
           ))}
