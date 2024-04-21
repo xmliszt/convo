@@ -228,15 +228,18 @@ export function Chat(props: ChatProps) {
   } = useSpeechRecognition();
 
   const pushMessageToBubbleAndSaveIt = useCallback(() => {
-    const newUserMessage = history[history.length - 1];
-    newUserMessage.role = 'user';
+    const newUserMessage: ChatType = {
+      role: 'user',
+      message: finalTranscript,
+      createdAt: new Date().toISOString(),
+    };
     setInputValue('');
     sendMessage(history.slice(0, -1), newUserMessage);
     saveConversationDialog({
       conversationId: props.conversationId,
       chat: newUserMessage,
     });
-  }, [history, props.conversationId, sendMessage]);
+  }, [finalTranscript, history, props.conversationId, sendMessage]);
 
   useEffect(() => {
     if (!listening && finalTranscript.length > 0 && isRecording) {
