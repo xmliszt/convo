@@ -12,7 +12,6 @@ import SpeechRecognition, {
 import { toast } from 'sonner';
 
 import { ChatBubble } from '@/components/chat-bubble/chat-bubble';
-import { MicrophoneButton } from '@/components/microphone-button';
 import { PaneGroupDrawer } from '@/components/pane-group-drawer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -429,7 +428,6 @@ export function Chat(props: ChatProps) {
           </div>
           <form onSubmit={handleSubmit} className='grid place-items-center'>
             <div className='relative inline-flex w-full gap-x-2'>
-              <MicrophoneButton onRecordinRecieved={setInputValue} />
               <Input
                 maxLength={200}
                 tabIndex={0}
