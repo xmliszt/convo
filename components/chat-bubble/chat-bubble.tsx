@@ -1,12 +1,15 @@
 'use client';
 
 import { Bug, Microphone, Robot, User } from '@phosphor-icons/react';
+import { SpeakerHigh, Waveform } from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
 import Markdown from 'react-markdown';
 
 import { cn } from '@/lib/utils';
+
+import { readText } from './services/text-to-speech';
 
 type ChatBubbleProps = {
   id: string;
@@ -15,11 +18,57 @@ type ChatBubbleProps = {
   isRecording: boolean;
   isError?: boolean;
   avatarUrl?: string;
+  gender?: 'male' | 'female';
   onRetry?: () => void;
 };
 
+function base64ToArrayBuffer(base64: string) {
+  const binaryString = window.atob(base64);
+  const length = binaryString.length;
+  const bytes = new Uint8Array(length);
+
+  for (let i = 0; i < length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+
+  return bytes.buffer;
+}
+
 export function ChatBubble(props: ChatBubbleProps) {
   const chatBubbleRef = useRef<HTMLDivElement>(null);
+
+  const [_, startPlaying] = useTransition();
+  const [source, setSource] = useState<AudioBufferSourceNode | null>(null);
+
+  const handleTextToSpeech = useCallback(() => {
+    if (source) {
+      source.stop();
+      setSource(null);
+      return;
+    }
+
+    startPlaying(async () => {
+      try {
+        const base64Mp3 = await readText(props.message, props.gender);
+        if (base64Mp3) {
+          const arrayBuffer = base64ToArrayBuffer(base64Mp3);
+          const audioContext = new AudioContext();
+          const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+          const newSource = audioContext.createBufferSource(); // Create a new source node
+          newSource.buffer = audioBuffer;
+          newSource.connect(audioContext.destination);
+          newSource.onended = () => {
+            setSource(null);
+          };
+          newSource.start();
+          setSource(newSource);
+        }
+      } catch (error) {
+        setSource(null);
+        console.error(error);
+      }
+    });
+  }, [source, props.gender, props.message]);
 
   // When bubble appears, scroll it into view smoothly if needed.
   useEffect(() => {
@@ -43,7 +92,7 @@ export function ChatBubble(props: ChatBubbleProps) {
       )}
     >
       <motion.div
-        className='flex aspect-square size-10 items-center justify-center rounded-full border bg-muted text-muted-foreground'
+        className='flex flex-col items-center justify-center rounded-full border bg-muted text-muted-foreground'
         initial={{
           opacity: 0,
           y: 10,
@@ -53,6 +102,7 @@ export function ChatBubble(props: ChatBubbleProps) {
           y: 0,
         }}
       >
+        {/* User icon */}
         {props.isUser ? (
           <User />
         ) : props.isRecording ? (
@@ -71,7 +121,16 @@ export function ChatBubble(props: ChatBubbleProps) {
         ) : (
           <Robot />
         )}
+
+        <button
+          hidden={props.isUser || props.isRecording || props.isError}
+          className='mt-2 h-10'
+          onClick={handleTextToSpeech}
+        >
+          {source !== null ? <Waveform /> : <SpeakerHigh />}
+        </button>
       </motion.div>
+
       <motion.div
         initial={{
           opacity: 0,

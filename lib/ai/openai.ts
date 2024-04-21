@@ -1,10 +1,8 @@
-import 'server-only';
-
 import OpenAI from 'openai';
 
 export const OPENAI_GPT_MODEL_NAME = 'gpt-3.5-turbo';
 
-const openai = new OpenAI();
+export const openai = new OpenAI();
 
 export type OpenAIMessage = OpenAI.Chat.Completions.ChatCompletionMessageParam;
 
