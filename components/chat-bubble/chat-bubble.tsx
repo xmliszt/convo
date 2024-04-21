@@ -123,8 +123,8 @@ const handleTextToSpeech = useCallback(() => {
           <Robot />
         )}
 
-        {/* Button */}
         <button
+          hidden={props.isUser || props.isRecording || props.isError}
           className='h-10 mt-2'
           onClick={handleTextToSpeech}
         >
