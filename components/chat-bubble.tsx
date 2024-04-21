@@ -1,6 +1,6 @@
 'use client';
 
-import { Robot, User } from '@phosphor-icons/react';
+import { Bug, Microphone, Robot, User } from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
@@ -12,6 +12,7 @@ type ChatBubbleProps = {
   id: string;
   message: string;
   isUser: boolean;
+  isRecording: boolean;
   isError?: boolean;
   avatarUrl?: string;
   onRetry?: () => void;
@@ -36,7 +37,9 @@ export function ChatBubble(props: ChatBubbleProps) {
       ref={chatBubbleRef}
       className={cn(
         'flex items-start justify-start gap-x-2',
-        props.isUser ? 'flex-row-reverse pl-10' : 'flex-row pr-10'
+        props.isUser || props.isRecording
+          ? 'flex-row-reverse pl-10'
+          : 'flex-row pr-10'
       )}
     >
       <motion.div
@@ -52,6 +55,10 @@ export function ChatBubble(props: ChatBubbleProps) {
       >
         {props.isUser ? (
           <User />
+        ) : props.isRecording ? (
+          <Microphone />
+        ) : props.isError ? (
+          <Bug />
         ) : props.avatarUrl ? (
           <Image
             src={props.avatarUrl}
@@ -82,11 +89,13 @@ export function ChatBubble(props: ChatBubbleProps) {
         }}
         className={cn(
           'rounded-lg border bg-secondary px-3 pb-2 pt-1 shadow-inner',
-          props.isUser ? '!rounded-tr-[2px]' : '!rounded-tl-[2px]',
-          props.isUser
+          props.isUser || props.isRecording
+            ? '!rounded-tr-[2px]'
+            : '!rounded-tl-[2px]',
+          props.isUser || props.isRecording
             ? 'bg-[linear-gradient(145deg,#f1f1f1,#ffffff)]'
             : 'bg-[linear-gradient(215deg,#f1f1f1,#ffffff)]',
-          props.isUser
+          props.isUser || props.isRecording
             ? 'dark:bg-[linear-gradient(145deg,#000000,#292828)]'
             : 'dark:bg-[linear-gradient(215deg,#000000,#292828)]'
         )}

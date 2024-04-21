@@ -14,6 +14,8 @@ type SaveConversationDialogOptions = {
 export async function saveConversationDialog(
   options: SaveConversationDialogOptions
 ) {
+  // We don't save the dialog recording in progress.
+  if (options.chat.role === 'recording') return;
   const supabase = createServerAnonClient();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user) {

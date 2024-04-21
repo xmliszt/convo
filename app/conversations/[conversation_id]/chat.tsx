@@ -1,10 +1,14 @@
 'use client';
+import 'regenerator-runtime/runtime';
 
 import { PaperPlane, Spinner } from '@phosphor-icons/react';
 import { AnimatePresence, motion, Variants } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
 import { isMobile } from 'react-device-detect';
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from 'react-speech-recognition';
 import { toast } from 'sonner';
 
 import { ChatBubble } from '@/components/chat-bubble';
@@ -17,6 +21,7 @@ import { cn } from '@/lib/utils';
 import { useScenarioBackground } from '../../scenarios/scenario-background-provider';
 import { BonusScorePane } from './bonus-score-pane';
 import { GoalPane } from './goal-pane';
+import { Microphone } from './microphone';
 import type { Chat as ChatType } from './scenario-provider';
 import { useScenario } from './scenario-provider';
 import { getEvaluationFromAI } from './services/openai/get-evaluation-from-ai';
@@ -152,61 +157,127 @@ export function Chat(props: ChatProps) {
     router,
   ]);
 
-  async function sendMessage(history: ChatType[], newUserMessage: ChatType) {
-    const convertedMessages: ChatType[] = history.filter(
-      (m) => m.role !== 'error'
-    );
-    try {
-      setIsSendingMessage(true);
-      const newModelMessage = await sendMessagesToLlm(
-        convertedMessages,
-        newUserMessage.message
+  const sendMessage = useCallback(
+    async (history: ChatType[], newUserMessage: ChatType) => {
+      const convertedMessages: ChatType[] = history.filter(
+        (m) => m.role !== 'error'
       );
-      if (!newModelMessage.message) {
+      try {
+        setIsSendingMessage(true);
+        const newModelMessage = await sendMessagesToLlm(
+          convertedMessages,
+          newUserMessage.message
+        );
+        if (!newModelMessage.message) {
+          setHistory((prev) => [
+            ...prev,
+            {
+              role: 'error',
+              message: 'An unknown error occurred while sending the message.',
+              createdAt: new Date().toISOString(),
+            },
+          ]);
+        } else {
+          const newHistory: ChatType[] = [
+            ...history,
+            newUserMessage,
+            newModelMessage,
+          ];
+          setHistory(newHistory);
+          saveConversationDialog({
+            conversationId: props.conversationId,
+            chat: newModelMessage,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        const errorMessage = error instanceof Error ? error.message : undefined;
         setHistory((prev) => [
           ...prev,
           {
             role: 'error',
-            message: 'An unknown error occurred while sending the message.',
+            message:
+              'An error occurred while sending the message.' + errorMessage
+                ? ` Error: ${errorMessage}`
+                : '',
             createdAt: new Date().toISOString(),
           },
         ]);
-      } else {
-        const newHistory: ChatType[] = [
-          ...history,
-          newUserMessage,
-          newModelMessage,
-        ];
-        setHistory(newHistory);
-        saveConversationDialog({
-          conversationId: props.conversationId,
-          chat: newModelMessage,
-        });
+      } finally {
+        setIsSendingMessage(false);
       }
-    } catch (error) {
-      console.error(error);
-      const errorMessage = error instanceof Error ? error.message : undefined;
-      setHistory((prev) => [
-        ...prev,
-        {
-          role: 'error',
-          message:
-            'An error occurred while sending the message.' + errorMessage
-              ? ` Error: ${errorMessage}`
-              : '',
-          createdAt: new Date().toISOString(),
-        },
-      ]);
-    } finally {
-      setIsSendingMessage(false);
-    }
-  }
+    },
+    [props.conversationId, setHistory]
+  );
 
   useEffect(() => {
     if (!isSendingMessage) {
       inputRef.current?.focus();
     }
   }, [isSendingMessage]);
+
+  // For STT
+  const [isRecording, setIsRecording] = useState(false);
+  const {
+    finalTranscript,
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
+
+  const pushMessageToBubbleAndSaveIt = useCallback(() => {
+    const newUserMessage = history[history.length - 1];
+    newUserMessage.role = 'user';
+    setInputValue('');
+    sendMessage(history.slice(0, -1), newUserMessage);
+    saveConversationDialog({
+      conversationId: props.conversationId,
+      chat: newUserMessage,
+    });
+  }, [history, props.conversationId, sendMessage]);
+
+  useEffect(() => {
+    if (!listening && finalTranscript.length > 0 && isRecording) {
+      // If auto-pause is triggerred. We stop listening and save the message.
+      console.log('Auto-pause triggerred.');
+      pushMessageToBubbleAndSaveIt();
+      setIsRecording(false);
+      resetTranscript();
+      SpeechRecognition.stopListening();
+    }
+  }, [
+    finalTranscript.length,
+    isRecording,
+    listening,
+    pushMessageToBubbleAndSaveIt,
+    resetTranscript,
+  ]);
+
+  useEffect(() => {
+    if (transcript.length > 200) {
+      console.log('Limit 200 exceeded, stop listening.');
+      pushMessageToBubbleAndSaveIt();
+      setIsRecording(false);
+      resetTranscript();
+      SpeechRecognition.stopListening();
+    }
+    const newUserMessage: ChatType = {
+      role: 'recording',
+      message: transcript,
+      createdAt: new Date().toISOString(),
+    };
+    if (transcript.length > 0) {
+      // If the last message is not "recording", we push the new message to the bubble.
+      if (history[history.length - 1].role !== 'recording') {
+        setHistory((prev) => [...prev, newUserMessage]);
+      } else {
+        // Otherwise, we replace the last message with the new message.
+        setHistory((prev) => [...prev.slice(0, -1), newUserMessage]);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transcript]);
 
   // We remove the first initial LLM prompt.
   const filteredMessages = [...history].slice(1);
@@ -245,6 +316,7 @@ export function Chat(props: ChatProps) {
               message={message.message}
               isError={message.role === 'error'}
               isUser={message.role === 'user'}
+              isRecording={message.role === 'recording'}
               avatarUrl={
                 message.role === 'user' ? undefined : llmRole?.avatar_url
               }
@@ -364,20 +436,51 @@ export function Chat(props: ChatProps) {
                   isSendingMessage ||
                   hasRunOutofTurn ||
                   isEvaluating ||
-                  readonly
+                  readonly ||
+                  isRecording
                 }
-                value={inputValue}
+                value={
+                  isRecording
+                    ? 'Listening... (Speak to the microphone)'
+                    : inputValue
+                }
                 placeholder={
                   hasRunOutofTurn
                     ? 'You have run out of turns'
-                    : 'Type a message...'
+                    : isRecording
+                      ? 'Speak something...'
+                      : 'Type a message...'
                 }
                 onChange={(event) => setInputValue(event.target.value)}
-                className='h-10 w-full bg-background/40 pr-10 transition-[box-shadow_background] duration-300 ease-out focus:bg-background/60 focus:shadow-xl'
+                className={cn(
+                  'h-10 w-full pr-10 transition-[box-shadow_background_color] duration-300 ease-out focus:bg-background/60 focus:shadow-xl',
+                  isRecording
+                    ? 'bg-destructive/50 text-black'
+                    : 'bg-background/40 text-primary'
+                )}
                 autoFocus
               />
               <AnimatePresence>
-                {inputValue.length > 0 && (
+                {inputValue.length === 0 && browserSupportsSpeechRecognition ? (
+                  <Microphone
+                    isRecording={isRecording}
+                    onStartRecording={() => {
+                      setIsRecording(true);
+                      resetTranscript();
+                      SpeechRecognition.startListening();
+                      console.log('Start recording');
+                    }}
+                    onStopRecording={() => {
+                      setIsRecording(false);
+                      if (transcript.length > 0) {
+                        pushMessageToBubbleAndSaveIt();
+                      }
+                      resetTranscript();
+                      SpeechRecognition.stopListening();
+                      console.log('Stop recording');
+                    }}
+                  />
+                ) : (
                   <motion.button
                     type='submit'
                     className='absolute bottom-1 right-1 top-1 grid size-8 place-items-center rounded-sm bg-card/80 p-2'
