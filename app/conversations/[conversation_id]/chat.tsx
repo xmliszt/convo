@@ -224,6 +224,7 @@ export function Chat(props: ChatProps) {
     listening,
     resetTranscript,
     browserSupportsSpeechRecognition,
+    isMicrophoneAvailable,
   } = useSpeechRecognition();
 
   const pushMessageToBubbleAndSaveIt = useCallback(() => {
@@ -462,7 +463,9 @@ export function Chat(props: ChatProps) {
                 autoFocus
               />
               <AnimatePresence>
-                {inputValue.length === 0 && browserSupportsSpeechRecognition ? (
+                {inputValue.length === 0 &&
+                browserSupportsSpeechRecognition &&
+                isMicrophoneAvailable ? (
                   <Microphone
                     isRecording={isRecording}
                     onStartRecording={() => {
