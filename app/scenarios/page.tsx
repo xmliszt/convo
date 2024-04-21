@@ -44,13 +44,13 @@ export default async function Page(props: PageProps) {
       <main>
         <ScrollArea className='h-full'>
           <div className='relative flex justify-center px-4 py-32'>
-            <ScenarioGrid scenarios={filteredScenarios} />
-            <div className='invisible fixed left-[calc(50vw+20rem)] top-28 h-[80vh] max-w-lg overflow-y-scroll scrollbar-hide lg:visible'>
+            <div className='invisible fixed bottom-0 left-0 top-28 flex h-auto w-[28%] items-start justify-center overflow-y-scroll px-8 scrollbar-hide lg:visible'>
               <CategoryPane
                 categories={categories}
                 selectedCategory={filterCategory}
               />
             </div>
+            <ScenarioGrid scenarios={filteredScenarios} />
           </div>
         </ScrollArea>
         {/* Mobile category drawer */}

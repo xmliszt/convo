@@ -143,7 +143,7 @@ export default function RootLayout({
         <NextThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <TooltipProvider delayDuration={100}>
             <Header />
-            <div className='fixed right-2 top-4 z-40'>
+            <div className='fixed right-4 top-4 z-40'>
               <UserSigninPortal />
             </div>
             {children}
