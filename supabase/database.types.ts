@@ -12,18 +12,21 @@ export type Database = {
       conversation_dialogs: {
         Row: {
           conversation_id: string | null
+          created_by: string | null
           message: string | null
           role: Database["public"]["Enums"]["role"]
           timestamp: string
         }
         Insert: {
           conversation_id?: string | null
+          created_by?: string | null
           message?: string | null
           role: Database["public"]["Enums"]["role"]
           timestamp?: string
         }
         Update: {
           conversation_id?: string | null
+          created_by?: string | null
           message?: string | null
           role?: Database["public"]["Enums"]["role"]
           timestamp?: string
@@ -34,6 +37,13 @@ export type Database = {
             columns: ["conversation_id"]
             isOneToOne: false
             referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_dialogs_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -106,7 +116,7 @@ export type Database = {
           {
             foreignKeyName: "evaluations_conversation_id_fkey"
             columns: ["conversation_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "conversations"
             referencedColumns: ["id"]
           },
@@ -174,6 +184,7 @@ export type Database = {
       scenarios: {
         Row: {
           categories: string[]
+          created_at: string
           description: string
           id: string
           image_url: string
@@ -183,6 +194,7 @@ export type Database = {
         }
         Insert: {
           categories?: string[]
+          created_at?: string
           description: string
           id?: string
           image_url: string
@@ -192,6 +204,7 @@ export type Database = {
         }
         Update: {
           categories?: string[]
+          created_at?: string
           description?: string
           id?: string
           image_url?: string

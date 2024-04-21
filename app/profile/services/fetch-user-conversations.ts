@@ -3,22 +3,18 @@ import 'server-only';
 import { redirect } from 'next/navigation';
 
 import { ConvoError } from '@/lib/convo-error';
-import {
-  createServerAnonClient,
-  createServerServiceRoleClient,
-} from '@/lib/supabase/server';
+import { createServerAnonClient } from '@/lib/supabase/server';
 
 export async function fetchUserConversations() {
-  const authSupabase = createServerAnonClient();
-  const { data, error } = await authSupabase.auth.getUser();
+  const supabase = createServerAnonClient();
+  const { data, error } = await supabase.auth.getUser();
   if (!data.user || error) {
     redirect('/signin');
   }
-  const supabase = createServerServiceRoleClient();
   const fetchUserConversationsResponse = await supabase
     .from('conversations')
     .select(
-      '*,scenario:scenarios!inner(*,llm_role:llm_roles!inner(*),goals(*),target_words!inner(*))'
+      '*,scenario:scenarios!inner(*,llm_role:llm_roles!inner(*),goals(*),target_words!inner(*)),evaluation:evaluations(*)'
     )
     .eq('created_by', data.user.id);
   if (fetchUserConversationsResponse.error)

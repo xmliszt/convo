@@ -26,7 +26,11 @@ import { saveEvaluation } from './services/save-evaluation';
 import { TargetWordsPane } from './target-words-pane';
 import { MAX_TURNS, TurnsLeftPane } from './turns-left-pane';
 
-export function Chat() {
+type ChatProps = {
+  evaluation?: Evaluation;
+};
+
+export function Chat(props: ChatProps) {
   const router = useRouter();
   const [inputValue, setInputValue] = useState('');
   const [isSendingMessage, setIsSendingMessage] = useState(false);
@@ -34,6 +38,7 @@ export function Chat() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const gameOverButtonRef = useRef<HTMLButtonElement>(null);
+  const readonly = !!props.evaluation;
 
   const { setBackgroundImageUrl, setShowBackgroundImage } =
     useScenarioBackground();
@@ -46,6 +51,12 @@ export function Chat() {
     isGameOver,
     llmRole,
   } = useScenario();
+
+  useEffect(() => {
+    if (props.evaluation) {
+      router.prefetch(`/evaluations/${props.evaluation.id}`);
+    }
+  }, [props.evaluation, router]);
 
   useEffect(() => {
     if (!scenario) return;
@@ -86,6 +97,10 @@ export function Chat() {
   }
 
   const handleEvaluation = useCallback(() => {
+    if (readonly && props.evaluation) {
+      router.push(`/evaluations/${props.evaluation.id}`);
+      return;
+    }
     if (!scenario || !targetWords || !goals || !history) return;
     const bonusScore =
       goals
@@ -121,7 +136,15 @@ export function Chat() {
         );
       }
     });
-  }, [goals, history, scenario, targetWords, router]);
+  }, [
+    readonly,
+    props.evaluation,
+    scenario,
+    targetWords,
+    goals,
+    history,
+    router,
+  ]);
 
   async function sendMessage(history: ChatType[], newUserMessage: ChatType) {
     const convertedMessages: ChatType[] = history.filter(
@@ -219,7 +242,7 @@ export function Chat() {
             />
           ))}
           <AnimatePresence>
-            {(isGameOver || hasRunOutofTurn) && (
+            {(isGameOver || hasRunOutofTurn || readonly) && (
               <motion.div
                 key='game-over-button'
                 className='grid w-full place-items-center'
@@ -260,7 +283,9 @@ export function Chat() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -30 }}
                     >
-                      End the conversation
+                      {props.evaluation
+                        ? 'View my evaluation results'
+                        : 'End the conversation'}
                     </motion.span>
                   )}
                 </Button>
@@ -325,7 +350,12 @@ export function Chat() {
                 tabIndex={0}
                 ref={inputRef}
                 type='text'
-                disabled={isSendingMessage || hasRunOutofTurn || isEvaluating}
+                disabled={
+                  isSendingMessage ||
+                  hasRunOutofTurn ||
+                  isEvaluating ||
+                  readonly
+                }
                 value={inputValue}
                 placeholder={
                   hasRunOutofTurn
@@ -344,7 +374,10 @@ export function Chat() {
                     initial='initial'
                     whileHover='hover'
                     disabled={
-                      isSendingMessage || hasRunOutofTurn || isEvaluating
+                      isSendingMessage ||
+                      hasRunOutofTurn ||
+                      isEvaluating ||
+                      readonly
                     }
                     animate={{
                       opacity: 1,

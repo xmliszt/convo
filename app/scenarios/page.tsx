@@ -32,7 +32,10 @@ export default async function Page(props: PageProps) {
     .sort((a, b) => a.localeCompare(b));
 
   const filterCategory = props.searchParams?.category;
-  let filteredScenarios: typeof scenarios = scenarios;
+  let filteredScenarios: typeof scenarios = [...scenarios].sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
   if (filterCategory) {
     filteredScenarios = scenarios.filter((scenario) =>
       scenario.categories.includes(lowerCase(filterCategory))

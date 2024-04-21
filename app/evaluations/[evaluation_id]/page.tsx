@@ -48,6 +48,7 @@ export default async function Page(props: PageProps) {
             role: 'user' | 'model';
             message: string;
             timestamp: string;
+            created_by: string;
           }>(
             (
               dialog
@@ -56,6 +57,7 @@ export default async function Page(props: PageProps) {
               role: 'user' | 'model';
               message: string;
               timestamp: string;
+              created_by: string;
             } => dialog.role !== 'error' && dialog.message !== null
           )
           .map((dialog) => ({

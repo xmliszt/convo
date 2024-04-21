@@ -1,3 +1,5 @@
+import { redirect } from 'next/navigation';
+
 import { BonusScorePane } from '@/app/scenarios/[scenario_id]/bonus-score-pane';
 import { Chat } from '@/app/scenarios/[scenario_id]/chat';
 import { GoalPane } from '@/app/scenarios/[scenario_id]/goal-pane';
@@ -18,6 +20,9 @@ export default async function Page(props: PageProps) {
   const { conversation } = await fetchConversation({
     conversationId: props.params.conversation_id,
   });
+  if (!conversation) {
+    return redirect('/signin');
+  }
 
   const scenario = conversation.scenario;
 
@@ -39,6 +44,7 @@ export default async function Page(props: PageProps) {
             role: 'user' | 'model';
             message: string;
             timestamp: string;
+            created_by: string;
           }>(
             (
               dialog
@@ -47,6 +53,7 @@ export default async function Page(props: PageProps) {
               role: 'user' | 'model';
               message: string;
               timestamp: string;
+              created_by: string;
             } => dialog.role !== 'error' && dialog.message !== null
           )
           .map((dialog) => ({
@@ -65,7 +72,7 @@ export default async function Page(props: PageProps) {
             </div>
           </div>
         </div>
-        <Chat />
+        <Chat evaluation={conversation.evaluation ?? undefined} />
         <div className='invisible absolute left-[calc(50vw+16rem)] top-0 z-20 max-w-[20rem] lg:visible'>
           <div className='h-screen w-full overflow-y-auto px-10 scrollbar-hide'>
             <div className='flex flex-col gap-y-4 pb-32 pt-20'>

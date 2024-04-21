@@ -12,7 +12,7 @@ export async function signInAnonymously(props: { captchaToken: string }) {
   if (error || !data.user) {
     throw new Error('Failed to sign in anonymously');
   }
-  console.log('data', data);
+
   return {
     user: data.user,
   };
