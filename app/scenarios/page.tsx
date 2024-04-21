@@ -45,7 +45,7 @@ export default async function Page(props: PageProps) {
         <ScrollArea className='h-full'>
           <div className='relative flex justify-center px-4 py-32'>
             <ScenarioGrid scenarios={filteredScenarios} />
-            <div className='invisible fixed left-[calc(50vw+20rem)] top-32 lg:visible'>
+            <div className='invisible fixed left-[calc(50vw+20rem)] top-28 h-[80vh] max-w-lg overflow-y-scroll scrollbar-hide lg:visible'>
               <CategoryPane
                 categories={categories}
                 selectedCategory={filterCategory}

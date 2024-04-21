@@ -7,6 +7,7 @@ import { Playfair_Display } from 'next/font/google';
 import { ThemeSwitch } from '@/components/theme-switch';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { UserSigninPortal } from '@/components/user-signin-portal';
 
 import { Header } from './header';
 import { NextThemeProvider } from './theme-provider';
@@ -142,8 +143,11 @@ export default function RootLayout({
         <NextThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <TooltipProvider delayDuration={100}>
             <Header />
+            <div className='fixed right-2 top-4 z-40'>
+              <UserSigninPortal />
+            </div>
             {children}
-            <div className='fixed right-4 top-4 z-40'>
+            <div className='fixed bottom-8 right-6 z-40'>
               <ThemeSwitch />
             </div>
             {/* trademark */}

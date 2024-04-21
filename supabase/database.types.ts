@@ -42,22 +42,32 @@ export type Database = {
         Row: {
           bonus_score: number
           created_at: string
+          created_by: string | null
           id: string
           scenario_id: string
         }
         Insert: {
           bonus_score?: number
           created_at?: string
+          created_by?: string | null
           id?: string
           scenario_id: string
         }
         Update: {
           bonus_score?: number
           created_at?: string
+          created_by?: string | null
           id?: string
           scenario_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "conversations_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "conversations_scenario_id_fkey"
             columns: ["scenario_id"]
@@ -224,6 +234,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      users: {
+        Row: {
+          email: string
+          first_login_at: string | null
+          id: string
+          last_login_at: string | null
+          login_times: number
+          name: string | null
+          password: string | null
+          photo_url: string | null
+        }
+        Insert: {
+          email: string
+          first_login_at?: string | null
+          id: string
+          last_login_at?: string | null
+          login_times?: number
+          name?: string | null
+          password?: string | null
+          photo_url?: string | null
+        }
+        Update: {
+          email?: string
+          first_login_at?: string | null
+          id?: string
+          last_login_at?: string | null
+          login_times?: number
+          name?: string | null
+          password?: string | null
+          photo_url?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {

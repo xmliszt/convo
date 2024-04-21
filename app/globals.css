@@ -87,6 +87,10 @@
   h1 {
     @apply font-bold;
   }
+
+  input {
+    @apply transition-[colors_box-shadow] duration-300 ease-out;
+  }
 }
 
 ::view-transition-group(root) {
@@ -111,18 +115,18 @@
 
 @keyframes reveal-dark {
   from {
-    clip-path: circle(0% at 100% 0%);
+    clip-path: circle(0% at 100% 100%);
   }
   to {
-    clip-path: circle(200% at 100% 0%);
+    clip-path: circle(200% at 0% 0%);
   }
 }
 
 @keyframes reveal-light {
   from {
-    clip-path: circle(0% at 100% 0%);
+    clip-path: circle(0% at 100% 100%);
   }
   to {
-    clip-path: circle(200% at 100% 0%);
+    clip-path: circle(200% at 0% 0%);
   }
 }
