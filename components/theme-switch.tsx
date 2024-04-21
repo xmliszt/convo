@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { useSelectedLayoutSegment } from 'next/navigation';
 import { useTheme } from 'next-themes';
 
+import { useMediaQuery } from '@/lib/use-media-query';
+
 export function ThemeSwitch() {
   const segment = useSelectedLayoutSegment();
   const { resolvedTheme, setTheme } = useTheme();
@@ -12,6 +14,8 @@ export function ThemeSwitch() {
   function switchTheme() {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   }
+
+  const isSmallerDevice = useMediaQuery('(max-width: 640px)');
 
   return (
     <motion.button
@@ -24,7 +28,7 @@ export function ThemeSwitch() {
         y: 0,
       }}
       animate={{
-        y: segment === 'conversations' ? -56 : 0,
+        y: isSmallerDevice && segment === 'conversations' ? -56 : 0,
       }}
       whileHover={{
         scale: 1.1,
