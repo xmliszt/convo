@@ -321,7 +321,7 @@ export function Chat(props: ChatProps) {
               avatarUrl={
                 message.role === 'user' ? undefined : llmRole?.avatar_url
               }
-              gender= {llmRole?.gender}
+              gender={llmRole?.gender ?? undefined}
               onRetry={handleRetry}
             />
           ))}
@@ -429,7 +429,7 @@ export function Chat(props: ChatProps) {
           </div>
           <form onSubmit={handleSubmit} className='grid place-items-center'>
             <div className='relative inline-flex w-full gap-x-2'>
-              <MicrophoneButton onRecordinRecieved={setInputValue}/>
+              <MicrophoneButton onRecordinRecieved={setInputValue} />
               <Input
                 maxLength={200}
                 tabIndex={0}

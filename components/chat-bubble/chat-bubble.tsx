@@ -4,7 +4,7 @@ import { Bug, Microphone, Robot, User } from '@phosphor-icons/react';
 import { SpeakerHigh, Waveform } from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useCallback,useEffect, useRef, useState,useTransition } from 'react';
+import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
 import Markdown from 'react-markdown';
 
 import { cn } from '@/lib/utils';
@@ -18,11 +18,11 @@ type ChatBubbleProps = {
   isRecording: boolean;
   isError?: boolean;
   avatarUrl?: string;
-  gender?: string
+  gender?: 'male' | 'female';
   onRetry?: () => void;
 };
 
-function base64ToArrayBuffer(base64) {
+function base64ToArrayBuffer(base64: string) {
   const binaryString = window.atob(base64);
   const length = binaryString.length;
   const bytes = new Uint8Array(length);
@@ -38,38 +38,37 @@ export function ChatBubble(props: ChatBubbleProps) {
   const chatBubbleRef = useRef<HTMLDivElement>(null);
 
   const [_, startPlaying] = useTransition();
-  const [source, setSource] = useState(null);
+  const [source, setSource] = useState<AudioBufferSourceNode | null>(null);
 
-const handleTextToSpeech = useCallback(() => {
-  if (source) {
-    source.stop();
-    setSource(null);
-    return;
-  }
-
-  startPlaying(async () => {
-    try {
-      const base64Mp3 = await readText(props.message, props.gender);
-      if (base64Mp3) {
-        const arrayBuffer = base64ToArrayBuffer(base64Mp3);
-        const audioContext = new AudioContext();
-        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-        const newSource = audioContext.createBufferSource(); // Create a new source node
-        newSource.buffer = audioBuffer;
-        newSource.connect(audioContext.destination);
-        newSource.onended = () => {
-          setSource(null);
-        };
-        newSource.start();
-        setSource(newSource);
-      }
-    } catch (error) {
+  const handleTextToSpeech = useCallback(() => {
+    if (source) {
+      source.stop();
       setSource(null);
-      console.error(error);
+      return;
     }
-  });
-}, [source, props.gender, props.message]);
 
+    startPlaying(async () => {
+      try {
+        const base64Mp3 = await readText(props.message, props.gender);
+        if (base64Mp3) {
+          const arrayBuffer = base64ToArrayBuffer(base64Mp3);
+          const audioContext = new AudioContext();
+          const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+          const newSource = audioContext.createBufferSource(); // Create a new source node
+          newSource.buffer = audioBuffer;
+          newSource.connect(audioContext.destination);
+          newSource.onended = () => {
+            setSource(null);
+          };
+          newSource.start();
+          setSource(newSource);
+        }
+      } catch (error) {
+        setSource(null);
+        console.error(error);
+      }
+    });
+  }, [source, props.gender, props.message]);
 
   // When bubble appears, scroll it into view smoothly if needed.
   useEffect(() => {
@@ -125,7 +124,7 @@ const handleTextToSpeech = useCallback(() => {
 
         <button
           hidden={props.isUser || props.isRecording || props.isError}
-          className='h-10 mt-2'
+          className='mt-2 h-10'
           onClick={handleTextToSpeech}
         >
           {source !== null ? <Waveform /> : <SpeakerHigh />}
