@@ -2,20 +2,14 @@
 
 import { MoonStars, Sun } from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
-import { useSelectedLayoutSegment } from 'next/navigation';
 import { useTheme } from 'next-themes';
 
-import { useMediaQuery } from '@/lib/use-media-query';
-
 export function ThemeSwitch() {
-  const segment = useSelectedLayoutSegment();
   const { resolvedTheme, setTheme } = useTheme();
 
   function switchTheme() {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   }
-
-  const isSmallerDevice = useMediaQuery('(max-width: 640px)');
 
   return (
     <motion.button
@@ -23,12 +17,6 @@ export function ThemeSwitch() {
       onClick={() => {
         if (!document.startViewTransition) switchTheme();
         document.startViewTransition(switchTheme);
-      }}
-      initial={{
-        y: 0,
-      }}
-      animate={{
-        y: isSmallerDevice && segment === 'conversations' ? -56 : 0,
       }}
       whileHover={{
         scale: 1.1,
