@@ -1,20 +1,28 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
-import { ScenarioBackground } from '../scenario-background';
-import { ScenarioBackgroundProvider } from '../scenario-background-provider';
+import { ScenarioBackground } from '../../scenarios/scenario-background';
+import { ScenarioBackgroundProvider } from '../../scenarios/scenario-background-provider';
 import { ScenarioProvider } from './scenario-provider';
+import { fetchConversation } from './services/fetch-conversation';
 import { fetchGoals } from './services/fetch-goals';
 import { fetchLlmRole } from './services/fetch-llm-role';
-import { fetchScenario } from './services/fetch-scenario';
 import { fetchTargetWords } from './services/fetch-target-words';
 import { getInitialHistory } from './services/openai/get-initial-history';
 
 export async function generateMetadata({
   params,
 }: {
-  params: { scenario_id: string };
+  params: { conversation_id: string };
 }): Promise<Metadata> {
-  const { scenario } = await fetchScenario({ scenarioId: params.scenario_id });
+  const { conversation } = await fetchConversation({
+    conversationId: params.conversation_id,
+  });
+  const scenario = conversation?.scenario;
+  if (!scenario)
+    return {
+      title: 'Convo | Conversation',
+    };
   return {
     title: `Convo | ${scenario.name}`,
     openGraph: {
@@ -25,16 +33,19 @@ export async function generateMetadata({
 
 type LayoutProps = {
   params: {
-    scenario_id: string;
+    conversation_id: string;
   };
   children: React.ReactNode;
 };
 
 export default async function Layout(props: LayoutProps) {
-  const { scenario } = await fetchScenario({
-    scenarioId: props.params.scenario_id,
+  const { conversation } = await fetchConversation({
+    conversationId: props.params.conversation_id,
   });
-
+  if (!conversation) {
+    return redirect('/scenarios');
+  }
+  const scenario = conversation.scenario;
   const [{ llmRole }, { goals }, { targetWords }] = await Promise.all([
     fetchLlmRole({ llmId: scenario.llm_id }),
     fetchGoals({ scenarioId: scenario.id }),

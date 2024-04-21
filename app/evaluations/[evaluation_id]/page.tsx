@@ -1,6 +1,6 @@
 import Markdown from 'react-markdown';
 
-import { ScenarioProvider } from '@/app/scenarios/[scenario_id]/scenario-provider';
+import { ScenarioProvider } from '@/app/conversations/[conversation_id]/scenario-provider';
 import { LabelWithPaddedDigits } from '@/components/label-with-padded-digits';
 import { ScrollArea } from '@/components/ui/scroll-area';
 

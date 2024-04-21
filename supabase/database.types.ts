@@ -250,9 +250,10 @@ export type Database = {
       }
       users: {
         Row: {
-          email: string
+          email: string | null
           first_login_at: string | null
           id: string
+          is_anonymous: boolean
           last_login_at: string | null
           login_times: number
           name: string | null
@@ -260,9 +261,10 @@ export type Database = {
           photo_url: string | null
         }
         Insert: {
-          email: string
+          email?: string | null
           first_login_at?: string | null
           id: string
+          is_anonymous?: boolean
           last_login_at?: string | null
           login_times?: number
           name?: string | null
@@ -270,9 +272,10 @@ export type Database = {
           photo_url?: string | null
         }
         Update: {
-          email?: string
+          email?: string | null
           first_login_at?: string | null
           id?: string
+          is_anonymous?: boolean
           last_login_at?: string | null
           login_times?: number
           name?: string | null

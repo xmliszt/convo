@@ -3,7 +3,7 @@
 import { CursorClick, Fingerprint } from '@phosphor-icons/react';
 import { isMobile } from 'react-device-detect';
 
-import { useScenario } from '@/app/scenarios/[scenario_id]/scenario-provider';
+import { useScenario } from '@/app/conversations/[conversation_id]/scenario-provider';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,

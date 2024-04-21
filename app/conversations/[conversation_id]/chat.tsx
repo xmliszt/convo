@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 
-import { useScenarioBackground } from '../scenario-background-provider';
+import { useScenarioBackground } from '../../scenarios/scenario-background-provider';
 import { BonusScorePane } from './bonus-score-pane';
 import { GoalPane } from './goal-pane';
 import type { Chat as ChatType } from './scenario-provider';

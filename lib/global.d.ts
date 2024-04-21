@@ -6,4 +6,6 @@ declare global {
   export type Goal = Database['public']['Tables']['goals']['Row'];
   export type TargetWords = Database['public']['Tables']['target_words']['Row'];
   export type Evaluation = Database['public']['Tables']['evaluations']['Row'];
+  export type Conversation =
+    Database['public']['Tables']['conversations']['Row'];
 }

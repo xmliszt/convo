@@ -80,7 +80,6 @@ export default function Error({
 }
 
 function isObject(value: string): boolean {
-  console.log(value);
   try {
     JSON.parse(value);
     return true;

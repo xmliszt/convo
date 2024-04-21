@@ -12,11 +12,12 @@ export async function fetchUserConversations() {
     redirect('/signin');
   }
   const fetchUserConversationsResponse = await supabase
-    .from('conversations')
+    .from('users')
     .select(
-      '*,scenario:scenarios!inner(*,llm_role:llm_roles!inner(*),goals(*),target_words!inner(*)),evaluation:evaluations(*)'
+      '*,conversations(*,scenario:scenarios!inner(*,llm_role:llm_roles!inner(*),goals(*),target_words!inner(*)),evaluation:evaluations(*),conversation_dialogs(*))'
     )
-    .eq('created_by', data.user.id);
+    .eq('id', data.user.id)
+    .single();
   if (fetchUserConversationsResponse.error)
     throw new ConvoError(
       'Failed to fetch user data',
@@ -28,6 +29,6 @@ export async function fetchUserConversations() {
       })
     );
   return {
-    conversations: fetchUserConversationsResponse.data,
+    user: fetchUserConversationsResponse.data,
   };
 }

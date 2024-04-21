@@ -2,14 +2,17 @@
 
 import { motion, Variants } from 'framer-motion';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useCallback, useTransition } from 'react';
 import { isMobile } from 'react-device-detect';
+import { toast } from 'sonner';
 
 import { HoverPerspectiveContainer } from '@/components/hover-perspective-container';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
 
 import { useScenarioBackground } from './scenario-background-provider';
+import { createConversation } from './services/create-conversation';
 
 type ScenarioGridProps = {
   scenarios: Scenario[];
@@ -50,6 +53,8 @@ type ScenarioCardProps = {
 function ScenarioCard(props: ScenarioCardProps) {
   const { backgroundImageUrl, setBackgroundImageUrl, setShowBackgroundImage } =
     useScenarioBackground();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const variants: Variants = {
     initial: {
@@ -73,10 +78,24 @@ function ScenarioCard(props: ScenarioCardProps) {
     },
   };
 
+  const handleCreateConversation = useCallback(() => {
+    if (isPending) return;
+    startTransition(async () => {
+      try {
+        const { conversation } = await createConversation({
+          scenarioId: props.scenario.id,
+        });
+        router.push(`/conversations/${conversation.id}`);
+      } catch (error) {
+        toast.error('Unable to create conversation.');
+      }
+    });
+  }, [props.scenario.id, router, isPending]);
+
   return (
-    <Link
-      href={`/scenarios/${props.scenario.id}`}
-      className='w-fit sm:place-self-stretch'
+    <div
+      className='w-fit cursor-pointer sm:place-self-stretch'
+      onClick={handleCreateConversation}
     >
       <HoverPerspectiveContainer className='h-full w-fit border-none shadow-none'>
         <motion.div
@@ -133,6 +152,6 @@ function ScenarioCard(props: ScenarioCardProps) {
           </div>
         </motion.div>
       </HoverPerspectiveContainer>
-    </Link>
+    </div>
   );
 }

@@ -17,12 +17,13 @@ export default function Page() {
           <CardHeader>
             <CardTitle>Sign in to Convo</CardTitle>
             <CardDescription>
-              Sign in to save your conversations and results with Convo, and
-              revisit them in your profile anytime you want!
+              Sign in start any conversation with Convo. You will also be able
+              to revisit your saved conversations and evaluation results in your
+              profile.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form className='space-y-4 [&>div]:space-y-2'>
+            <form className='space-y-4'>
               {/* TODO(@xmliszt): Proper email provider signin flow */}
               {/* <div>
                 <Label htmlFor='email'>Email</Label>
@@ -42,7 +43,7 @@ export default function Page() {
                   placeholder='Your password...'
                 />
               </div> */}
-              <div className='flex flex-col justify-center space-y-2 px-4'>
+              <div className='flex flex-col justify-center space-y-4 px-4'>
                 {/* <Button type='submit' variant='outline'>
                   <EnvelopeSimple className='mr-2' />
                   Sign in / Sign up with email

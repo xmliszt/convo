@@ -13,6 +13,7 @@ export async function signInGoogle({
     },
   });
   if (error) {
+    console.error(error);
     throw new Error('Failed to sign in with Google');
   }
 }

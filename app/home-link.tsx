@@ -70,6 +70,7 @@ export function HomeLink(props: HomeLinkProps) {
   function handleLinkClick() {
     setIsBeforeRouting(true);
     setTimeout(() => {
+      console.log('Navigating to:', props.homeLink.href);
       router.push(props.homeLink.href);
     }, 200);
   }
