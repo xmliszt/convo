@@ -12,7 +12,7 @@ import {
 import { Chat } from './chat';
 
 export type Chat = {
-  role: 'user' | 'model' | 'error';
+  role: 'user' | 'model' | 'error' | 'recording';
   message: string;
   /**
    * ISO 8601 string

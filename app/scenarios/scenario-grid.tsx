@@ -87,6 +87,7 @@ function ScenarioCard(props: ScenarioCardProps) {
         });
         router.push(`/conversations/${conversation.id}`);
       } catch (error) {
+        console.error(error);
         toast.error('Unable to create conversation.');
       }
     });
