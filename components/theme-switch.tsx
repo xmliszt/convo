@@ -2,9 +2,11 @@
 
 import { MoonStars, Sun } from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
+import { useSelectedLayoutSegment } from 'next/navigation';
 import { useTheme } from 'next-themes';
 
 export function ThemeSwitch() {
+  const segment = useSelectedLayoutSegment();
   const { resolvedTheme, setTheme } = useTheme();
 
   function switchTheme() {
@@ -17,6 +19,12 @@ export function ThemeSwitch() {
       onClick={() => {
         if (!document.startViewTransition) switchTheme();
         document.startViewTransition(switchTheme);
+      }}
+      initial={{
+        y: 0,
+      }}
+      animate={{
+        y: segment === 'conversations' ? -56 : 0,
       }}
       whileHover={{
         scale: 1.1,
