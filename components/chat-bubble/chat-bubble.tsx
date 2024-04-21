@@ -1,7 +1,14 @@
 'use client';
 
-import { Bug, Microphone, Robot, User } from '@phosphor-icons/react';
-import { SpeakerHigh, Waveform } from '@phosphor-icons/react';
+import {
+  Bug,
+  Microphone,
+  Robot,
+  Spinner,
+  User,
+  UserSound,
+} from '@phosphor-icons/react';
+import { SpeakerHigh } from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
@@ -37,7 +44,7 @@ function base64ToArrayBuffer(base64: string) {
 export function ChatBubble(props: ChatBubbleProps) {
   const chatBubbleRef = useRef<HTMLDivElement>(null);
 
-  const [_, startPlaying] = useTransition();
+  const [isLoadingAudio, startPlaying] = useTransition();
   const [source, setSource] = useState<AudioBufferSourceNode | null>(null);
 
   const handleTextToSpeech = useCallback(() => {
@@ -92,7 +99,7 @@ export function ChatBubble(props: ChatBubbleProps) {
       )}
     >
       <motion.div
-        className='flex flex-col items-center justify-center rounded-full border bg-muted text-muted-foreground'
+        className='flex min-h-10 min-w-10 flex-col items-center justify-center rounded-full border bg-muted text-muted-foreground'
         initial={{
           opacity: 0,
           y: 10,
@@ -115,20 +122,26 @@ export function ChatBubble(props: ChatBubbleProps) {
             alt='Avatar'
             width={40}
             height={40}
-            className='rounded-full border'
+            className='rounded-full border shadow-lg'
             unoptimized
           />
         ) : (
           <Robot />
         )}
-
-        <button
-          hidden={props.isUser || props.isRecording || props.isError}
-          className='mt-2 h-10'
-          onClick={handleTextToSpeech}
-        >
-          {source !== null ? <Waveform /> : <SpeakerHigh />}
-        </button>
+        {!(props.isUser || props.isRecording || props.isError) && (
+          <motion.button
+            className='flex items-center justify-center p-3'
+            onClick={handleTextToSpeech}
+          >
+            {source !== null ? (
+              <UserSound />
+            ) : isLoadingAudio ? (
+              <Spinner className='animate-spin' />
+            ) : (
+              <SpeakerHigh />
+            )}
+          </motion.button>
+        )}
       </motion.div>
 
       <motion.div
