@@ -31,7 +31,9 @@ export default async function Page() {
   // Group evaluations by scenario
   const allEvaluations = conversationsOrderedByLatestDate
     .map((conversation) => conversation.evaluation)
-    .filter<NonNullable<Evaluation>>((evaluation) => evaluation !== null);
+    .filter<
+      NonNullable<Evaluation>
+    >((evaluation): evaluation is Evaluation => evaluation !== null);
   const groupedEvaluations = groupBy(
     allEvaluations,
     (evaluation) =>
