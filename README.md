@@ -1,35 +1,40 @@
 # Convo
 
-[Convo.website](https://convo.website) helps you practice English conversation with real-life scenarios. It is a gamified experience where you will role play with AI counter-part to steer the conversation towards a set of end goals.
+[Convo.website](https://convo.website) helps you practice English conversation with real-world scenarios. It is a gamified experience where you will role play with AI counter-part to steer the conversation towards a set of end goals.
 
 ![Convo](https://convo.website/og/title-dark.jpg)
 
 # Introduction
 
-Welcome to **Convo**, where **language learning** becomes an immersive journey through **real-life scenarios**. Our innovative platform offers a diverse range of situations, from everyday **school conversations** to professional **interviews** and **travel experiences**. With **Convo**, you'll engage in lifelike conversations powered by intelligent **AI**, making **learning** feel natural and engaging. Speak directly to **Convo** and hear its instant responses using advanced **speech recognition** and **synthesis**. Plus, enjoy the convenience of **anonymous sign-in** and **conversation saving**, **personalized feedback**, and **evaluation**, and seamless **Google OAuth sign-in**. With support for **light and dark mode** and a **classic minimalist design**, **Convo** ensures an optimal learning experience tailored to your preferences. Join us today and unlock the power of limitless conversation!
+Welcome to **Convo**, where **language learning** becomes an immersive experience through **real-world conversations**. Chat with an **intelligent AI** to hit targets, score points and get constructive feedback. All in the name of having fun while learning! We offer a dynamic series of practical conversational scenarios that vary in settings, styles and purposes. Whether you are a student preparing for a presentation, a professional heading for an interview, or you simply want to go about the daily norms, there is something for you.
+
+Our innovative platform uses state of the art technology to ensure the best of experiences. The user interface is versatile, optimised for both mobile and desktop viewing, and supports dark/light modes. Join us today and get chatting about anything, anywhere, anytime!
 
 # Key features
 
 ## Immersive Scenario-Based Learning
-Explore a wide range of real-life situations like school conversations, job interviews, and travel experiences. Convo offers diverse scenarios that make learning feel like real-life situations.
+Explore a wide range of real-world scenarios. From the classroom to the restaurent, casual to formal, presentation-based to dialogue-based.
 
 ## Intelligent AI Role-Play
 Have lifelike conversations with our smart AI. It responds just like a real person, making your learning experience natural and engaging.
 
 ## Advanced Speech Recognition and Synthesis
-Talk to Convo's AI and hear its responses instantly. It's like having a real conversation, but with technology doing the heavy lifting.
-
-## Anonymous Sign-in and Conversation Saving
-Sign in without sharing personal details and save your conversations for later. You can pick up right where you left off whenever you want.
+Speak to Convo's AI and hear its responses instantly. It's like having a real conversation, but with technology doing the heavy lifting.
 
 ## Personalised Feedback and Evaluation
-Get helpful tips from Convo's AI on how to improve your language skills. It gives feedback on things like grammar and word choice, so you can become a better speaker.
+Get helpful tips from Convo's AI on how to improve your language skills. It gives feedback on areas like grammar and word choice, so you can become a better speaker.
+
+## Anonymous Sign-in and Conversation Saving
+Sign in without sharing personal details and save your conversations for later. You can always pick up right where you left off.
 
 ## Convenient Google OAuth Sign-in
 Sign in easily with your Google account. No need to remember another password – just use your existing Google credentials.
 
 ## Light and Dark Mode Support
 Choose between light and dark mode to suit your preferences. Whether you like a bright interface or something easier on the eyes, Convo has you covered.
+
+## Responsive UI
+Our user interface works seamlessly on both mobile and desktop, so we can keep the conversation on the go wherever you are.
 
 ## Classic Minimalistic Elegant UI Design
 Enjoy Convo's simple and stylish design. It's easy to use and looks great, making your learning experience enjoyable and distraction-free.
