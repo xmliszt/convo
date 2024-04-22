@@ -30,6 +30,14 @@ const nextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        source: '/sitemap.txt',
+        destination: '/api/sitemap?type=txt',
+      },
+    ];
+  },
 };
 
 module.exports = withPWA(nextConfig);

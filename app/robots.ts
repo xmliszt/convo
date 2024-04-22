@@ -5,6 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
+      disallow: ['/profile'],
     },
     sitemap: 'https://convo.website/sitemap.xml',
   };

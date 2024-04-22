@@ -27,7 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
     })),
     ...categories.map((category) => ({
-      url: `https://convo.website/scenarios?category=${category}`,
+      url: `https://convo.website/scenarios?category=${encodeURIComponent(category)}`,
       lastModified: new Date(),
     })),
   ];
