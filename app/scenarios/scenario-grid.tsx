@@ -153,7 +153,7 @@ function ScenarioCard(props: ScenarioCardProps) {
                   'dark:bg-[linear-gradient(to_top,#22222280_0%,transparent_100%)]'
                 )}
               >
-                <h1 className='text-center text-lg transition-transform ease-in-out group-hover:translate-y-[-10px] group-hover:scale-[1.05]'>
+                <h1 className='mb-4 h-12 text-center text-lg transition-transform ease-in-out group-hover:translate-y-[-10px] group-hover:scale-[1.05]'>
                   {isPending ? 'Creating conversation...' : props.scenario.name}
                 </h1>
                 {isPending ? (

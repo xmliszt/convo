@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, Variants } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { AnimatedText } from '@/components/animated-text';
 
@@ -67,13 +67,13 @@ export function HomeLink(props: HomeLinkProps) {
     }),
   };
 
-  function handleLinkClick() {
+  const handleLinkClick = useCallback(() => {
     setIsBeforeRouting(true);
     setTimeout(() => {
       console.log('Navigating to:', props.homeLink.href);
       router.push(props.homeLink.href);
     }, 200);
-  }
+  }, [props.homeLink.href, router]);
 
   useEffect(() => {
     setIsBeforeRouting(false);

@@ -31,6 +31,7 @@ import { saveConversationDialog } from './services/save-conversation-dialog';
 import { saveEvaluation } from './services/save-evaluation';
 import { TargetWordsPane } from './target-words-pane';
 import { MAX_TURNS, TurnsLeftPane } from './turns-left-pane';
+import { useMicrophonePermission } from './use-microphone-permission';
 
 type ChatProps = {
   conversationId: string;
@@ -223,8 +224,9 @@ export function Chat(props: ChatProps) {
     listening,
     resetTranscript,
     browserSupportsSpeechRecognition,
-    isMicrophoneAvailable,
   } = useSpeechRecognition();
+  const { isMicrophoneAvailable, isMicrophoneBlockedByExtensions } =
+    useMicrophonePermission();
 
   const pushMessageToBubbleAndSaveIt = useCallback(() => {
     const newUserMessage: ChatType = {
@@ -258,6 +260,8 @@ export function Chat(props: ChatProps) {
   ]);
 
   useEffect(() => {
+    // Guard: must be recording to run this.
+    if (!isRecording) return;
     if (transcript.length > 200) {
       console.log('Limit 200 exceeded, stop listening.');
       pushMessageToBubbleAndSaveIt();
@@ -467,16 +471,28 @@ export function Chat(props: ChatProps) {
               <AnimatePresence>
                 {inputValue.length === 0 &&
                 browserSupportsSpeechRecognition &&
-                isMicrophoneAvailable ? (
+                isMicrophoneAvailable &&
+                !isMicrophoneBlockedByExtensions &&
+                (window.webkitSpeechRecognition || window.SpeechRecognition) ? (
                   <Microphone
                     isRecording={isRecording}
                     onStartRecording={() => {
+                      console.table({
+                        browserSupportsSpeechRecognition,
+                        isMicrophoneAvailable,
+                        isMicrophoneBlockedByExtensions,
+                        inputLength: inputValue.length === 0,
+                        webkitSpeechRecognition: window.webkitSpeechRecognition,
+                        speechRecognition: window.SpeechRecognition,
+                      });
+                      if (!isMicrophoneAvailable) return;
                       setIsRecording(true);
                       resetTranscript();
                       SpeechRecognition.startListening();
                       console.log('Start recording');
                     }}
                     onStopRecording={() => {
+                      if (!isMicrophoneAvailable) return;
                       setIsRecording(false);
                       SpeechRecognition.stopListening();
                       if (transcript.length > 0) {
