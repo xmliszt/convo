@@ -2,7 +2,7 @@
 
 [Convo.website](https://convo.website) helps you practice English conversation with real-world scenarios. It is a gamified experience where you will role play with AI counter-part to steer the conversation towards a set of end goals.
 
-![Convo](https://convo.website/og/title-dark.jpg)
+[![convo youtube cover](https://i.imgur.com/ASSQyPj.jpeg)](https://youtu.be/TqE_mjJPd08?si=Y0gVr7Caj7og_Ncp)
 
 # Introduction
 
