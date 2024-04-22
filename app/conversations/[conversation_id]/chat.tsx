@@ -26,9 +26,9 @@ import type { Chat as ChatType } from './scenario-provider';
 import { useScenario } from './scenario-provider';
 import { getEvaluationFromAI } from './services/openai/get-evaluation-from-ai';
 import { sendMessagesToLlm } from './services/openai/send-messages-to-llm';
-import { saveConversation } from './services/save-conversation';
 import { saveConversationDialog } from './services/save-conversation-dialog';
 import { saveEvaluation } from './services/save-evaluation';
+import { updateConversation } from './services/update-conversation';
 import { TargetWordsPane } from './target-words-pane';
 import { MAX_TURNS, TurnsLeftPane } from './turns-left-pane';
 import { useMicrophonePermission } from './use-microphone-permission';
@@ -123,9 +123,8 @@ export function Chat(props: ChatProps) {
         .reduce((acc) => acc + 1, 0);
     startEvaluation(async () => {
       try {
-        const { conversation } = await saveConversation({
-          scenarioId: scenario.id,
-          conversation: history,
+        const { conversation } = await updateConversation({
+          conversationId: props.conversationId,
           bonusScore,
         });
         const aiEvaluation = await getEvaluationFromAI({
@@ -151,6 +150,7 @@ export function Chat(props: ChatProps) {
   }, [
     readonly,
     props.evaluation,
+    props.conversationId,
     scenario,
     targetWords,
     goals,
