@@ -475,6 +475,12 @@ export function Chat(props: ChatProps) {
                 !isMicrophoneBlockedByExtensions &&
                 (window.webkitSpeechRecognition || window.SpeechRecognition) ? (
                   <Microphone
+                    disabled={
+                      isSendingMessage ||
+                      hasRunOutofTurn ||
+                      isEvaluating ||
+                      readonly
+                    }
                     isRecording={isRecording}
                     onStartRecording={() => {
                       console.table({

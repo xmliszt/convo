@@ -6,6 +6,7 @@ import { motion, Variants } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 type MicrophoneProps = {
+  disabled?: boolean;
   isRecording: boolean;
   onStartRecording: () => void;
   onStopRecording: () => void;
@@ -30,6 +31,7 @@ export function Microphone(props: MicrophoneProps) {
   return (
     <motion.button
       type='button'
+      disabled={props.disabled}
       onClick={() => {
         if (props.isRecording) {
           props.onStopRecording();
