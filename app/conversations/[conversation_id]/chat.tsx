@@ -219,7 +219,6 @@ export function Chat(props: ChatProps) {
   // For STT
   const [isRecording, setIsRecording] = useState(false);
   const {
-    finalTranscript,
     transcript,
     listening,
     resetTranscript,
@@ -230,7 +229,7 @@ export function Chat(props: ChatProps) {
   const pushMessageToBubbleAndSaveIt = useCallback(() => {
     const newUserMessage: ChatType = {
       role: 'user',
-      message: finalTranscript,
+      message: transcript,
       createdAt: new Date().toISOString(),
     };
     setInputValue('');
@@ -239,19 +238,19 @@ export function Chat(props: ChatProps) {
       conversationId: props.conversationId,
       chat: newUserMessage,
     });
-  }, [finalTranscript, history, props.conversationId, sendMessage]);
+  }, [history, props.conversationId, sendMessage, transcript]);
 
   useEffect(() => {
-    if (!listening && finalTranscript.length > 0 && isRecording) {
+    if (!listening && transcript.length > 0 && isRecording) {
       // If auto-pause is triggerred. We stop listening and save the message.
       console.log('Auto-pause triggerred.');
-      pushMessageToBubbleAndSaveIt();
       setIsRecording(false);
-      resetTranscript();
       SpeechRecognition.stopListening();
+      pushMessageToBubbleAndSaveIt();
+      resetTranscript();
     }
   }, [
-    finalTranscript.length,
+    transcript.length,
     isRecording,
     listening,
     pushMessageToBubbleAndSaveIt,
@@ -479,12 +478,11 @@ export function Chat(props: ChatProps) {
                     }}
                     onStopRecording={() => {
                       setIsRecording(false);
+                      SpeechRecognition.stopListening();
                       if (transcript.length > 0) {
                         pushMessageToBubbleAndSaveIt();
                       }
                       resetTranscript();
-                      SpeechRecognition.stopListening();
-                      console.log('Stop recording');
                     }}
                   />
                 ) : (

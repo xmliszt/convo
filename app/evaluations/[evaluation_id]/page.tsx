@@ -92,7 +92,7 @@ export default async function Page(props: PageProps) {
                   padding={3}
                 />
                 <LabelWithPaddedDigits
-                  label='AI Evaluation score:'
+                  label='AI evaluation score:'
                   value={evaluationScore}
                   padding={3}
                 />

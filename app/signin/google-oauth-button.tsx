@@ -4,7 +4,7 @@ import { GoogleLogo } from '@phosphor-icons/react';
 import { useCallback, useTransition } from 'react';
 import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/button';
+import { AnimatedButtonWithTransition } from '@/components/animated-button-with-transition';
 
 import { signInGoogle } from './services/signin-google';
 
@@ -21,13 +21,20 @@ export function GoogleOAuthButton() {
   }, []);
 
   return (
-    <Button
-      disabled={isPending}
-      type='button'
-      variant='default'
-      onClick={handleGoogleOAuth}
-    >
-      <GoogleLogo className='mr-2' /> Sign in with Google
-    </Button>
+    <div>
+      <AnimatedButtonWithTransition
+        disabled={isPending}
+        variant='default'
+        onClick={handleGoogleOAuth}
+        isPending={isPending}
+        normalLabel='Sign in with Google'
+        normalIcon={<GoogleLogo />}
+        loadingLabel='Signing in with Google...'
+      />
+      <p className='my-1 text-xs text-muted-foreground'>
+        Consider signing in with Google to access your saved conversations
+        across devices.
+      </p>
+    </div>
   );
 }
