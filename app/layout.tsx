@@ -9,6 +9,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { UserSigninPortal } from '@/components/user-signin-portal';
 
 import { Header } from './header';
+import { HomeLink } from './home-link';
 import { NextThemeProvider } from './theme-provider';
 import { ThemeSwitchHolder } from './theme-switch-holder';
 import { UserSigninPortalHolder } from './user-signin-portal-holder';
@@ -138,27 +139,41 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const isMaintenanceMode = process.env.MAINTENANCE_MODE === 'true';
+
   return (
     <html lang='en' className={font.className}>
       <body>
         <NextThemeProvider attribute='class' defaultTheme='system' enableSystem>
-          <TooltipProvider delayDuration={100}>
-            <Header />
-            <UserSigninPortalHolder>
-              <UserSigninPortal />
-            </UserSigninPortalHolder>
-            {children}
-            <ThemeSwitchHolder />
-            {/* trademark */}
-            <div className='fixed bottom-1 right-2 z-50 text-[0.6rem] font-semibold text-secondary-foreground/70'>
-              <span>Convo © 2024. All rights reserved.</span>
-            </div>
-            {/* beta tag */}
-            <div className='fixed bottom-1 left-2 z-50 text-[0.6rem] font-semibold text-secondary-foreground/70'>
-              <span>Beta</span>
-            </div>
-            <Toaster duration={1000} />
-          </TooltipProvider>
+          {isMaintenanceMode ? (
+            <main className='relative flex items-center justify-center px-4'>
+              <ThemeSwitchHolder />
+              <HomeLink
+                homeLink={{ href: '/scenarios', label: 'Start' }}
+                fontSize='6vw'
+                showWhenOnHomePage
+                maintenanceMode
+              />
+            </main>
+          ) : (
+            <TooltipProvider delayDuration={100}>
+              <Header />
+              <UserSigninPortalHolder>
+                <UserSigninPortal />
+              </UserSigninPortalHolder>
+              {children}
+              <ThemeSwitchHolder />
+              {/* trademark */}
+              <div className='fixed bottom-1 right-2 z-50 text-[0.6rem] font-semibold text-secondary-foreground/70'>
+                <span>Convo © 2024. All rights reserved.</span>
+              </div>
+              {/* beta tag */}
+              <div className='fixed bottom-1 left-2 z-50 text-[0.6rem] font-semibold text-secondary-foreground/70'>
+                <span>Beta</span>
+              </div>
+              <Toaster duration={1000} />
+            </TooltipProvider>
+          )}
         </NextThemeProvider>
         <Analytics />
       </body>

@@ -35,6 +35,10 @@ type HomeLinkProps = {
    * If true, we show the home link on home page.
    */
   showWhenOnHomePage?: boolean;
+  /**
+   * Maintenance mode
+   */
+  maintenanceMode?: boolean;
 };
 
 export function HomeLink(props: HomeLinkProps) {
@@ -68,12 +72,13 @@ export function HomeLink(props: HomeLinkProps) {
   };
 
   const handleLinkClick = useCallback(() => {
+    if (props.maintenanceMode) return;
     setIsBeforeRouting(true);
     setTimeout(() => {
       console.log('Navigating to:', props.homeLink.href);
       router.push(props.homeLink.href);
     }, 200);
-  }, [props.homeLink.href, router]);
+  }, [props.homeLink.href, props.maintenanceMode, router]);
 
   useEffect(() => {
     setIsBeforeRouting(false);
@@ -130,7 +135,11 @@ export function HomeLink(props: HomeLinkProps) {
                 fontSize: props.fontSize,
               }}
             >
-              <AnimatedText yOffset={20}>{props.homeLink.label}</AnimatedText>
+              <AnimatedText yOffset={20}>
+                {props.maintenanceMode
+                  ? '...is under maintenance'
+                  : props.homeLink.label}
+              </AnimatedText>
             </div>
           </motion.div>
         </motion.div>

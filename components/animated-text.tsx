@@ -52,7 +52,7 @@ export function AnimatedText(props: AnimatedTextProps) {
 }
 
 function splitTextUsingRegex(text: string) {
-  const regex = /[\s\S]/gu;
+  const regex = /[\s\S]/g;
   const characters = [];
 
   let match;
