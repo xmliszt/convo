@@ -1,4 +1,5 @@
 import { lowerCase } from 'lodash';
+import { Metadata } from 'next';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -8,6 +9,21 @@ import { ScenarioBackground } from './scenario-background';
 import { ScenarioBackgroundProvider } from './scenario-background-provider';
 import { ScenarioGrid } from './scenario-grid';
 import { fetchScenarios } from './services/fetch-scenarios';
+
+export async function generateMetadata(props: {
+  searchParams?: {
+    category: string;
+  };
+}): Promise<Metadata> {
+  const filterCategory = props.searchParams?.category;
+  return {
+    title: `Convo | Scenarios ${filterCategory ? `- ${filterCategory}` : ''}`,
+    alternates: {
+      canonical:
+        '/scenarios' + (filterCategory ? `?category=${filterCategory}` : ''),
+    },
+  };
+}
 
 type PageProps = {
   searchParams?: {

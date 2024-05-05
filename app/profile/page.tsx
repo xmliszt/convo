@@ -1,4 +1,5 @@
 import { groupBy } from 'lodash';
+import { Metadata } from 'next';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
@@ -13,6 +14,13 @@ import { DangerZone } from './danger-zone';
 import { EvaluationsCard } from './evaluations-card';
 import { fetchUserConversations } from './services/fetch-user-conversations';
 import { Signout } from './signout';
+
+export const metadata: Metadata = {
+  title: 'Convo | Profile',
+  alternates: {
+    canonical: '/profile',
+  },
+};
 
 export default async function Page() {
   const { user } = await fetchUserConversations();

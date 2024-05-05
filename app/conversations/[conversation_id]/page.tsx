@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import { ScenarioBackground } from '@/app/scenarios/scenario-background';
@@ -14,6 +15,25 @@ import { saveConversationDialog } from './services/save-conversation-dialog';
 import { TargetWordsPane } from './target-words-pane';
 import { TurnsLeftPane } from './turns-left-pane';
 import { getInitialLlmPrompt } from './utils/get-initial-llm-prompt';
+
+export async function generateMetadata(props: {
+  params: {
+    conversation_id: string;
+  };
+}): Promise<Metadata> {
+  const { conversation } = await fetchConversation({
+    conversationId: props.params.conversation_id,
+  });
+
+  return {
+    title:
+      'Convo | Conversation' +
+      (conversation ? ` - ${conversation.scenario.name}` : ''),
+    alternates: {
+      canonical: '/conversations' + (conversation ? `/${conversation.id}` : ''),
+    },
+  };
+}
 
 type PageProps = {
   params: {

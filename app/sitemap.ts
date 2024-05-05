@@ -22,10 +22,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: 'https://convo.website/scenarios',
       lastModified: new Date(),
     },
-    ...scenarios.map((scenario) => ({
-      url: `https://convo.website/scenarios/${scenario.id}`,
-      lastModified: new Date(),
-    })),
     ...categories.map((category) => ({
       url: `https://convo.website/scenarios?category=${encodeURIComponent(category)}`,
       lastModified: new Date(),

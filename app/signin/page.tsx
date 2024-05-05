@@ -1,3 +1,5 @@
+import { Metadata } from 'next';
+
 import {
   Card,
   CardContent,
@@ -8,6 +10,13 @@ import {
 
 import { AnonymousSignInButton } from './anonymous-signin-button';
 import { GoogleOAuthButton } from './google-oauth-button';
+
+export const metadata: Metadata = {
+  title: 'Convo | Sign in',
+  alternates: {
+    canonical: '/signin',
+  },
+};
 
 export default function Page() {
   return (

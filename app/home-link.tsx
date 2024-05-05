@@ -75,7 +75,6 @@ export function HomeLink(props: HomeLinkProps) {
     if (props.maintenanceMode) return;
     setIsBeforeRouting(true);
     setTimeout(() => {
-      console.log('Navigating to:', props.homeLink.href);
       router.push(props.homeLink.href);
     }, 200);
   }, [props.homeLink.href, props.maintenanceMode, router]);

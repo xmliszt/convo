@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import Markdown from 'react-markdown';
 
 import { ScenarioProvider } from '@/app/conversations/[conversation_id]/scenario-provider';
@@ -8,6 +9,23 @@ import { CopyLink } from './copy-link';
 import { CopyLinkIcon } from './copy-link-icon';
 import { ScenarioBackgroundLoader } from './scenario-background-loader';
 import { fetchEvaluation } from './services/fetch-evaluation';
+
+export async function generateMetadata(props: {
+  params: {
+    evaluation_id: string;
+  };
+}): Promise<Metadata> {
+  const { evaluation } = await fetchEvaluation(props.params.evaluation_id);
+
+  return {
+    title:
+      'Convo | Evaluation' +
+      (evaluation ? ` - ${evaluation.conversation.scenario.name}` : ''),
+    alternates: {
+      canonical: '/evaluations' + (evaluation ? `/${evaluation.id}` : ''),
+    },
+  };
+}
 
 type PageProps = {
   params: {
