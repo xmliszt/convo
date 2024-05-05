@@ -1,8 +1,10 @@
 import './globals.css';
 
+import { GithubLogo } from '@phosphor-icons/react/dist/ssr';
 import { Analytics } from '@vercel/analytics/react';
 import { Metadata, Viewport } from 'next';
 import { Playfair_Display } from 'next/font/google';
+import Link from 'next/link';
 
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -163,17 +165,31 @@ export default function RootLayout({
               </UserSigninPortalHolder>
               {children}
               <ThemeSwitchHolder />
-              {/* trademark */}
-              <div className='fixed bottom-1 right-2 z-50 text-[0.6rem] font-semibold text-secondary-foreground/70'>
-                <span>Convo © 2024. All rights reserved.</span>
-              </div>
-              {/* beta tag */}
-              <div className='fixed bottom-1 left-2 z-50 text-[0.6rem] font-semibold text-secondary-foreground/70'>
-                <span>Beta</span>
-              </div>
               <Toaster duration={1000} />
             </TooltipProvider>
           )}
+          <div
+            className='mask:linear-gradient(to_top,black_0%,black_50%,transparent_100%) fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between bg-background/40 px-2 pb-1 pt-2 text-[0.8rem] font-semibold text-secondary-foreground/70 backdrop-blur-[5px]'
+            style={{
+              WebkitBackdropFilter: 'blur(5px)',
+              WebkitMask:
+                'linear-gradient(to top,black 0%,black 50%,transparent 100%)',
+            }}
+          >
+            {/* beta tag, github link */}
+            <div className='flex items-center gap-2'>
+              <span>Beta ⋅</span>
+              <Link href='https://github.com/xmliszt/convo' target='_blank'>
+                <span className='flex items-center gap-1'>
+                  <GithubLogo /> Convo is open source
+                </span>
+              </Link>
+            </div>
+            {/* trademark */}
+            <div>
+              <span>Convo © 2024. All rights reserved.</span>
+            </div>
+          </div>
         </NextThemeProvider>
         <Analytics />
       </body>

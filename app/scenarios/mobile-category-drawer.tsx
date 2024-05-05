@@ -15,7 +15,7 @@ export function MobileCategoryDrawer(props: MobileCategoryDrawerProps) {
     <Drawer>
       <DrawerTrigger asChild>
         <Button
-          className='visible fixed bottom-4 left-4 z-20 flex h-8 items-center gap-x-1 rounded-full border border-input bg-background px-3 py-1 transition-colors lg:invisible'
+          className='visible fixed bottom-8 left-4 z-20 flex h-8 items-center gap-x-1 rounded-full border border-input bg-background px-3 py-1 transition-colors lg:invisible'
           variant='ghost'
         >
           <Stack />
