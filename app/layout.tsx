@@ -169,7 +169,7 @@ export default function RootLayout({
             </TooltipProvider>
           )}
           <div
-            className='mask:linear-gradient(to_top,black_0%,black_50%,transparent_100%) fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between bg-background/40 px-2 pb-1 pt-2 text-[0.8rem] font-semibold text-secondary-foreground/70 backdrop-blur-[5px]'
+            className='mask:linear-gradient(to_top,black_0%,black_50%,transparent_100%) fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between bg-background/40 px-2 pb-1 pt-2 text-[0.7rem] font-semibold text-secondary-foreground/70 backdrop-blur-[5px]'
             style={{
               WebkitBackdropFilter: 'blur(5px)',
               WebkitMask:
@@ -177,11 +177,11 @@ export default function RootLayout({
             }}
           >
             {/* beta tag, github link */}
-            <div className='flex items-center gap-2'>
+            <div className='flex items-center'>
               <span>Beta ⋅</span>
               <Link href='https://github.com/xmliszt/convo' target='_blank'>
                 <span className='flex items-center gap-1'>
-                  <GithubLogo /> Convo is open source
+                  <GithubLogo /> open source
                 </span>
               </Link>
             </div>
