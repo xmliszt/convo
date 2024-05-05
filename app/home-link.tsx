@@ -137,7 +137,7 @@ export function HomeLink(props: HomeLinkProps) {
             >
               <AnimatedText yOffset={20}>
                 {props.maintenanceMode
-                  ? '...is under maintenance'
+                  ? '...will be back soon!'
                   : props.homeLink.label}
               </AnimatedText>
             </div>
