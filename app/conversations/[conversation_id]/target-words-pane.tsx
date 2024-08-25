@@ -30,15 +30,10 @@ type TargetWordsPaneProps = {
 };
 
 export function TargetWordsPane(props: TargetWordsPaneProps) {
-  const {
-    targetWords,
-    history,
-    setTargetWords,
-    completedWords,
-    setCompletedWords,
-  } = useScenario();
+  const { targetWords, history, completedWords, setCompletedWords } =
+    useScenario();
 
-  const [_, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   // Fetch completed words on mount.
   useEffect(() => {
@@ -73,6 +68,7 @@ export function TargetWordsPane(props: TargetWordsPaneProps) {
     );
     if (newlyCompletedWords.length > 0) {
       // Update DB with the new matched words.
+      if (isPending) return;
       startTransition(async () => {
         await Promise.all(
           newlyCompletedWords.map(async (completedWord) =>
@@ -90,10 +86,10 @@ export function TargetWordsPane(props: TargetWordsPaneProps) {
   }, [
     history,
     targetWords,
-    setTargetWords,
     completedWords,
     props.conversationId,
     setCompletedWords,
+    isPending,
   ]);
 
   const individualTargetWordVariants: Variants = {

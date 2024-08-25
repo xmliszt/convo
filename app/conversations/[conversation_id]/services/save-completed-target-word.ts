@@ -53,14 +53,17 @@ export async function saveCompletedTargetWord(
     }
   } else {
     // Existing record, update record
+    const existingWords = new Set<string>(
+      selectCompletedTargetWordsResponse.data.completed_words ?? []
+    );
+    if (existingWords.has(options.word)) {
+      // Word already exists in the completed words
+      return;
+    }
+    existingWords.add(options.word);
     const updateResponse = await supabase
       .from('conversation_completed_target_words')
-      .update({
-        completed_words: [
-          ...(selectCompletedTargetWordsResponse.data.completed_words ?? []),
-          options.word,
-        ],
-      })
+      .update({ completed_words: Array.from(existingWords) })
       .eq('conversation_id', options.conversationId);
     if (updateResponse.error) {
       throw new ConvoError(

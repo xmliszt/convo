@@ -52,6 +52,7 @@ export function GoalPane(props: GoalPaneProps) {
 
   const checkGoals = useCallback(
     (history: Chat[]) => {
+      if (isPending) return;
       // Start transition so it does not block UI.
       startTransition(async () => {
         if (scenario) {
@@ -65,6 +66,7 @@ export function GoalPane(props: GoalPaneProps) {
               setIsGameOver(true);
               return;
             }
+            // Check with AI about goal completions.
             const allCompletedGoalIds = await checkGoalCompletions({
               goals: goals,
               completedGoalIds: completedGoals.map((goal) => goal.id),
@@ -97,7 +99,14 @@ export function GoalPane(props: GoalPaneProps) {
         }
       });
     },
-    [goals, props.conversationId, scenario, setCompletedGoalIds, setIsGameOver]
+    [
+      goals,
+      isPending,
+      props.conversationId,
+      scenario,
+      setCompletedGoalIds,
+      setIsGameOver,
+    ]
   );
 
   const previousHistory = useRef<Chat[]>([]);

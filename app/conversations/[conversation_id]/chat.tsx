@@ -36,6 +36,7 @@ import { useMicrophonePermission } from './use-microphone-permission';
 type ChatProps = {
   conversationId: string;
   evaluation: Evaluation | null;
+  user: UserProfile;
 };
 
 export function Chat(props: ChatProps) {
@@ -326,7 +327,11 @@ export function Chat(props: ChatProps) {
               isUser={message.role === 'user'}
               isRecording={message.role === 'recording'}
               avatarUrl={
-                message.role === 'user' ? undefined : llmRole?.avatar_url
+                message.role === 'user'
+                  ? props.user.photo_url === null
+                    ? undefined
+                    : props.user.photo_url
+                  : llmRole?.avatar_url
               }
               gender={llmRole?.gender ?? undefined}
               onRetry={handleRetry}

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
+import { fetchUser } from '@/app/profile/services/fetch-user';
 import { ScenarioBackground } from '@/app/scenarios/scenario-background';
 import { ScenarioBackgroundProvider } from '@/app/scenarios/scenario-background-provider';
 import { openGraph } from '@/app/shared-metadata';
@@ -44,6 +45,7 @@ type PageProps = {
 };
 
 export default async function Page(props: PageProps) {
+  const { user } = await fetchUser();
   const { conversation } = await fetchConversation({
     conversationId: props.params.conversation_id,
   });
@@ -126,6 +128,7 @@ export default async function Page(props: PageProps) {
           <Chat
             conversationId={props.params.conversation_id}
             evaluation={conversation.evaluation}
+            user={user}
           />
           <div className='invisible absolute left-[calc(50vw+16rem)] top-0 z-20 max-w-[20rem] lg:visible'>
             <div className='h-screen w-full overflow-y-auto px-10 scrollbar-hide'>

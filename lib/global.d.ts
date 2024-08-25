@@ -1,6 +1,7 @@
 import { Database } from '@/supabase/database.types';
 
 declare global {
+  export type UserProfile = Database['public']['Tables']['users']['Row'];
   export type Scenario = Database['public']['Tables']['scenarios']['Row'];
   export type LlmRole = Database['public']['Tables']['llm_roles']['Row'];
   export type Goal = Database['public']['Tables']['goals']['Row'];

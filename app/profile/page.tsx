@@ -62,7 +62,7 @@ export default async function Page() {
   return (
     <ScenarioBackgroundProvider>
       <main>
-        <ScrollArea className='h-screen w-full'>
+        <ScrollArea className='h-screen w-full [&>div>div]:!block [&>div>div]:!min-w-full'>
           <div className='mx-auto flex h-full w-full max-w-lg flex-col gap-y-8 px-4 py-20'>
             <h1 className='my-4 text-center text-6xl font-bold'>Profile</h1>
             {/* Anonymous user link identity*/}
@@ -95,10 +95,8 @@ export default async function Page() {
                 </CardHeader>
                 <CardContent>
                   <div className='flex flex-col justify-start gap-y-2'>
-                    <p>
-                      You have no conversations or evaluations yet. You can head
-                      down to the scenarios page and choose one to start!
-                    </p>
+                    You have no conversations or evaluations yet. You can head
+                    down to the scenarios page and choose one to start!
                     <Link href='/scenarios'>
                       <Button>Bring me there</Button>
                     </Link>

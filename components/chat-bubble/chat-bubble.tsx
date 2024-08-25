@@ -109,25 +109,47 @@ export function ChatBubble(props: ChatBubbleProps) {
           y: 0,
         }}
       >
-        {/* User icon */}
-        {props.isUser ? (
-          <User />
-        ) : props.isRecording ? (
-          <Microphone />
-        ) : props.isError ? (
-          <Bug />
-        ) : props.avatarUrl ? (
-          <Image
-            src={props.avatarUrl}
-            alt='Avatar'
-            width={40}
-            height={40}
-            className='rounded-full border shadow-lg'
-            unoptimized
-          />
-        ) : (
-          <Robot />
-        )}
+        {/* Avatar icon */}
+        <div className='flex size-10 items-center justify-center overflow-hidden rounded-full border bg-background text-foreground shadow-md'>
+          {(() => {
+            if (props.isRecording) return <Microphone />;
+            if (props.isError) return <Bug />;
+            // User icon
+            if (props.isUser) {
+              // User with avatar
+              if (props.avatarUrl !== undefined) {
+                return (
+                  <Image
+                    src={props.avatarUrl}
+                    alt='Avatar'
+                    width={40}
+                    height={40}
+                    unoptimized
+                  />
+                );
+              }
+              // User without avatar
+              return <User />;
+            }
+            // AI icon
+            else {
+              // AI with avatar
+              if (props.avatarUrl !== undefined) {
+                return (
+                  <Image
+                    src={props.avatarUrl}
+                    alt='Avatar'
+                    width={40}
+                    height={40}
+                    unoptimized
+                  />
+                );
+              }
+              // AI without avatar
+              return <Robot />;
+            }
+          })()}
+        </div>
         {!(props.isUser || props.isRecording || props.isError) && (
           <motion.button
             className='flex items-center justify-center p-3'
