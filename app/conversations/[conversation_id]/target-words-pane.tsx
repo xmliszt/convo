@@ -38,7 +38,7 @@ export function TargetWordsPane(props: TargetWordsPaneProps) {
     setCompletedWords,
   } = useScenario();
 
-  const [isPending, startTransition] = useTransition();
+  const [_, startTransition] = useTransition();
 
   // Fetch completed words on mount.
   useEffect(() => {
