@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 
+import { openGraph } from '../shared-metadata';
 import { CategoryPane } from './category-pane';
 import { MobileCategoryDrawer } from './mobile-category-drawer';
 import { ScenarioBackground } from './scenario-background';
@@ -11,16 +12,22 @@ import { ScenarioGrid } from './scenario-grid';
 import { fetchScenarios } from './services/fetch-scenarios';
 
 export async function generateMetadata(props: {
-  searchParams?: {
-    category: string;
-  };
+  searchParams?: { category: string };
 }): Promise<Metadata> {
   const filterCategory = props.searchParams?.category;
   return {
-    title: `Convo | Scenarios ${filterCategory ? `- ${filterCategory}` : ''}`,
+    title: `Convo | Scenarios ${filterCategory !== undefined ? `- ${filterCategory}` : ''}`,
+    openGraph: {
+      ...openGraph,
+      url:
+        '/scenarios' +
+        (filterCategory !== undefined ? `?category=${filterCategory}` : ''),
+      title: `Convo | Scenarios ${filterCategory !== undefined ? `- ${filterCategory}` : ''}`,
+    },
     alternates: {
       canonical:
-        '/scenarios' + (filterCategory ? `?category=${filterCategory}` : ''),
+        '/scenarios' +
+        (filterCategory !== undefined ? `?category=${filterCategory}` : ''),
     },
   };
 }

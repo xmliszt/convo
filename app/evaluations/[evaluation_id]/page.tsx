@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Markdown from 'react-markdown';
 
 import { ScenarioProvider } from '@/app/conversations/[conversation_id]/scenario-provider';
+import { openGraph } from '@/app/shared-metadata';
 import { LabelWithPaddedDigits } from '@/components/label-with-padded-digits';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -18,11 +19,15 @@ export async function generateMetadata(props: {
   const { evaluation } = await fetchEvaluation(props.params.evaluation_id);
 
   return {
-    title:
-      'Convo | Evaluation' +
-      (evaluation ? ` - ${evaluation.conversation.scenario.name}` : ''),
+    title: 'Convo | Evaluation' + ` - ${evaluation.conversation.scenario.name}`,
+    openGraph: {
+      ...openGraph,
+      url: `/evaluations/${evaluation.id}`,
+      title:
+        'Convo | Evaluation' + ` - ${evaluation.conversation.scenario.name}`,
+    },
     alternates: {
-      canonical: '/evaluations' + (evaluation ? `/${evaluation.id}` : ''),
+      canonical: `/evaluations/${evaluation.id}`,
     },
   };
 }

@@ -8,10 +8,16 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
+import { openGraph } from '../shared-metadata';
 import { GoogleOAuthButton } from './google-oauth-button';
 
 export const metadata: Metadata = {
   title: 'Convo | Sign in',
+  openGraph: {
+    ...openGraph,
+    url: '/signin',
+    title: 'Convo | Sign in',
+  },
   alternates: {
     canonical: '/signin',
   },

@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 
 import { ScenarioBackground } from '@/app/scenarios/scenario-background';
 import { ScenarioBackgroundProvider } from '@/app/scenarios/scenario-background-provider';
+import { openGraph } from '@/app/shared-metadata';
 
 import { BonusScorePane } from './bonus-score-pane';
 import { Chat } from './chat';
@@ -24,12 +25,14 @@ export async function generateMetadata(props: {
   });
 
   return {
-    title:
-      'Convo | Conversation' +
-      (conversation ? ` - ${conversation.scenario.name}` : ''),
+    title: `Convo | ${conversation.scenario.name}`,
+    openGraph: {
+      ...openGraph,
+      url: `/conversations/${props.params.conversation_id}`,
+      title: `Convo | ${conversation.scenario.name}`,
+    },
     alternates: {
-      canonical:
-        '/conversations' + (conversation !== null ? `/${conversation.id}` : ''),
+      canonical: `/conversations/${props.params.conversation_id}`,
     },
   };
 }

@@ -8,6 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 import { ScenarioBackground } from '../scenarios/scenario-background';
 import { ScenarioBackgroundProvider } from '../scenarios/scenario-background-provider';
+import { openGraph } from '../shared-metadata';
 import { GoogleOAuthButton } from '../signin/google-oauth-button';
 import { ConversationsCard } from './conversations-card';
 import { DangerZone } from './danger-zone';
@@ -17,6 +18,11 @@ import { Signout } from './signout';
 
 export const metadata: Metadata = {
   title: 'Convo | Profile',
+  openGraph: {
+    ...openGraph,
+    url: '/profile',
+    title: 'Convo | Profile',
+  },
   alternates: {
     canonical: '/profile',
   },

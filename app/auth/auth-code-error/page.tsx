@@ -1,3 +1,19 @@
+import { Metadata } from 'next';
+
+import { openGraph } from '@/app/shared-metadata';
+
+export const metadata: Metadata = {
+  title: 'Convo | Auth Error',
+  openGraph: {
+    ...openGraph,
+    url: '/auth/auth-code-error',
+    title: 'Convo | Error',
+  },
+  alternates: {
+    canonical: '/auth/auth-code-error',
+  },
+};
+
 export default function Page() {
   return (
     <main>

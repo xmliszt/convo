@@ -12,6 +12,7 @@ import { UserSigninPortal } from '@/components/user-signin-portal';
 
 import { Header } from './header';
 import { HomeLink } from './home-link';
+import { openGraph } from './shared-metadata';
 import { NextThemeProvider } from './theme-provider';
 import { ThemeSwitchHolder } from './theme-switch-holder';
 import { UserSigninPortalHolder } from './user-signin-portal-holder';
@@ -58,33 +59,9 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Li Yuxuan', url: 'https://liyuxuan.dev/' }],
   creator: 'Li Yuxuan',
-  alternates: {
-    canonical: '/',
-  },
+  alternates: { canonical: '/' },
   category: 'education',
-  openGraph: {
-    title: 'Convo | Boundless Conversation Practice with AI',
-    description:
-      'Convo is an innovative edtech web app designed to enhance language learning through immersive, situational conversations. Choose from a variety of scenarios covering diverse topics and interact with an AI role-playing partner. Practice speaking freely, set conversation goals, and target specific vocabulary, all while receiving personalized feedback on your linguistic performance. Start your journey to fluent communication today with Convo.',
-    url: '/',
-    siteName: 'Convo | Boundless Conversation Practice with AI',
-    images: [
-      {
-        url: 'https://convo.website/og/title-dark.jpg',
-        width: 800,
-        height: 600,
-        alt: 'Convo | Boundless Conversation Practice with AI',
-      },
-      {
-        url: 'https://convo.website/og/title-light.jpg',
-        width: 800,
-        height: 600,
-        alt: 'Convo | Boundless Conversation Practice with AI',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
+  openGraph,
   twitter: {
     card: 'summary_large_image',
     title: 'Convo | Boundless Conversation Practice with AI',
