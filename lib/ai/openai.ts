@@ -14,7 +14,7 @@ type CreateCompletionOptions = {
 export async function createCompletion(options: CreateCompletionOptions) {
   const completion = await openai.chat.completions.create({
     messages: options.messages,
-    model: 'gpt-4o',
+    model: 'gpt-4o-mini',
     temperature: options.temperature,
     response_format: {
       type: options.returnAsJson ? 'json_object' : 'text',
