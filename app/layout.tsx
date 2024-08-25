@@ -72,15 +72,9 @@ export const metadata: Metadata = {
     creatorId: '1704579643',
     images: [
       {
-        url: 'https://convo.website/og/title-dark.jpg',
-        width: 800,
-        height: 600,
-        alt: 'Convo | Boundless Conversation Practice with AI',
-      },
-      {
-        url: 'https://convo.website/og/title-light.jpg',
-        width: 800,
-        height: 600,
+        url: '/twitter-image.jpg',
+        width: 1200,
+        height: 630,
         alt: 'Convo | Boundless Conversation Practice with AI',
       },
     ],

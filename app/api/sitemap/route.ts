@@ -4,6 +4,13 @@ import { fetchScenarios } from '@/app/scenarios/services/fetch-scenarios';
 
 const generateTxtSitemap = async (): Promise<string> => {
   let sitemap = '';
+
+  // Static routes
+  ['', 'scenarios', 'profile', 'signin'].forEach((route) => {
+    sitemap += `https://convo.website/${route}\n`;
+  });
+
+  // Dynamic routes
   const { scenarios } = await fetchScenarios();
   const categories = scenarios.reduce<string[]>((acc, scenario) => {
     scenario.categories.forEach((category) => {
@@ -13,10 +20,6 @@ const generateTxtSitemap = async (): Promise<string> => {
     });
     return acc;
   }, []);
-  scenarios.forEach(
-    (scenario) =>
-      (sitemap += `https://convo.website/scenarios/${scenario.id}\n`)
-  );
   categories.forEach(
     (category) =>
       // URL encoded category
@@ -36,9 +39,7 @@ export async function GET(request: NextRequest) {
       try {
         const content = await generateTxtSitemap();
         return new Response(content, {
-          headers: {
-            'Content-Type': 'text/plain',
-          },
+          headers: { 'Content-Type': 'text/plain' },
         });
       } catch (error) {
         console.error(error);
