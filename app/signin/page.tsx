@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-import { AnonymousSignInButton } from './anonymous-signin-button';
 import { GoogleOAuthButton } from './google-oauth-button';
 
 export const metadata: Metadata = {
@@ -33,33 +32,7 @@ export default function Page() {
           </CardHeader>
           <CardContent>
             <form className='space-y-4'>
-              {/* TODO(@xmliszt): Proper email provider signin flow */}
-              {/* <div>
-                <Label htmlFor='email'>Email</Label>
-                <Input
-                  id='email'
-                  type='email'
-                  name='email'
-                  placeholder='Your email address...'
-                />
-              </div>
-              <div>
-                <Label htmlFor='password'>Password</Label>
-                <Input
-                  id='password'
-                  type='password'
-                  name='password'
-                  placeholder='Your password...'
-                />
-              </div> */}
               <div className='flex flex-col justify-center space-y-4 px-4'>
-                {/* <Button type='submit' variant='outline'>
-                  <EnvelopeSimple className='mr-2' />
-                  Sign in / Sign up with email
-                </Button> */}
-
-                {/* Anonymous signin button */}
-                <AnonymousSignInButton />
                 {/* OAuth buttons */}
                 <GoogleOAuthButton />
               </div>
