@@ -18,17 +18,17 @@ export function useMicrophonePermission() {
           setIsMicrophoneAvailable(true);
           setIsMicrophoneBlockedByExtensions(false);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((error) => {
+          console.error(error);
           setIsMicrophoneAvailable(false);
-          if (err.name === 'NotAllowedError') {
+          if (error.name === 'NotAllowedError') {
             setIsMicrophoneBlockedByExtensions(true);
           } else {
             setIsMicrophoneBlockedByExtensions(false);
           }
         });
     } else {
-      console.log('getUserMedia not supported on your browser!');
+      console.warn('getUserMedia not supported on your browser!');
     }
   }, []);
 

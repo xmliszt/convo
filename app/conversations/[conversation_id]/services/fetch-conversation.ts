@@ -3,11 +3,11 @@ import 'server-only';
 import { ConvoError } from '@/lib/convo-error';
 import { createServerAnonClient } from '@/lib/supabase/server';
 
+type FetchConversationOptions = { conversationId: string };
+
 export async function fetchConversation({
   conversationId,
-}: {
-  conversationId: string;
-}) {
+}: FetchConversationOptions) {
   const supabase = createServerAnonClient();
   const response = await supabase
     .from('conversations')
@@ -15,7 +15,8 @@ export async function fetchConversation({
       '*,scenario:scenarios!inner(*,llm_role:llm_roles!inner(*),goals(*),target_words!inner(*)),conversation_dialogs(*),evaluation:evaluations(*)'
     )
     .eq('id', conversationId)
-    .maybeSingle();
+    .single();
+
   if (response.error) {
     throw new ConvoError(
       'Unable to fetch conversation with ID: ' + conversationId,

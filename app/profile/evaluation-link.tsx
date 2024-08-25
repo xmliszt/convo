@@ -21,6 +21,8 @@ export function EvaluationLink(props: EvaluationLinkProps) {
 
   const isSmallerDevice = useMediaQuery('(max-width: 640px)');
 
+  if (props.evaluationId === undefined) return null;
+
   return (
     <Link
       href={`/evaluations/${props.evaluationId}`}

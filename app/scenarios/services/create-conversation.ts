@@ -11,7 +11,7 @@ export async function createConversation({
 }) {
   const supabase = createServerAnonClient();
   const { data, error } = await supabase.auth.getUser();
-  console.log('data', data, 'error', error);
+  console.error('data', data, 'error', error);
   if (!data.user || error) {
     return redirect('/signin');
   }
@@ -24,6 +24,5 @@ export async function createConversation({
     .select()
     .single();
   if (response.error) throw response.error;
-  console.log('response', response.data);
   return { conversation: response.data };
 }

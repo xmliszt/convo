@@ -247,8 +247,6 @@ export function Chat(props: ChatProps) {
 
   useEffect(() => {
     if (!listening && transcript.length > 0 && isRecording) {
-      // If auto-pause is triggerred. We stop listening and save the message.
-      console.log('Auto-pause triggerred.');
       setIsRecording(false);
       SpeechRecognition.stopListening();
       pushMessageToBubbleAndSaveIt();
@@ -266,7 +264,7 @@ export function Chat(props: ChatProps) {
     // Guard: must be recording to run this.
     if (!isRecording) return;
     if (transcript.length > 200) {
-      console.log('Limit 200 exceeded, stop listening.');
+      console.warn('Limit 200 exceeded, stop listening.');
       pushMessageToBubbleAndSaveIt();
       setIsRecording(false);
       resetTranscript();
@@ -498,7 +496,6 @@ export function Chat(props: ChatProps) {
                       setIsRecording(true);
                       resetTranscript();
                       SpeechRecognition.startListening();
-                      console.log('Start recording');
                     }}
                     onStopRecording={() => {
                       if (!isMicrophoneAvailable) return;

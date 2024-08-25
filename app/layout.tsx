@@ -70,13 +70,13 @@ export const metadata: Metadata = {
     siteName: 'Convo | Boundless Conversation Practice with AI',
     images: [
       {
-        url: 'https://www.convo.website/og/title-dark.jpg',
+        url: 'https://convo.website/og/title-dark.jpg',
         width: 800,
         height: 600,
         alt: 'Convo | Boundless Conversation Practice with AI',
       },
       {
-        url: 'https://www.convo.website/og/title-light.jpg',
+        url: 'https://convo.website/og/title-light.jpg',
         width: 800,
         height: 600,
         alt: 'Convo | Boundless Conversation Practice with AI',
@@ -95,13 +95,13 @@ export const metadata: Metadata = {
     creatorId: '1704579643',
     images: [
       {
-        url: 'https://www.convo.website/og/title-dark.jpg',
+        url: 'https://convo.website/og/title-dark.jpg',
         width: 800,
         height: 600,
         alt: 'Convo | Boundless Conversation Practice with AI',
       },
       {
-        url: 'https://www.convo.website/og/title-light.jpg',
+        url: 'https://convo.website/og/title-light.jpg',
         width: 800,
         height: 600,
         alt: 'Convo | Boundless Conversation Practice with AI',

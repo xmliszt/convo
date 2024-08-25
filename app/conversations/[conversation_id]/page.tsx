@@ -28,7 +28,8 @@ export async function generateMetadata(props: {
       'Convo | Conversation' +
       (conversation ? ` - ${conversation.scenario.name}` : ''),
     alternates: {
-      canonical: '/conversations' + (conversation ? `/${conversation.id}` : ''),
+      canonical:
+        '/conversations' + (conversation !== null ? `/${conversation.id}` : ''),
     },
   };
 }

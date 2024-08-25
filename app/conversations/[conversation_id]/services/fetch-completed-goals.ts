@@ -3,9 +3,7 @@
 import { ConvoError } from '@/lib/convo-error';
 import { createServerServiceRoleClient } from '@/lib/supabase/server';
 
-type FetchGoalsOptions = {
-  conversationId: string;
-};
+type FetchGoalsOptions = { conversationId: string };
 
 /**
  * Fetches the completed goals associated with the conversation.
@@ -18,6 +16,7 @@ export async function fetchCompletedGoalsAndTargetWords(
     .from('conversation_completed_goals')
     .select('*,goal:goals!inner(*)')
     .eq('conversation_id', options.conversationId);
+
   if (selectCompletedGoalsResponse.error) {
     throw new ConvoError(
       `Failed to fetch completed goals for conversation: ${options.conversationId}`,
@@ -34,7 +33,8 @@ export async function fetchCompletedGoalsAndTargetWords(
     .from('conversation_completed_target_words')
     .select()
     .eq('conversation_id', options.conversationId)
-    .single();
+    .maybeSingle();
+
   if (selectCompletedTargetWordsResponse.error) {
     throw new ConvoError(
       `Failed to fetch completed target words for conversation: ${options.conversationId}`,
@@ -51,6 +51,6 @@ export async function fetchCompletedGoalsAndTargetWords(
     conversationId: options.conversationId,
     completedGoals: selectCompletedGoalsResponse.data.map((data) => data.goal),
     completedTargetWords:
-      selectCompletedTargetWordsResponse.data.completed_words ?? [],
+      selectCompletedTargetWordsResponse.data?.completed_words ?? [],
   };
 }

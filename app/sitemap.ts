@@ -6,9 +6,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { scenarios } = await fetchScenarios();
   const categories = scenarios.reduce<string[]>((acc, scenario) => {
     scenario.categories.forEach((category) => {
-      if (!acc.includes(category)) {
-        acc.push(category);
-      }
+      if (!acc.includes(category)) acc.push(category);
     });
     return acc;
   }, []);
@@ -20,6 +18,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: 'https://convo.website/scenarios',
+      lastModified: new Date(),
+    },
+    {
+      url: 'https://convo.website/profile',
       lastModified: new Date(),
     },
     ...categories.map((category) => ({

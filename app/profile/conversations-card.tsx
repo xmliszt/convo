@@ -67,15 +67,16 @@ export function ConversationsCard(props: ConvversationsCardProps) {
                   <div className='col-span-2 flex flex-col gap-y-2'>
                     {props.groupedConversations[scenarioId].length > 0 &&
                       props.groupedConversations[scenarioId].map(
-                        (conversation, idx) => (
-                          <ConversationLink
-                            key={conversation.id}
-                            conversationId={conversation.id}
-                            conversationNumber={idx + 1}
-                            conversationCreatedAt={conversation.created_at}
-                            scenarioImageUrl={scenario.image_url}
-                          />
-                        )
+                        (conversation, idx) =>
+                          conversation !== undefined ? (
+                            <ConversationLink
+                              key={conversation.id}
+                              conversationId={conversation.id}
+                              conversationNumber={idx + 1}
+                              conversationCreatedAt={conversation.created_at}
+                              scenarioImageUrl={scenario.image_url}
+                            />
+                          ) : null
                       )}
                   </div>
                 </div>

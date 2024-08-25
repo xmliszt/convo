@@ -21,6 +21,8 @@ export function ConversationLink(props: ConversationLinkProps) {
 
   const isSmallerDevice = useMediaQuery('(max-width: 640px)');
 
+  if (props.conversationId === undefined) return null;
+
   return (
     <Link
       href={`/conversations/${props.conversationId}`}
