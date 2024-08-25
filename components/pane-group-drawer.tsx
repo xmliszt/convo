@@ -1,7 +1,6 @@
 'use client';
 
-import { CursorClick, Fingerprint } from '@phosphor-icons/react';
-import { isMobile } from 'react-device-detect';
+import { ListChecks } from '@phosphor-icons/react';
 
 import { useScenario } from '@/app/conversations/[conversation_id]/scenario-provider';
 import { Button } from '@/components/ui/button';
@@ -17,6 +16,8 @@ import {
 } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+
 type PaneGroupDrawerProps = {
   children: React.ReactNode;
   onDrawerClose?: () => void;
@@ -27,20 +28,24 @@ export function PaneGroupDrawer(props: PaneGroupDrawerProps) {
 
   return (
     <Drawer onClose={props.onDrawerClose}>
-      <DrawerTrigger
-        asChild
-        className='transition-[box-shadow] duration-300 ease-out focus:shadow-xl'
-      >
-        <Button
-          className='flex h-8 items-center gap-x-1 rounded-full border border-input bg-background/40 px-3 py-1 transition-colors'
-          variant='ghost'
-        >
-          {isMobile ? <Fingerprint /> : <CursorClick />}
-          <span className='text-xs'>
-            {isMobile ? 'Tap' : 'Click'} to view details
-          </span>
-        </Button>
-      </DrawerTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DrawerTrigger
+            asChild
+            className='transition-[box-shadow] duration-300 ease-out focus:shadow-xl'
+          >
+            <Button
+              className='grid size-8 place-items-center rounded-sm border border-input bg-background/40 p-1 text-foreground transition-colors'
+              variant='ghost'
+            >
+              <ListChecks size={16} />
+            </Button>
+          </DrawerTrigger>
+        </TooltipTrigger>
+        <TooltipContent side='right' sideOffset={4} align='center'>
+          Open details and goals
+        </TooltipContent>
+      </Tooltip>
       <DrawerContent
         className={cn(
           'max-h-[90vh] overflow-hidden rounded-t-2xl bg-[linear-gradient(320deg,#ababab,#ffffff)] px-0 dark:bg-[linear-gradient(320deg,#000000,#292828)]',

@@ -30,14 +30,8 @@ type GoalPaneProps = {
 };
 
 export function GoalPane(props: GoalPaneProps) {
-  const {
-    scenario,
-    goals,
-    history,
-    setIsGameOver,
-    setCompletedGoalIds,
-    completedGoalIds,
-  } = useScenario();
+  const { scenario, goals, history, setCompletedGoalIds, completedGoalIds } =
+    useScenario();
   const [isPending, startTransition] = useTransition();
 
   // Fetch completed goals on mount.
@@ -61,11 +55,10 @@ export function GoalPane(props: GoalPaneProps) {
               conversationId: props.conversationId,
             });
             setCompletedGoalIds(completedGoals.map((goal) => goal.id));
-            // Game is over when all goals are completed.
-            if (completedGoals.length === goals.length) {
-              setIsGameOver(true);
-              return;
-            }
+
+            // If all goals are already completed, no need to check with AI.
+            if (completedGoals.length === goals.length) return;
+
             // Check with AI about goal completions.
             const allCompletedGoalIds = await checkGoalCompletions({
               goals: goals,
@@ -89,24 +82,17 @@ export function GoalPane(props: GoalPaneProps) {
                 })
               )
             );
-            // Game is over when all goals are completed.
-            if (allCompletedGoalIds.length === goals.length) {
-              setIsGameOver(true);
-            }
+            // Update state.
+            setCompletedGoalIds((prev) =>
+              Array.from(new Set([...prev, ...newlyCompletedGoalIds]))
+            );
           } catch (error) {
             console.log(error);
           }
         }
       });
     },
-    [
-      goals,
-      isPending,
-      props.conversationId,
-      scenario,
-      setCompletedGoalIds,
-      setIsGameOver,
-    ]
+    [goals, isPending, props.conversationId, scenario, setCompletedGoalIds]
   );
 
   const previousHistory = useRef<Chat[]>([]);

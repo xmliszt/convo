@@ -39,7 +39,6 @@ type ScenarioProviderContextValue = {
     }>
   >;
   setHistory: Dispatch<SetStateAction<Chat[]>>;
-  setIsGameOver: Dispatch<SetStateAction<boolean>>;
   setCompletedGoalIds: Dispatch<SetStateAction<string[]>>;
   setCompletedWords: Dispatch<SetStateAction<string[]>>;
 };
@@ -59,7 +58,6 @@ const ScenarioProviderContext = createContext<ScenarioProviderContextValue>({
   setGoals: () => {},
   setTargetWords: () => {},
   setHistory: () => {},
-  setIsGameOver: () => {},
   setCompletedGoalIds: () => {},
   setCompletedWords: () => {},
 });
@@ -77,7 +75,6 @@ type ScenarioProviderProps = {
 };
 
 export function ScenarioProvider(props: ScenarioProviderProps) {
-  const [isGameOver, setIsGameOver] = useState(false);
   const [goals, setGoals] = useState<Goal[]>(props.goals);
   const [targetWords, setTargetWords] = useState<{
     id: string;
@@ -95,13 +92,12 @@ export function ScenarioProvider(props: ScenarioProviderProps) {
         goals,
         history,
         targetWords,
-        isGameOver,
+        isGameOver: completedGoalIds.length === goals.length,
         completedGoalIds,
         completedWords,
         setGoals,
         setTargetWords,
         setHistory,
-        setIsGameOver,
         setCompletedGoalIds,
         setCompletedWords,
       }}

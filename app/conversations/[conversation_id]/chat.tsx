@@ -75,10 +75,10 @@ export function Chat(props: ChatProps) {
     setShowBackgroundImage(true);
   }, [scenario, setBackgroundImageUrl, setShowBackgroundImage]);
 
+  // When game over, scroll to the evaluation button.
   useEffect(() => {
-    if (isGameOver) {
-      gameOverButtonRef.current?.focus();
-      gameOverButtonRef.current?.scrollIntoView({
+    if (isGameOver && gameOverButtonRef.current !== null) {
+      gameOverButtonRef.current.scrollIntoView({
         behavior: 'smooth',
         block: 'center',
       });
@@ -417,28 +417,6 @@ export function Chat(props: ChatProps) {
         }}
       >
         <div className='flex max-w-lg grow flex-col justify-start gap-2 px-4'>
-          {/* For viewport < lg */}
-          <div className='visible lg:invisible'>
-            <PaneGroupDrawer
-              onDrawerClose={() => {
-                const lastChatBubbleIndex = filteredMessages.length - 1;
-                const lastChatBubble = document.getElementById(
-                  `chat-bubble-${lastChatBubbleIndex}`
-                );
-                setTimeout(() => {
-                  lastChatBubble?.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start',
-                  });
-                }, 500);
-              }}
-            >
-              <BonusScorePane />
-              <TurnsLeftPane />
-              <GoalPane conversationId={props.conversationId} />
-              <TargetWordsPane conversationId={props.conversationId} />
-            </PaneGroupDrawer>
-          </div>
           <form onSubmit={handleSubmit} className='grid place-items-center'>
             <div className='relative inline-flex w-full gap-x-2'>
               <Input
@@ -467,13 +445,36 @@ export function Chat(props: ChatProps) {
                 }
                 onChange={(event) => setInputValue(event.target.value)}
                 className={cn(
-                  'h-10 w-full pr-10 transition-[box-shadow_background_color] duration-300 ease-out focus:bg-background/60 focus:shadow-xl',
+                  'h-10 w-full transition-[box-shadow_background_color] duration-300 ease-out focus:bg-background/60 focus:shadow-xl',
+                  'px-12 lg:pl-4 lg:pr-12',
                   isRecording
                     ? 'bg-destructive/50 font-bold text-white'
                     : 'bg-background/40 font-normal text-primary'
                 )}
                 autoFocus
               />
+              {/* For viewport < lg */}
+              <div className='visible absolute left-1 flex h-full items-center lg:invisible '>
+                <PaneGroupDrawer
+                  onDrawerClose={() => {
+                    const lastChatBubbleIndex = filteredMessages.length - 1;
+                    const lastChatBubble = document.getElementById(
+                      `chat-bubble-${lastChatBubbleIndex}`
+                    );
+                    setTimeout(() => {
+                      lastChatBubble?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start',
+                      });
+                    }, 500);
+                  }}
+                >
+                  <BonusScorePane />
+                  <TurnsLeftPane />
+                  <GoalPane conversationId={props.conversationId} />
+                  <TargetWordsPane conversationId={props.conversationId} />
+                </PaneGroupDrawer>
+              </div>
               <AnimatePresence>
                 {inputValue.length === 0 &&
                 browserSupportsSpeechRecognition &&
