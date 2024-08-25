@@ -45,6 +45,9 @@ export default async function Page(props: PageProps) {
     .slice(1)
     .filter((dialog) => dialog.role === 'user').length;
 
+  if (scenario.target_words === null)
+    throw new Error(`Scenario ${scenario.id} has no target words`);
+
   return (
     <ScenarioProvider
       goals={scenario.goals.map((goal) => ({
@@ -53,12 +56,7 @@ export default async function Page(props: PageProps) {
       }))}
       llmRole={scenario.llm_role}
       scenario={scenario}
-      targetWords={
-        scenario.target_words?.words.map((word) => ({
-          word,
-          completed: false,
-        })) ?? []
-      }
+      targetWords={scenario.target_words}
       history={
         conversation.conversation_dialogs
           ?.filter<{

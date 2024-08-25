@@ -9,14 +9,15 @@ import { cn } from '@/lib/utils';
 import { useScenario } from './scenario-provider';
 
 export function BonusScorePane() {
-  const { goals, targetWords } = useScenario();
+  const { goals, targetWords, completedGoalIds, completedWords } =
+    useScenario();
   const [animate, setAnimate] = useState(false);
   const currentScore =
     goals
-      .filter((goal) => goal.completed)
+      .filter((goal) => completedGoalIds.includes(goal.id))
       .reduce((acc, goal) => acc + goal.points, 0) +
-    targetWords
-      .filter((targetWord) => targetWord.completed)
+    targetWords.words
+      .filter((word) => completedWords.includes(word))
       .reduce((acc, _) => acc + 1, 0);
   const previousScore = useRef(currentScore);
 
