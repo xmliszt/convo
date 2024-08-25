@@ -29,7 +29,8 @@ export async function saveConversationDialog(
       message: options.chat.message,
       timestamp: options.chat.createdAt,
       created_by: data.user.id,
-    });
+    })
+    .select();
   if (insertDialogsResponse.error) throw insertDialogsResponse.error;
   return {
     conversationDialog: insertDialogsResponse.data,
