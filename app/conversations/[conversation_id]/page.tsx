@@ -17,9 +17,7 @@ import { TurnsLeftPane } from './turns-left-pane';
 import { getInitialLlmPrompt } from './utils/get-initial-llm-prompt';
 
 export async function generateMetadata(props: {
-  params: {
-    conversation_id: string;
-  };
+  params: { conversation_id: string };
 }): Promise<Metadata> {
   const { conversation } = await fetchConversation({
     conversationId: props.params.conversation_id,
@@ -45,13 +43,15 @@ export default async function Page(props: PageProps) {
   const { conversation } = await fetchConversation({
     conversationId: props.params.conversation_id,
   });
-  if (!conversation) {
-    return redirect('/scenarios');
-  }
+  if (!conversation) return redirect('/scenarios');
+
   const scenario = conversation.scenario;
   const llmRole = scenario.llm_role;
   const targetWords = scenario.target_words;
   const goals = scenario.goals;
+
+  if (targetWords === null)
+    throw new Error(`Scenraio ${conversation.scenario.id} has no target words`);
 
   const hasConversationDialogHistory =
     conversation.conversation_dialogs.length > 0;
@@ -105,20 +105,17 @@ export default async function Page(props: PageProps) {
         goals={goals.map((goal) => ({ ...goal, completed: false }))}
         llmRole={llmRole}
         scenario={scenario}
-        targetWords={
-          targetWords?.words.map((word) => ({
-            word,
-            completed: false,
-          })) ?? []
-        }
+        targetWords={targetWords}
         history={history}
       >
         <main className='relative'>
           <div className='invisible absolute left-[calc(50vw-36rem)] top-0 z-20 max-w-[20rem] lg:visible'>
             <div className='h-screen w-full overflow-y-auto px-10 scrollbar-hide'>
               <div className='flex flex-col gap-y-4 pb-32 pt-20'>
-                <GoalPane />
-                <TargetWordsPane />
+                <GoalPane conversationId={props.params.conversation_id} />
+                <TargetWordsPane
+                  conversationId={props.params.conversation_id}
+                />
               </div>
             </div>
           </div>

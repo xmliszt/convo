@@ -2,6 +2,7 @@
 
 import { ArrowClockwise, Info } from '@phosphor-icons/react';
 import { motion, Variants } from 'framer-motion';
+import { difference } from 'lodash';
 import { useCallback, useEffect, useRef, useTransition } from 'react';
 
 import {
@@ -20,11 +21,34 @@ import { useMediaQuery } from '@/lib/use-media-query';
 import { cn } from '@/lib/utils';
 
 import { Chat, useScenario } from './scenario-provider';
+import { fetchCompletedGoalsAndTargetWords } from './services/fetch-completed-goals';
 import { checkGoalCompletions } from './services/openai/check-goal-completions';
+import { saveCompletedGoal } from './services/save-completed-goal';
 
-export function GoalPane() {
-  const { scenario, goals, setGoals, history } = useScenario();
+type GoalPaneProps = {
+  conversationId: string;
+};
+
+export function GoalPane(props: GoalPaneProps) {
+  const {
+    scenario,
+    goals,
+    history,
+    setIsGameOver,
+    setCompletedGoalIds,
+    completedGoalIds,
+  } = useScenario();
   const [isPending, startTransition] = useTransition();
+
+  // Fetch completed goals on mount.
+  useEffect(() => {
+    startTransition(async () => {
+      const { completedGoals } = await fetchCompletedGoalsAndTargetWords({
+        conversationId: props.conversationId,
+      });
+      setCompletedGoalIds(completedGoals.map((goal) => goal.id));
+    });
+  }, [props.conversationId, setCompletedGoalIds]);
 
   const checkGoals = useCallback(
     (history: Chat[]) => {
@@ -32,23 +56,40 @@ export function GoalPane() {
       startTransition(async () => {
         if (scenario) {
           try {
-            const completedGoalIds = await checkGoalCompletions({
+            const { completedGoals } = await fetchCompletedGoalsAndTargetWords({
+              conversationId: props.conversationId,
+            });
+            setCompletedGoalIds(completedGoals.map((goal) => goal.id));
+            // Game is over when all goals are completed.
+            if (completedGoals.length === goals.length) {
+              setIsGameOver(true);
+              return;
+            }
+            const allCompletedGoalIds = await checkGoalCompletions({
               goals: goals,
-              completedGoalIds: goals
-                .filter((goal) => goal.completed)
-                .map((g) => g.id),
+              completedGoalIds: completedGoals.map((goal) => goal.id),
               history: history.filter(
                 (message) => message.role === 'user' || message.role === 'model'
               ),
               scenario: scenario,
             });
-            if (completedGoalIds.length > 0) {
-              setGoals((prev) =>
-                prev.map((goal) => ({
-                  ...goal,
-                  completed: completedGoalIds.includes(goal.id),
-                }))
-              );
+            if (allCompletedGoalIds.length === 0) return;
+            const newlyCompletedGoalIds = difference(
+              allCompletedGoalIds,
+              completedGoals.map((goal) => goal.id)
+            );
+            // Update DB for completed goals.
+            await Promise.all(
+              newlyCompletedGoalIds.map((completedGoalId) =>
+                saveCompletedGoal({
+                  conversationId: props.conversationId,
+                  goalId: completedGoalId,
+                })
+              )
+            );
+            // Game is over when all goals are completed.
+            if (allCompletedGoalIds.length === goals.length) {
+              setIsGameOver(true);
             }
           } catch (error) {
             console.log(error);
@@ -56,7 +97,7 @@ export function GoalPane() {
         }
       });
     },
-    [goals, scenario, setGoals]
+    [goals, props.conversationId, scenario, setCompletedGoalIds, setIsGameOver]
   );
 
   const previousHistory = useRef<Chat[]>([]);
@@ -64,7 +105,6 @@ export function GoalPane() {
   useEffect(() => {
     if (history.length <= 2) return;
     if (history.length === previousHistory.current.length) return;
-    if (goals.every((goal) => goal.completed)) return;
     checkGoals(history);
     previousHistory.current = history;
   }, [goals, history, checkGoals]);
@@ -147,7 +187,7 @@ export function GoalPane() {
               <motion.div
                 className={cn(
                   'relative flex items-start justify-between gap-3',
-                  goal.completed
+                  completedGoalIds.includes(goal.id)
                     ? 'text-green-600 [&>span]:line-through'
                     : '[&>span]:[text-decoration:none]'
                 )}
@@ -161,7 +201,9 @@ export function GoalPane() {
                     className='mt-1'
                     custom={0}
                     initial='initial'
-                    animate={goal.completed ? 'visible' : 'initial'}
+                    animate={
+                      completedGoalIds.includes(goal.id) ? 'visible' : 'initial'
+                    }
                     variants={completionVariants}
                     hidden={isSmallerDevice}
                   >
@@ -170,7 +212,9 @@ export function GoalPane() {
                   <motion.div
                     custom={1}
                     initial='initial'
-                    animate={goal.completed ? 'visible' : 'initial'}
+                    animate={
+                      completedGoalIds.includes(goal.id) ? 'visible' : 'initial'
+                    }
                     variants={completionVariants}
                   >
                     <div className='font-bold'>{goal.short_description}</div>
@@ -182,7 +226,7 @@ export function GoalPane() {
                 <div
                   className={cn(
                     'pointer-events-none w-10 min-w-10 max-w-10 select-none rounded-[6px] border px-2 text-center text-sm font-bold transition-colors ease-out',
-                    goal.completed
+                    completedGoalIds.includes(goal.id)
                       ? 'border-green-600 bg-green-600/10 text-green-700'
                       : 'border-border bg-background/30 text-primary/50'
                   )}

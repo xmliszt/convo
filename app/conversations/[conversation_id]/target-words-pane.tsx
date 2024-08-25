@@ -2,7 +2,8 @@
 
 import { CheckCircle, Circle, Info } from '@phosphor-icons/react';
 import { motion, Variants } from 'framer-motion';
-import { useEffect } from 'react';
+import { difference } from 'lodash';
+import { useEffect, useTransition } from 'react';
 
 import {
   Card,
@@ -20,38 +21,80 @@ import { useMediaQuery } from '@/lib/use-media-query';
 import { cn } from '@/lib/utils';
 
 import { useScenario } from './scenario-provider';
+import { fetchCompletedGoalsAndTargetWords } from './services/fetch-completed-goals';
+import { saveCompletedTargetWord } from './services/save-completed-target-word';
 import { getMatchedWordsInString } from './utils/get-matched-targets';
 
-export function TargetWordsPane() {
-  const { targetWords, history, setTargetWords } = useScenario();
+type TargetWordsPaneProps = {
+  conversationId: string;
+};
+
+export function TargetWordsPane(props: TargetWordsPaneProps) {
+  const {
+    targetWords,
+    history,
+    setTargetWords,
+    completedWords,
+    setCompletedWords,
+  } = useScenario();
+
+  const [isPending, startTransition] = useTransition();
+
+  // Fetch completed words on mount.
+  useEffect(() => {
+    startTransition(async () => {
+      const { completedTargetWords } = await fetchCompletedGoalsAndTargetWords({
+        conversationId: props.conversationId,
+      });
+      setCompletedWords(completedTargetWords);
+    });
+  }, [props.conversationId, setCompletedWords]);
 
   useEffect(() => {
-    if (targetWords.every((word) => word.completed)) return;
+    // If all target words are already completed, return.
+    if (targetWords.words.every((word) => completedWords.includes(word)))
+      return;
+
     // Match target words in AI-generated messages and update the completion status for target words.
     const llmMessage = [...history]
       .filter((m) => m.role === 'model')
       .map((m) => m.message)
       .join(' ');
-    const matchedWords = getMatchedWordsInString(
+    const allCompletedWordsDetectedInConversation = getMatchedWordsInString(
       llmMessage,
-      targetWords.map((word) => word.word)
+      targetWords.words
     );
-    const currentlyMatchedTargetWordrs = targetWords
-      .filter((word) => word.completed)
-      .map((word) => word.word);
-    const newMatchedWords = matchedWords.filter(
-      (word) => !currentlyMatchedTargetWordrs.includes(word)
+    const alreadyCompletedTargetWords = targetWords.words.filter((word) =>
+      completedWords.includes(word)
     );
-    if (newMatchedWords.length > 0) {
-      setTargetWords((prev) =>
-        prev.map((word) =>
-          newMatchedWords.includes(word.word)
-            ? { ...word, completed: true }
-            : word
-        )
-      );
+    const newlyCompletedWords = difference(
+      allCompletedWordsDetectedInConversation,
+      alreadyCompletedTargetWords
+    );
+    if (newlyCompletedWords.length > 0) {
+      // Update DB with the new matched words.
+      startTransition(async () => {
+        await Promise.all(
+          newlyCompletedWords.map(async (completedWord) =>
+            saveCompletedTargetWord({
+              conversationId: props.conversationId,
+              targetWordId: targetWords.id,
+              word: completedWord,
+            })
+          )
+        );
+      });
+      // Update state with the new matched words.
+      setCompletedWords((prev) => [...prev, ...newlyCompletedWords]);
     }
-  }, [history, targetWords, setTargetWords]);
+  }, [
+    history,
+    targetWords,
+    setTargetWords,
+    completedWords,
+    props.conversationId,
+    setCompletedWords,
+  ]);
 
   const individualTargetWordVariants: Variants = {
     initial: {
@@ -118,12 +161,13 @@ export function TargetWordsPane() {
       </CardHeader>
       <CardContent>
         <div className='flex flex-col gap-4'>
-          {targetWords.map((word, idx) => (
+          {targetWords.words.map((word, idx) => (
             <motion.div
-              key={word.word}
+              key={word}
               className={cn(
                 'flex items-start gap-3 leading-none [&>svg]:mt-1',
-                word.completed && 'text-green-600 [&>span]:line-through'
+                completedWords.includes(word) &&
+                  'text-green-600 [&>span]:line-through'
               )}
               custom={idx}
               initial='initial'
@@ -133,24 +177,24 @@ export function TargetWordsPane() {
               <motion.span
                 custom={0}
                 initial='initial'
-                animate={word.completed ? 'visible' : 'initial'}
+                animate={completedWords.includes(word) ? 'visible' : 'initial'}
                 variants={completionVariants}
               >
-                {word.completed ? <CheckCircle /> : <Circle />}
+                {completedWords.includes(word) ? <CheckCircle /> : <Circle />}
               </motion.span>
               <motion.span
                 custom={1}
                 initial='initial'
-                animate={word.completed ? 'visible' : 'initial'}
+                animate={completedWords.includes(word) ? 'visible' : 'initial'}
                 variants={completionVariants}
                 className='relative grow leading-tight'
               >
-                {word.word}
+                {word}
               </motion.span>
               <div
                 className={cn(
                   'pointer-events-none w-10 select-none rounded-[6px] border px-2 text-center text-sm font-bold transition-colors ease-out',
-                  word.completed
+                  completedWords.includes(word)
                     ? 'border-green-600 bg-green-600/10 text-green-700'
                     : 'border-border bg-background/30 text-primary/50'
                 )}

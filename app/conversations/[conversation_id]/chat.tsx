@@ -58,6 +58,8 @@ export function Chat(props: ChatProps) {
     setHistory,
     isGameOver,
     llmRole,
+    completedGoalIds,
+    completedWords,
   } = useScenario();
 
   useEffect(() => {
@@ -116,10 +118,10 @@ export function Chat(props: ChatProps) {
     if (!scenario || !targetWords || !goals || !history) return;
     const bonusScore =
       goals
-        .filter((goal) => goal.completed)
+        .filter((goal) => completedGoalIds.includes(goal.id))
         .reduce((acc, goal) => acc + goal.points, 0) +
-      targetWords
-        .filter((targetWord) => targetWord.completed)
+      targetWords.words
+        .filter((word) => completedWords.includes(word))
         .reduce((acc) => acc + 1, 0);
     startEvaluation(async () => {
       try {
@@ -129,7 +131,6 @@ export function Chat(props: ChatProps) {
         });
         const aiEvaluation = await getEvaluationFromAI({
           scenario,
-          targetWords,
           goals,
           history: history.slice(1), //  Remove first system message
         });
@@ -156,6 +157,8 @@ export function Chat(props: ChatProps) {
     goals,
     history,
     router,
+    completedGoalIds,
+    completedWords,
   ]);
 
   const sendMessage = useCallback(
@@ -429,8 +432,8 @@ export function Chat(props: ChatProps) {
             >
               <BonusScorePane />
               <TurnsLeftPane />
-              <GoalPane />
-              <TargetWordsPane />
+              <GoalPane conversationId={props.conversationId} />
+              <TargetWordsPane conversationId={props.conversationId} />
             </PaneGroupDrawer>
           </div>
           <form onSubmit={handleSubmit} className='grid place-items-center'>

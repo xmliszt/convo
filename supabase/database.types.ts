@@ -9,6 +9,69 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      conversation_completed_goals: {
+        Row: {
+          conversation_id: string
+          goal_id: string
+        }
+        Insert: {
+          conversation_id: string
+          goal_id: string
+        }
+        Update: {
+          conversation_id?: string
+          goal_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_completed_goals_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_completed_goals_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversation_completed_target_words: {
+        Row: {
+          completed_words: string[] | null
+          conversation_id: string
+          target_word_id: string
+        }
+        Insert: {
+          completed_words?: string[] | null
+          conversation_id: string
+          target_word_id: string
+        }
+        Update: {
+          completed_words?: string[] | null
+          conversation_id?: string
+          target_word_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_completed_target_words_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_completed_target_words_target_word_id_fkey"
+            columns: ["target_word_id"]
+            isOneToOne: false
+            referencedRelation: "target_words"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversation_dialogs: {
         Row: {
           conversation_id: string | null

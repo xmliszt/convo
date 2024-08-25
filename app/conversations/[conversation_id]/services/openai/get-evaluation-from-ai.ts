@@ -2,16 +2,11 @@
 
 import { createCompletion } from '@/lib/ai/openai';
 
-import type {
-  Chat,
-  GoalWthCompletion,
-  TargetWordsWithCompletion,
-} from '../../scenario-provider';
+import type { Chat } from '../../scenario-provider';
 
 type GetEvaluationsOptions = {
   scenario: Scenario;
-  goals: GoalWthCompletion[];
-  targetWords: TargetWordsWithCompletion[];
+  goals: Goal[];
   history: Chat[];
 };
 

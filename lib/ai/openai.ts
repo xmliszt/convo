@@ -1,7 +1,5 @@
 import OpenAI from 'openai';
 
-export const OPENAI_GPT_MODEL_NAME = 'gpt-3.5-turbo';
-
 export const openai = new OpenAI();
 
 export type OpenAIMessage = OpenAI.Chat.Completions.ChatCompletionMessageParam;
@@ -16,7 +14,7 @@ type CreateCompletionOptions = {
 export async function createCompletion(options: CreateCompletionOptions) {
   const completion = await openai.chat.completions.create({
     messages: options.messages,
-    model: OPENAI_GPT_MODEL_NAME,
+    model: 'gpt-4o',
     temperature: options.temperature,
     response_format: {
       type: options.returnAsJson ? 'json_object' : 'text',

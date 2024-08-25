@@ -5,7 +5,6 @@ import {
   Dispatch,
   SetStateAction,
   useContext,
-  useEffect,
   useState,
 } from 'react';
 
@@ -20,26 +19,29 @@ export type Chat = {
   createdAt: string;
 };
 
-export type GoalWthCompletion = Goal & {
-  completed: boolean;
-};
-
-export type TargetWordsWithCompletion = {
-  word: string;
-  completed: boolean;
-};
-
 type ScenarioProviderContextValue = {
   llmRole: LlmRole | undefined;
   scenario: Scenario | undefined;
-  goals: GoalWthCompletion[];
-  targetWords: TargetWordsWithCompletion[];
+  goals: Goal[];
+  targetWords: {
+    id: string;
+    words: string[];
+  };
+  completedGoalIds: string[];
+  completedWords: string[];
   history: Chat[];
   isGameOver: boolean;
-  setGoals: Dispatch<SetStateAction<GoalWthCompletion[]>>;
-  setTargetWords: Dispatch<SetStateAction<TargetWordsWithCompletion[]>>;
+  setGoals: Dispatch<SetStateAction<Goal[]>>;
+  setTargetWords: Dispatch<
+    SetStateAction<{
+      id: string;
+      words: string[];
+    }>
+  >;
   setHistory: Dispatch<SetStateAction<Chat[]>>;
   setIsGameOver: Dispatch<SetStateAction<boolean>>;
+  setCompletedGoalIds: Dispatch<SetStateAction<string[]>>;
+  setCompletedWords: Dispatch<SetStateAction<string[]>>;
 };
 
 const ScenarioProviderContext = createContext<ScenarioProviderContextValue>({
@@ -47,40 +49,43 @@ const ScenarioProviderContext = createContext<ScenarioProviderContextValue>({
   scenario: undefined,
   goals: [],
   history: [],
-  targetWords: [],
+  targetWords: {
+    id: '',
+    words: [],
+  },
   isGameOver: false,
+  completedGoalIds: [],
+  completedWords: [],
   setGoals: () => {},
   setTargetWords: () => {},
   setHistory: () => {},
   setIsGameOver: () => {},
+  setCompletedGoalIds: () => {},
+  setCompletedWords: () => {},
 });
 
 type ScenarioProviderProps = {
   llmRole: LlmRole;
   scenario: Scenario;
-  goals: GoalWthCompletion[];
-  targetWords: TargetWordsWithCompletion[];
+  goals: Goal[];
+  targetWords: {
+    id: string;
+    words: string[];
+  };
   history: Chat[];
   children: React.ReactNode;
 };
 
 export function ScenarioProvider(props: ScenarioProviderProps) {
   const [isGameOver, setIsGameOver] = useState(false);
-  const [goals, setGoals] = useState<GoalWthCompletion[]>(props.goals);
-  const [targetWords, setTargetWords] = useState<TargetWordsWithCompletion[]>(
-    props.targetWords
-  );
+  const [goals, setGoals] = useState<Goal[]>(props.goals);
+  const [targetWords, setTargetWords] = useState<{
+    id: string;
+    words: string[];
+  }>(props.targetWords);
   const [history, setHistory] = useState<Chat[]>(props.history);
-
-  // Game over whena all goals and target words are completed.
-  useEffect(() => {
-    if (
-      goals.every((goal) => goal.completed) &&
-      targetWords.every((word) => word.completed)
-    ) {
-      setIsGameOver(true);
-    }
-  }, [goals, targetWords]);
+  const [completedGoalIds, setCompletedGoalIds] = useState<string[]>([]);
+  const [completedWords, setCompletedWords] = useState<string[]>([]);
 
   return (
     <ScenarioProviderContext.Provider
@@ -91,10 +96,14 @@ export function ScenarioProvider(props: ScenarioProviderProps) {
         history,
         targetWords,
         isGameOver,
+        completedGoalIds,
+        completedWords,
         setGoals,
         setTargetWords,
         setHistory,
         setIsGameOver,
+        setCompletedGoalIds,
+        setCompletedWords,
       }}
     >
       {props.children}
