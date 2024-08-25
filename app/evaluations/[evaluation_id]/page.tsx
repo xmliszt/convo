@@ -7,7 +7,6 @@ import { LabelWithPaddedDigits } from '@/components/label-with-padded-digits';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 import { CopyLink } from './copy-link';
-import { CopyLinkIcon } from './copy-link-icon';
 import { ScenarioBackgroundLoader } from './scenario-background-loader';
 import { fetchEvaluation } from './services/fetch-evaluation';
 
@@ -94,9 +93,6 @@ export default async function Page(props: PageProps) {
             <article className='w-full'>
               <h1 className='relative my-4 text-center text-6xl font-bold'>
                 {scenario.name}
-                <div className='absolute right-0 top-0 flex size-12 -translate-y-12 translate-x-1 items-center justify-center lg:-translate-y-6'>
-                  <CopyLinkIcon />
-                </div>
               </h1>
               <p className='my-2 text-justify text-base font-normal [text-align-last:center]'>
                 {scenario.description}
