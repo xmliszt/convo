@@ -38,6 +38,9 @@ const nextConfig = {
       },
     ];
   },
+  compiler: {
+    styledComponents: true,
+  },
 };
 
 module.exports = withPWA(nextConfig);

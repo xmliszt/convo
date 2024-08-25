@@ -95,7 +95,7 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-const font = Playfair_Display({
+const PlayfairDisplay = Playfair_Display({
   weight: ['400', '500', '600', '700', '800', '900'],
   subsets: ['latin'],
 });
@@ -108,7 +108,11 @@ export default function RootLayout({
   const isMaintenanceMode = process.env.MAINTENANCE_MODE === 'true';
 
   return (
-    <html lang='en' className={font.className}>
+    <html
+      lang='en'
+      className={PlayfairDisplay.className}
+      suppressHydrationWarning
+    >
       <body>
         <NextThemeProvider attribute='class' defaultTheme='system' enableSystem>
           {isMaintenanceMode ? (
